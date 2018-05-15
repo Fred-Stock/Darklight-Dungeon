@@ -12,6 +12,10 @@ namespace Game1
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
+        //Screen sprites
+        Texture2D mainMenu;
+
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -27,6 +31,10 @@ namespace Game1
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
+            graphics.PreferredBackBufferWidth = 1920;  // set this value to the desired width of your window
+            graphics.PreferredBackBufferHeight = 1080;   // set this value to the desired height of your window
+            this.IsMouseVisible = true;
+            graphics.ApplyChanges();
 
             base.Initialize();
         }
@@ -41,6 +49,9 @@ namespace Game1
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
+
+            //screen loading
+            mainMenu = Content.Load<Texture2D>("Screens//Main_menu");
         }
 
         /// <summary>
@@ -76,6 +87,11 @@ namespace Game1
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
+            spriteBatch.Begin();
+
+            spriteBatch.Draw(mainMenu,new Vector2(0,0), Color.White);
+
+            spriteBatch.End();
 
             base.Draw(gameTime);
         }
