@@ -14,6 +14,8 @@ namespace Game1
 
         //Screen sprites
         Texture2D mainMenu;
+        Texture2D levelScreen;
+        Texture2D wall;
 
 
         public Game1()
@@ -52,6 +54,8 @@ namespace Game1
 
             //screen loading
             mainMenu = Content.Load<Texture2D>("Screens//Main_menu");
+            levelScreen = Content.Load<Texture2D>("Screens//Level");
+            wall = Content.Load<Texture2D>("Screens//Wall");
         }
 
         /// <summary>
