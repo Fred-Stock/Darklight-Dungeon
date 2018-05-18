@@ -4,6 +4,21 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Game1
 {
+    // gamestate enums
+    enum GameState
+    {
+        MainMenu,
+        Instructions,
+        Options,
+        Game,
+        Pause,
+        Inventory,
+        Shop,
+        EndGame
+    }
+
+    
+
     /// <summary>
     /// This is the main type for your game.
     /// </summary>
@@ -12,10 +27,18 @@ namespace Game1
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
-        //Screen sprites
+        // specified fields
+        GameState gameState = GameState.MainMenu;
+
+        // sprite fields
+        #region Sprites
+        
+        // screens
         Texture2D mainMenu;
         Texture2D levelScreen;
         Texture2D wall;
+
+        #endregion
 
 
         public Game1()
@@ -79,6 +102,56 @@ namespace Game1
 
             // TODO: Add your update logic here
 
+            // gamestates
+            #region Main Menu
+            if (gameState == GameState.MainMenu)
+            {
+
+            }
+            #endregion
+            #region Instructions
+            if (gameState == GameState.Instructions)
+            {
+
+            }
+            #endregion
+            #region Options
+            if (gameState == GameState.Options)
+            {
+
+            }
+            #endregion
+            #region Game
+            if (gameState == GameState.Game)
+            {
+
+            }
+            #endregion
+            #region Pause
+            if (gameState == GameState.Pause)
+            {
+
+            }
+            #endregion
+            #region Inventory
+            if (gameState == GameState.Inventory)
+            {
+
+            }
+            #endregion
+            #region Shop
+            if (gameState == GameState.Shop)
+            {
+
+            }
+            #endregion
+            #region End Game
+            if (gameState == GameState.EndGame)
+            {
+
+            }
+            #endregion
+
             base.Update(gameTime);
         }
 
@@ -94,6 +167,56 @@ namespace Game1
             spriteBatch.Begin();
 
             spriteBatch.Draw(mainMenu,new Vector2(0,0), Color.White);
+
+            // gamestates
+            #region Main Menu
+            if (gameState == GameState.MainMenu)
+            {
+
+            }
+            #endregion
+            #region Instructions
+            if (gameState == GameState.Instructions)
+            {
+
+            }
+            #endregion
+            #region Options
+            if (gameState == GameState.Options)
+            {
+
+            }
+            #endregion
+            #region Game
+            if (gameState == GameState.Game)
+            {
+
+            }
+            #endregion
+            #region Pause
+            if (gameState == GameState.Pause)
+            {
+
+            }
+            #endregion
+            #region Inventory
+            if (gameState == GameState.Inventory)
+            {
+
+            }
+            #endregion
+            #region Shop
+            if (gameState == GameState.Shop)
+            {
+
+            }
+            #endregion
+            #region End Game
+            if (gameState == GameState.EndGame)
+            {
+
+            }
+            #endregion
 
             spriteBatch.End();
 
