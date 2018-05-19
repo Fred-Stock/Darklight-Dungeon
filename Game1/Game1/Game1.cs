@@ -37,8 +37,14 @@ namespace Game1
         Texture2D mainMenu;
         Texture2D levelScreen;
         Texture2D wall;
+
+        //sprites
         Texture2D player_forward;
         Texture2D player_backward;
+
+        //buttons
+        Texture2D play_hover;
+        Texture2D quit_hover;
 
         #endregion
 
@@ -85,6 +91,8 @@ namespace Game1
             //sprite loading
             player_forward = Content.Load<Texture2D>("Sprites//player_forward");
             player_backward = Content.Load<Texture2D>("Sprites//player_backward");
+            play_hover = Content.Load<Texture2D>("Sprites//Play_hover");
+            quit_hover = Content.Load<Texture2D>("Sprites//quit_hover");
         }
 
         /// <summary>
