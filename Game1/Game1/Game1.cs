@@ -36,6 +36,11 @@ namespace Game1
         // screens
         Texture2D mainMenu;
         Texture2D levelScreen;
+
+        //objects
+        Texture2D door_locked;
+        Texture2D door_open;
+        Texture2D door_open_animation;
         Texture2D wall;
 
         //sprites
@@ -82,17 +87,25 @@ namespace Game1
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
-
+            #region Loading
             //screen loading
             mainMenu = Content.Load<Texture2D>("Screens//Main_menu");
             levelScreen = Content.Load<Texture2D>("Screens//Level");
             wall = Content.Load<Texture2D>("Screens//Wall");
 
+            //object loading
+            door_locked = Content.Load<Texture2D>("Sprites//door_locked");
+            door_open = Content.Load<Texture2D>("Sprites//door_unlocked");
+            door_open_animation = Content.Load<Texture2D>("Sprites//door_unlocking_animated");
+
             //sprite loading
             player_forward = Content.Load<Texture2D>("Sprites//player_forward");
             player_backward = Content.Load<Texture2D>("Sprites//player_backward");
+
+            //button loading
             play_hover = Content.Load<Texture2D>("Sprites//Play_hover");
             quit_hover = Content.Load<Texture2D>("Sprites//quit_hover");
+            #endregion
         }
 
         /// <summary>
@@ -180,13 +193,13 @@ namespace Game1
             // TODO: Add your drawing code here
             spriteBatch.Begin();
 
-            spriteBatch.Draw(mainMenu,new Vector2(0,0), Color.White);
+            
 
             // gamestates
             #region Main Menu
             if (gameState == GameState.MainMenu)
             {
-
+                spriteBatch.Draw(mainMenu, new Vector2(0, 0), Color.White);
             }
             #endregion
             #region Instructions
