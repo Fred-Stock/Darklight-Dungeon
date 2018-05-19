@@ -13,7 +13,7 @@ namespace Game1
     {
         //fields
         private int score;
-        private Weapons weapon;
+        private Weapon weapon;
         private Armor armor;
 
         //properties
@@ -23,18 +23,20 @@ namespace Game1
             set { score = value; }
         }
 
-        public Weapons Weapon
+        public Weapon Weapon
         {
             get { return weapon; }
+            set { weapon = value; }
         }
 
         public Armor Armor
         {
             get { return armor; }
+            set { armor = value; }
         }
 
         //constructor
-        public Player(int score, Weapons weapon, Armor armor, int health, int damage, Rectangle position, Texture2D texture ) : base(health, damage, position, texture)
+        public Player(int score, Weapon weapon, Armor armor, int health, int damage, Rectangle position, Texture2D texture ) : base(health, damage, position, texture)
         {
             this.score = score;
             this.weapon = weapon;

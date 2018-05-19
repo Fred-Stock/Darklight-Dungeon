@@ -30,6 +30,11 @@ namespace Game1
         // specified fields
         GameState gameState = GameState.MainMenu;
 
+        //create objects
+        Player player;
+        Weapon playerWeapon;
+        Armor playerArmor;
+
         // sprite fields
         #region Sprites
         
@@ -73,6 +78,15 @@ namespace Game1
             graphics.PreferredBackBufferHeight = 1080;   // set this value to the desired height of your window
             this.IsMouseVisible = true;
             graphics.ApplyChanges();
+
+            //Initialize fields
+            playerWeapon = new Weapon(WeaponType.test, new Rectangle(50, 50, 10, 10), door_locked); //all values in here are just for test
+            playerArmor = new Armor(ArmorType.test, new Rectangle(50, 50, 10, 10), door_locked); //all values in here are just for test too
+
+            //initialize the player
+            player = new Player(0, playerWeapon, playerArmor, 100, 20, new Rectangle(100, 100, 50, 50), player_forward); //all values in hereare just for test as well
+
+            Manager manager = new Manager(player);
 
             base.Initialize();
         }
