@@ -37,6 +37,8 @@ namespace Game1
         Texture2D mainMenu;
         Texture2D levelScreen;
         Texture2D wall;
+        Texture2D player_forward;
+        Texture2D player_backward;
 
         #endregion
 
@@ -79,6 +81,10 @@ namespace Game1
             mainMenu = Content.Load<Texture2D>("Screens//Main_menu");
             levelScreen = Content.Load<Texture2D>("Screens//Level");
             wall = Content.Load<Texture2D>("Screens//Wall");
+
+            //sprite loading
+            player_forward = Content.Load<Texture2D>("Sprites//player_forward");
+            player_backward = Content.Load<Texture2D>("Sprites//player_backward");
         }
 
         /// <summary>
