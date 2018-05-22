@@ -16,5 +16,10 @@ namespace Game1
         {
 
         }
+
+        public override void Move(Characters character)
+        {
+            
+        }
     }
 }

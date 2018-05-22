@@ -147,7 +147,11 @@ namespace Game1
             #region Main Menu
             if (gameState == GameState.MainMenu)
             {
-
+                //this whole if statement is just a place holder for testing
+                if (Keyboard.GetState().IsKeyDown(Keys.Enter))
+                {
+                    gameState = GameState.Game;
+                }
             }
             #endregion
             #region Instructions
@@ -165,7 +169,7 @@ namespace Game1
             #region Game
             if (gameState == GameState.Game)
             {
-
+                player.Move(player);
             }
             #endregion
             #region Pause
@@ -231,7 +235,7 @@ namespace Game1
             #region Game
             if (gameState == GameState.Game)
             {
-
+                spriteBatch.Draw(player_forward, player.Position, Color.White);
             }
             #endregion
             #region Pause
