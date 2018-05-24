@@ -41,6 +41,8 @@ namespace Game1
         // screens
         Texture2D mainMenu;
         Texture2D levelScreen;
+        Texture2D pause;
+        Texture2D gameOver;
 
         //objects
         Texture2D door_locked;
@@ -51,6 +53,8 @@ namespace Game1
         //sprites
         Texture2D player_forward;
         Texture2D player_backward;
+        Texture2D rock_large;
+        Texture2D rock_small;
 
         //buttons
         Texture2D play_hover;
@@ -106,11 +110,15 @@ namespace Game1
             mainMenu = Content.Load<Texture2D>("Screens//Main_menu");
             levelScreen = Content.Load<Texture2D>("Screens//Level");
             wall = Content.Load<Texture2D>("Screens//Wall");
+            pause = Content.Load<Texture2D>("Screens//Pause");
+            gameOver = Content.Load<Texture2D>("Screens//Game_over");
 
             //object loading
             door_locked = Content.Load<Texture2D>("Sprites//door_locked");
             door_open = Content.Load<Texture2D>("Sprites//door_unlocked");
             door_open_animation = Content.Load<Texture2D>("Sprites//door_unlocking_animated");
+            rock_large = Content.Load<Texture2D>("Sprites//rock_big");
+            rock_small = Content.Load<Texture2D>("Sprites//rock_small");
 
             //sprite loading
             player_forward = Content.Load<Texture2D>("Sprites//player_forward");
@@ -235,6 +243,7 @@ namespace Game1
             #region Game
             if (gameState == GameState.Game)
             {
+                spriteBatch.Draw(levelScreen, new Vector2(0, 0), Color.White);
                 spriteBatch.Draw(player_forward, player.Position, Color.White);
             }
             #endregion
