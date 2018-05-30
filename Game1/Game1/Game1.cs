@@ -35,9 +35,12 @@ namespace Game1
         Weapon playerWeapon;
         Armor playerArmor;
 
+
+        Door testDoor;
+
         // sprite fields
         #region Sprites
-        
+
         // screens
         Texture2D mainMenu;
         Texture2D levelScreen;
@@ -67,6 +70,9 @@ namespace Game1
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+
+
+            //temp door object
         }
 
         /// <summary>
@@ -128,6 +134,7 @@ namespace Game1
             play_hover = Content.Load<Texture2D>("Sprites//Play_hover");
             quit_hover = Content.Load<Texture2D>("Sprites//quit_hover");
             #endregion
+            testDoor = new Door(new Rectangle(500, 50, door_open.Width, door_open.Height), door_locked, door_open_animation, door_open);
         }
 
         /// <summary>
@@ -139,6 +146,7 @@ namespace Game1
             // TODO: Unload any non ContentManager content here
         }
 
+        
         /// <summary>
         /// Allows the game to run logic such as updating the world,
         /// checking for collisions, gathering input, and playing audio.
@@ -178,6 +186,13 @@ namespace Game1
             if (gameState == GameState.Game)
             {
                 player.Move(player);
+
+
+                if (player.Position.Intersects(testDoor.Position))
+                {
+                    testDoor.Activated = true;
+                }
+                testDoor.DoorActivation();
             }
             #endregion
             #region Pause
@@ -245,6 +260,7 @@ namespace Game1
             {
                 spriteBatch.Draw(levelScreen, new Vector2(0, 0), Color.White);
                 spriteBatch.Draw(player_forward, player.Position, Color.White);
+                spriteBatch.Draw(testDoor.CurrentTexture, testDoor.Position, Color.White);
             }
             #endregion
             #region Pause
