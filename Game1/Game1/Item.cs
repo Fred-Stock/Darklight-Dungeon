@@ -7,26 +7,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
-
-//item type enums
-//can be added to if more items are added
-//there are seperate enums for each different type of item
-enum Weapons
-{
-
-}
-
-enum Armor
-{
-
-}
-
-enum GameKeys //funky title to avoid conflicts with the built-in key enum 
-{
-
-}
-
-
 namespace Game1
 {
     class Item : GameObject 
@@ -50,25 +30,6 @@ namespace Game1
 
         //constructor 
         public Item(Rectangle position, Texture2D texture) : base(position, texture)
-        {
-
-        }
-
-        //methods
-
-
-        //different methods for each different type of item
-        public void WeaponAction(Weapons item)
-        {
-            
-        }
-
-        public void ArmorAction(Armor item)
-        {
-
-        }
-
-        public void KeyAction(GameKeys item)
         {
 
         }

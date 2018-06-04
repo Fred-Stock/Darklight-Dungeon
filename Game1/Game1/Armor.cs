@@ -7,19 +7,26 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
+enum ArmorType
+{
+    test,
+}
+
 namespace Game1
 {
-    class Enemies : Characters
+    class Armor : Item
     {
-        //constructor
-        public Enemies(int health, int damage, Rectangle position, Texture2D texture) : base(health, damage, position, texture)
-        {
+        ArmorType armor;
 
+        public Armor(ArmorType armor, Rectangle position, Texture2D texture) : base(position, texture)
+        {
+            this.armor = armor;
         }
 
-        public override void Move(Characters character)
+        //methods
+        public void ArmorAction()
         {
-            
+
         }
     }
 }

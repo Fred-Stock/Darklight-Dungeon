@@ -16,6 +16,8 @@ namespace Game1
 
         protected int damage;
 
+        protected KeyboardState kbstate;
+
         public int Health
         {
             get { return health; }
@@ -37,6 +39,29 @@ namespace Game1
         public virtual void TakeDamage(Characters damaged, Characters damager)
         {
             damaged.Health -= damager.Damage;
+        }
+
+        public virtual void Move(Characters character)
+        {
+            Rectangle temp = character.Position;
+            kbstate = Keyboard.GetState();
+            if (kbstate.IsKeyDown(Keys.W))
+            {
+                temp.Y -= 3;
+            }
+            if (kbstate.IsKeyDown(Keys.S))
+            {
+                temp.Y += 3;
+            }
+            if (kbstate.IsKeyDown(Keys.A))
+            {
+                temp.X -= 3;
+            }
+            if (kbstate.IsKeyDown(Keys.D))
+            {
+                temp.X += 3;
+            }
+            character.Position = temp;
         }
     }
 }
