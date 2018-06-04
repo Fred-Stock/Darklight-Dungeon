@@ -38,7 +38,9 @@ namespace Game1
         {
             this.score = score;
             this.weapon = weapon;
+            jkewk;
             this.armor = armor;
+            damage = (int)weapon;
         }
 
     }
