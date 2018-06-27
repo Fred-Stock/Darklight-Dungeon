@@ -181,3 +181,10 @@
 /processorParam:TextureFormat=Color
 /build:Sprites/rock_small.png
 
+#begin arial12.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:arial12.spritefont
+

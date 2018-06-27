@@ -32,7 +32,9 @@ namespace Game1
         //constructor
         public Characters(int health, int damage, Rectangle position, Texture2D texture) : base(position, texture)
         {
-                
+            this.damage = damage;
+            this.health = health;
+            
         }
 
         //methods
@@ -63,5 +65,6 @@ namespace Game1
             }
             character.Position = temp;
         }
+
     }
 }

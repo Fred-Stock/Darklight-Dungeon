@@ -13,17 +13,23 @@ namespace Game1
 {
     enum WeaponType
     {
-        test,
+        test = 4,
     }
 
     class Weapon : Item
     {
         //fields
-        WeaponType weapon;
+        WeaponType type;
+        
+        public WeaponType Type
+        {
+            get { return type; }
+        }
+
 
         public Weapon(WeaponType weapon, Rectangle position, Texture2D texture) : base(position, texture)
         {
-            this.weapon = weapon;
+            this.type = weapon;
         }
 
         //methods

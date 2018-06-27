@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System.Collections.Generic;
+using System;
 
 namespace Game1
 {
@@ -63,6 +65,18 @@ namespace Game1
         Texture2D play_hover;
         Texture2D quit_hover;
 
+        //spritefont
+        SpriteFont Arial12;
+
+        //list of all enemies probably hould be reworked later but for now good enough
+        List<Enemies> enemyList;
+
+        //keyboardstate fields
+        KeyboardState kbState;
+
+        //random object
+        Random rng;
+
         #endregion
 
 
@@ -89,6 +103,9 @@ namespace Game1
             this.IsMouseVisible = true;
             graphics.ApplyChanges();
 
+            enemyList = new List<Enemies>();
+            rng = new Random();
+            
             //Initialize fields
             playerWeapon = new Weapon(WeaponType.test, new Rectangle(50, 50, 10, 10), door_locked); //all values in here are just for test
             playerArmor = new Armor(ArmorType.test, new Rectangle(50, 50, 10, 10), door_locked); //all values in here are just for test too
@@ -97,6 +114,11 @@ namespace Game1
             player = new Player(0, playerWeapon, playerArmor, 100, 20, new Rectangle(100, 100, 50, 50), player_forward); //all values in hereare just for test as well
 
             Manager manager = new Manager(player);
+
+
+            Arial12 = Content.Load<SpriteFont>("arial12");
+
+            gameState = GameState.MainMenu;
 
             base.Initialize();
         }
@@ -146,7 +168,29 @@ namespace Game1
             // TODO: Unload any non ContentManager content here
         }
 
-        
+         MouseState mouseState = new MouseState();
+
+
+        /// <summary>
+        /// method for checking button presses
+        /// </summary>
+        /// <param name="tlx">top left corner y coordinate</param>
+        /// <param name="tly">top left corner x coordinate</param>
+        /// <param name="brx">bottom right corner y coordinate</param>
+        /// <param name="bry">bottom right corner x coordinate</param>
+        /// <returns></returns>
+        public bool ButtonClicked(int tlx, int tly, int brx, int bry)
+        {
+            if((mouseState.X >= tlx && mouseState.Y >= tly) && (mouseState.X < brx && mouseState.Y < bry))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         /// <summary>
         /// Allows the game to run logic such as updating the world,
         /// checking for collisions, gathering input, and playing audio.
@@ -158,16 +202,33 @@ namespace Game1
                 Exit();
 
             // TODO: Add your update logic here
+            mouseState = Mouse.GetState();
+            kbState = Keyboard.GetState();
 
+            if(enemyList.Count < 1)
+            {
+                Enemies testEnemy = new Enemies(rng, 10, 2, new Rectangle(500, 500, 100, 100), player_forward);
+                enemyList.Add(testEnemy);
+
+            }
             // gamestates
             #region Main Menu
             if (gameState == GameState.MainMenu)
             {
-                //this whole if statement is just a place holder for testing
-                if (Keyboard.GetState().IsKeyDown(Keys.Enter))
+                //checks which button is pressed when the mouse is clicked
+                if (mouseState.LeftButton == ButtonState.Pressed)
                 {
-                    gameState = GameState.Game;
+                    if(ButtonClicked(210, 530, 615, 670))
+                    {
+                        gameState = GameState.Game;
+
+                    }
+                    if(ButtonClicked(210, 670, 590, 900))
+                    {
+                        gameState = GameState.Options;
+                    }
                 }
+
             }
             #endregion
             #region Instructions
@@ -193,6 +254,36 @@ namespace Game1
                     testDoor.Activated = true;
                 }
                 testDoor.DoorActivation();
+
+                for(int i = 0; i < enemyList.Count; i++)
+                {
+                    if(enemyList[i] != null)
+                    {
+                        if (enemyList[i].Position.Intersects(player.Position))
+                        {
+                            if (kbState.IsKeyDown(Keys.J))
+                            {
+                                enemyList[i].TakeDamage(enemyList[i], player);
+                                if (enemyList[i].Health <= 0)
+                                {
+                                    enemyList.RemoveAt(i);
+                                    enemyList.Insert(i, null);
+                                }
+                            }
+                            else
+                            {
+                                enemyList[i].TakeDamage(player, enemyList[i]);
+                                if(player.Health <= 0)
+                                {
+                                    gameState = GameState.EndGame;
+                                }
+                            }
+
+                        }
+
+                        enemyList[i].Move(enemyList[i]);
+                    }
+                }
             }
             #endregion
             #region Pause
@@ -233,8 +324,9 @@ namespace Game1
 
             // TODO: Add your drawing code here
             spriteBatch.Begin();
+            mouseState = Mouse.GetState();
 
-            
+            //show mouse placement for button placements
 
             // gamestates
             #region Main Menu
@@ -261,6 +353,15 @@ namespace Game1
                 spriteBatch.Draw(levelScreen, new Vector2(0, 0), Color.White);
                 spriteBatch.Draw(player_forward, player.Position, Color.White);
                 spriteBatch.Draw(testDoor.CurrentTexture, testDoor.Position, Color.White);
+
+                for(int i = 0; i < enemyList.Count; i++)
+                {
+                    if(enemyList[i] != null)
+                    {
+
+                        spriteBatch.Draw(enemyList[i].Texture, enemyList[i].Position, Color.White);
+                    }
+                }
             }
             #endregion
             #region Pause
@@ -288,6 +389,7 @@ namespace Game1
             }
             #endregion
 
+            spriteBatch.DrawString(Arial12, "X: " + mouseState.X + "\nY: " + mouseState.Y, new Vector2(100, 100), Color.White);
             spriteBatch.End();
 
             base.Draw(gameTime);
