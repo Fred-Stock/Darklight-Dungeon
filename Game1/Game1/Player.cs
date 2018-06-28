@@ -15,6 +15,8 @@ namespace Game1
         private int score;
         private Weapon weapon;
         private Armor armor;
+        private Dictionary<string, Item> inventory;
+        private List<string> invList;
 
         //properties
         public int Score
@@ -35,6 +37,17 @@ namespace Game1
             set { armor = value; }
         }
 
+        public List<string> InvList
+        {
+            get { return invList; }
+        }
+
+        public Dictionary<string, Item> Inventory
+        {
+            get { return inventory; }
+        }
+
+
         //constructor
         public Player(int score, Weapon weapon, Armor armor, int health, int damage, Rectangle position, Texture2D texture ) : base(health, damage, position, texture)
         {
@@ -42,6 +55,15 @@ namespace Game1
             this.weapon = weapon;
 
             this.armor = armor;
+            inventory = new Dictionary<string, Item>();
+            invList = new List<string>();
+        }
+
+        public void PickUpItem(Item item)
+        {
+            inventory.Add(item.Name, item);
+            invList.Add(item.Name);
+            item.Visible = false;
         }
 
     }

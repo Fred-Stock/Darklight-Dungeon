@@ -12,26 +12,27 @@ namespace Game1
     class Item : GameObject 
     {
         //fields
-        private Texture2D texture;
-        private Rectangle position;
+        private string name;
+        private bool visible;
 
         //properties
-        public Texture2D Texture
+        public string Name
         {
-            get { return texture; }
+            get { return name; }
         }
 
-        public Rectangle Position
+        public bool Visible
         {
-            get { return position; }
-            set { position = value; }
+            get { return visible; }
+            set { visible = value; }
         }
 
 
         //constructor 
-        public Item(Rectangle position, Texture2D texture) : base(position, texture)
+        public Item(string name, Rectangle position, Texture2D texture) : base(position, texture)
         {
-
+            this.name = name;
+            visible = true;
         }
     }
 }

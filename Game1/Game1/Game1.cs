@@ -107,8 +107,8 @@ namespace Game1
             rng = new Random();
             
             //Initialize fields
-            playerWeapon = new Weapon(WeaponType.test, new Rectangle(50, 50, 10, 10), door_locked); //all values in here are just for test
-            playerArmor = new Armor(ArmorType.test, new Rectangle(50, 50, 10, 10), door_locked); //all values in here are just for test too
+
+            playerArmor = new Armor(ArmorType.test, "testA", new Rectangle(50, 50, 10, 10), door_locked); //all values in here are just for test too
 
             //initialize the player
             player = new Player(0, playerWeapon, playerArmor, 100, 20, new Rectangle(100, 100, 50, 50), player_forward); //all values in hereare just for test as well
@@ -157,6 +157,7 @@ namespace Game1
             quit_hover = Content.Load<Texture2D>("Sprites//quit_hover");
             #endregion
             testDoor = new Door(new Rectangle(500, 50, door_open.Width, door_open.Height), door_locked, door_open_animation, door_open);
+            playerWeapon = new Weapon(WeaponType.test, "testW", new Rectangle(50, 50, 10, 10), rock_small); //all values in here are just for test
         }
 
         /// <summary>
@@ -255,6 +256,14 @@ namespace Game1
                 }
                 testDoor.DoorActivation();
 
+                if (player.Position.Intersects(playerWeapon.Position))
+                {
+                    if (playerWeapon.Visible)
+                    {
+                        player.PickUpItem(playerWeapon);
+                    }
+                }
+
                 for(int i = 0; i < enemyList.Count; i++)
                 {
                     if(enemyList[i] != null)
@@ -284,6 +293,11 @@ namespace Game1
                         enemyList[i].Move(enemyList[i]);
                     }
                 }
+                //transition to inventory screen
+                if (kbState.IsKeyDown(Keys.I))
+                {
+                    gameState = GameState.Inventory;
+                }
             }
             #endregion
             #region Pause
@@ -295,7 +309,7 @@ namespace Game1
             #region Inventory
             if (gameState == GameState.Inventory)
             {
-
+               
             }
             #endregion
             #region Shop
@@ -353,12 +367,16 @@ namespace Game1
                 spriteBatch.Draw(levelScreen, new Vector2(0, 0), Color.White);
                 spriteBatch.Draw(player_forward, player.Position, Color.White);
                 spriteBatch.Draw(testDoor.CurrentTexture, testDoor.Position, Color.White);
+                if (playerWeapon.Visible)
+                {
+
+                    spriteBatch.Draw(playerWeapon.Texture, playerWeapon.Position, Color.White);
+                }
 
                 for(int i = 0; i < enemyList.Count; i++)
                 {
                     if(enemyList[i] != null)
                     {
-
                         spriteBatch.Draw(enemyList[i].Texture, enemyList[i].Position, Color.White);
                     }
                 }
@@ -373,7 +391,13 @@ namespace Game1
             #region Inventory
             if (gameState == GameState.Inventory)
             {
-
+                foreach (string item in player.InvList)
+                {
+                    spriteBatch.Draw(player.Inventory[item].Texture, new Rectangle(50 + (player.InvList.IndexOf(item) * 50), 
+                        50 + player.InvList.IndexOf(item)%10 * 50,
+                        100, 100), Color.White);
+                    spriteBatch.DrawString(Arial12, item, new Vector2(60 + (player.InvList.IndexOf(item) * 50), 160 + player.InvList.IndexOf(item) % 10 * 50), Color.White);
+                }
             }
             #endregion
             #region Shop

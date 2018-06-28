@@ -18,7 +18,7 @@ namespace Game1
     {
         ArmorType armor;
 
-        public Armor(ArmorType armor, Rectangle position, Texture2D texture) : base(position, texture)
+        public Armor(ArmorType armor, string name, Rectangle position, Texture2D texture) : base(name, position, texture)
         {
             this.armor = armor;
         }

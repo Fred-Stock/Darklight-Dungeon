@@ -18,7 +18,7 @@ namespace Game1
     {
         KeyType key;
 
-        public GameKey(KeyType key, Rectangle position, Texture2D texture) : base(position, texture)
+        public GameKey(KeyType key, string name, Rectangle position, Texture2D texture) : base(name, position, texture)
         {
             this.key = key;
         }

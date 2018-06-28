@@ -27,7 +27,7 @@ namespace Game1
         }
 
 
-        public Weapon(WeaponType weapon, Rectangle position, Texture2D texture) : base(position, texture)
+        public Weapon(WeaponType weapon, string name, Rectangle position, Texture2D texture) : base(name, position, texture)
         {
             this.type = weapon;
         }
