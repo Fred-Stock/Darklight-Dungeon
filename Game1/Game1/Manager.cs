@@ -9,9 +9,15 @@ namespace Game1
     class Manager
     {
         //data structures
-        List<Enemies> enemyList = new List<Enemies>();
-        List<Obstacle> obstacleList = new List<Obstacle>();
-        List<Item> itemList = new List<Item>();
+        private List<Obstacle> obstacleList = new List<Obstacle>();
+        private List<Enemies> enemyList = new List<Enemies>();
+        private List<Item> itemList = new List<Item>();
+
+        //properties
+        public List<Item> ItemList
+        {
+            get { return itemList; }
+        }
 
         //global entities
         Player player;

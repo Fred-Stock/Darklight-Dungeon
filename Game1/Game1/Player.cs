@@ -17,6 +17,7 @@ namespace Game1
         private Armor armor;
         private Dictionary<string, Item> inventory;
         private List<string> invList;
+        private int currency;
 
         //properties
         public int Score
@@ -47,6 +48,11 @@ namespace Game1
             get { return inventory; }
         }
 
+        public int Currency
+        {
+            get { return currency; }
+            set { currency = value; }
+        }
 
         //constructor
         public Player(int score, Weapon weapon, Armor armor, int health, int damage, Rectangle position, Texture2D texture ) : base(health, damage, position, texture)
@@ -63,6 +69,19 @@ namespace Game1
         {
             inventory.Add(item.Name, item);
             invList.Add(item.Name);
+            item.Visible = false;
+        }
+
+        public void PickUpCurrency(Item item)
+        {
+            if(item.Name == "largeCoin")
+            {
+                currency += 10;
+            }
+            else if (item.Name == "smallCoin")
+            {
+                currency += 5;
+            }
             item.Visible = false;
         }
 

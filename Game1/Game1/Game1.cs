@@ -35,10 +35,16 @@ namespace Game1
         //create objects
         Player player;
         Weapon playerWeapon;
+        Weapon playerWeapon2;
         Armor playerArmor;
-
-
+        Manager manager;
+        Item testCurrency;
+        ShopManager shop;
         Door testDoor;
+
+        //helper fields
+        KeyboardState previous; //keyboardstate to help with tracking single keyboard inputs
+
 
         // sprite fields
         #region Sprites
@@ -108,17 +114,17 @@ namespace Game1
             
             //Initialize fields
 
-            playerArmor = new Armor(ArmorType.test, "testA", new Rectangle(50, 50, 10, 10), door_locked); //all values in here are just for test too
-
+            
             //initialize the player
             player = new Player(0, playerWeapon, playerArmor, 100, 20, new Rectangle(100, 100, 50, 50), player_forward); //all values in hereare just for test as well
 
-            Manager manager = new Manager(player);
-
+            manager = new Manager(player);
 
             Arial12 = Content.Load<SpriteFont>("arial12");
 
             gameState = GameState.MainMenu;
+
+            previous = kbState;
 
             base.Initialize();
         }
@@ -131,6 +137,7 @@ namespace Game1
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
+
 
             // TODO: use this.Content to load your game content here
             #region Loading
@@ -157,7 +164,14 @@ namespace Game1
             quit_hover = Content.Load<Texture2D>("Sprites//quit_hover");
             #endregion
             testDoor = new Door(new Rectangle(500, 50, door_open.Width, door_open.Height), door_locked, door_open_animation, door_open);
-            playerWeapon = new Weapon(WeaponType.test, "testW", new Rectangle(50, 50, 10, 10), rock_small); //all values in here are just for test
+            playerWeapon = new Weapon(WeaponType.test, "testW", new Rectangle(50, 250, 40, 40), rock_small); //all values in here are just for test
+            playerWeapon2 = new Weapon(WeaponType.test, "testW2", new Rectangle(50, 400, 40, 40), rock_small); //all values in here are just for test
+            testCurrency = new Item("smallCoin", new Rectangle(200, 500, 20, 20), rock_large);
+            playerArmor = new Armor(ArmorType.test, "testA", new Rectangle(50, 50, 10, 10), door_locked); //all values in here are just for test too
+            List<Item> testShopInv = new List<Item>();
+            testShopInv.Add(playerWeapon);
+            testShopInv.Add(playerArmor);
+            shop = new ShopManager(testShopInv);
         }
 
         /// <summary>
@@ -206,7 +220,8 @@ namespace Game1
             mouseState = Mouse.GetState();
             kbState = Keyboard.GetState();
 
-            if(enemyList.Count < 1)
+
+            if(enemyList.Count < 1)//this prevents infinite creation of enemies. When loading a level this value will have to be set from file I/O
             {
                 Enemies testEnemy = new Enemies(rng, 10, 2, new Rectangle(500, 500, 100, 100), player_forward);
                 enemyList.Add(testEnemy);
@@ -249,18 +264,28 @@ namespace Game1
             {
                 player.Move(player);
 
-
+                manager.ItemList.Add(playerWeapon);
+                manager.ItemList.Add(playerWeapon2);
+                manager.ItemList.Add(testCurrency);
                 if (player.Position.Intersects(testDoor.Position))
                 {
+                    
                     testDoor.Activated = true;
+                    gameState = GameState.Shop;
                 }
                 testDoor.DoorActivation();
-
-                if (player.Position.Intersects(playerWeapon.Position))
+                for(int i = 0; i < manager.ItemList.Count; i++)
                 {
-                    if (playerWeapon.Visible)
+                    if (player.Position.Intersects(manager.ItemList[i].Position) && manager.ItemList[i].Visible)
                     {
-                        player.PickUpItem(playerWeapon);
+                        if(manager.ItemList[i].Name == "smallCoin" || manager.ItemList[i].Name == "largeCoin")
+                        {
+                            player.PickUpCurrency(manager.ItemList[i]);
+                        }
+                        else
+                        {
+                            player.PickUpItem(manager.ItemList[i]);
+                        }
                     }
                 }
 
@@ -309,13 +334,28 @@ namespace Game1
             #region Inventory
             if (gameState == GameState.Inventory)
             {
-               
+                if (kbState.IsKeyDown(Keys.Enter))
+                {
+                    gameState = GameState.Game;
+                }
             }
             #endregion
             #region Shop
             if (gameState == GameState.Shop)
             {
-
+                if (kbState.IsKeyDown(Keys.Enter))
+                {
+                    //move the player back one pixel so that the game does not instantly send them back in
+                    //this is a temporary solution will need to be adjusted based on position of player according to the door
+                    Rectangle temp = player.Position;
+                    temp.X--;
+                    player.Position = temp;
+                    gameState = GameState.Game;
+                    if (SingleButtonPress(Keys.D1))
+                    {
+                        shop.BuyItem(player, shop.ShopInv[0]);
+                    }
+                }
             }
             #endregion
             #region End Game
@@ -367,10 +407,12 @@ namespace Game1
                 spriteBatch.Draw(levelScreen, new Vector2(0, 0), Color.White);
                 spriteBatch.Draw(player_forward, player.Position, Color.White);
                 spriteBatch.Draw(testDoor.CurrentTexture, testDoor.Position, Color.White);
-                if (playerWeapon.Visible)
+                for (int i = 0; i < manager.ItemList.Count; i++)
                 {
-
-                    spriteBatch.Draw(playerWeapon.Texture, playerWeapon.Position, Color.White);
+                    if (manager.ItemList[i].Visible)
+                    {
+                        spriteBatch.Draw(manager.ItemList[i].Texture, manager.ItemList[i].Position, Color.White);
+                    }
                 }
 
                 for(int i = 0; i < enemyList.Count; i++)
@@ -391,19 +433,25 @@ namespace Game1
             #region Inventory
             if (gameState == GameState.Inventory)
             {
+                spriteBatch.Draw(levelScreen, new Vector2(0, 0), Color.White);
                 foreach (string item in player.InvList)
                 {
-                    spriteBatch.Draw(player.Inventory[item].Texture, new Rectangle(50 + (player.InvList.IndexOf(item) * 50), 
-                        50 + player.InvList.IndexOf(item)%10 * 50,
+                    spriteBatch.Draw(player.Inventory[item].Texture, new Rectangle(50 + (player.InvList.IndexOf(item)/3 * 150), 
+                        50 + player.InvList.IndexOf(item)%2 * 150,
                         100, 100), Color.White);
-                    spriteBatch.DrawString(Arial12, item, new Vector2(60 + (player.InvList.IndexOf(item) * 50), 160 + player.InvList.IndexOf(item) % 10 * 50), Color.White);
+                    spriteBatch.DrawString(Arial12, item, new Vector2(60 + (player.InvList.IndexOf(item)/3 * 150), 160 + player.InvList.IndexOf(item)%2 * 160), Color.White);
                 }
+                spriteBatch.DrawString(Arial12, "Currency: " + player.Currency, new Vector2(25, 25), Color.White);
             }
             #endregion
             #region Shop
             if (gameState == GameState.Shop)
             {
-
+                spriteBatch.Draw(levelScreen, new Vector2(0, 0), Color.White);
+                for(int i = 0; i < shop.ShopInv.Count; i++)
+                {
+                    spriteBatch.Draw(shop.ShopInv[i].Texture, new Rectangle(GraphicsDevice.Viewport.Width / 3 + (200 * i), GraphicsDevice.Viewport.Height / 2 - 50, 100, 100), Color.White);
+                }
             }
             #endregion
             #region End Game
@@ -417,6 +465,22 @@ namespace Game1
             spriteBatch.End();
 
             base.Draw(gameTime);
+        }
+
+        //helper methods
+        public bool SingleButtonPress(Keys key)
+        {
+            if (kbState.IsKeyDown(key) && !previous.IsKeyDown(key))
+            {
+                previous = kbState;
+                return true;
+            }
+            else
+            {
+                previous = kbState;
+                return false;
+            }
+
         }
     }
 }
