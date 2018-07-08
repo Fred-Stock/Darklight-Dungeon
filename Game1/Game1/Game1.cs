@@ -340,7 +340,7 @@ namespace Game1
             #region Inventory
             if (gameState == GameState.Inventory)
             {
-                if (kbState.IsKeyDown(Keys.Enter))
+                if (kbState.IsKeyDown(Keys.I))
                 {
                     gameState = GameState.Game;
                 }
