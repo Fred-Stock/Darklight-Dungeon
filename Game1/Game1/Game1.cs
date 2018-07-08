@@ -59,7 +59,7 @@ namespace Game1
         Texture2D levelScreen;
         Texture2D pause;
         Texture2D gameOver;
-        Texture2D inventory;
+        Texture2D inventoryScreen;
 
         //objects
         Texture2D door_locked;
@@ -156,7 +156,7 @@ namespace Game1
             wall = Content.Load<Texture2D>("Screens//Wall");
             pause = Content.Load<Texture2D>("Screens//Pause");
             gameOver = Content.Load<Texture2D>("Screens//Game_over");
-            inventory = Content.Load<Texture2D>("Screens//Inventory");
+            inventoryScreen = Content.Load<Texture2D>("Screens//Inventory");
 
             //object loading
             door_locked = Content.Load<Texture2D>("Sprites//door_locked");
@@ -462,7 +462,7 @@ namespace Game1
             #region Inventory
             if (gameState == GameState.Inventory)
             {
-                spriteBatch.Draw(inventory, new Vector2(0, 0), Color.White);
+                spriteBatch.Draw(inventoryScreen, new Vector2(0, 0), Color.White);
                 foreach (string item in player.InvList)
                 {
                     spriteBatch.Draw(player.Inventory[item].Texture, new Rectangle(50 + (player.InvList.IndexOf(item)/3 * 150), 
@@ -490,7 +490,8 @@ namespace Game1
             #region End Game
             if (gameState == GameState.EndGame)
             {
-
+                spriteBatch.Draw(levelScreen, new Vector2(0, 0), Color.White);
+                spriteBatch.Draw(gameOver, new Vector2(0, 0), Color.White);
             }
             #endregion
 
