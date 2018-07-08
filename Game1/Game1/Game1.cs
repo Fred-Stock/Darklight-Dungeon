@@ -168,8 +168,8 @@ namespace Game1
             //sprite loading
             player_forward = Content.Load<Texture2D>("Sprites//player_forward");
             player_backward = Content.Load<Texture2D>("Sprites//player_backward");
-            attack_1 = Content.Load<Texture2D>("Sprites//Attack_1");
-            attack_2 = Content.Load<Texture2D>("Sprites//Attack_2");
+            //attack_1 = Content.Load<Texture2D>("Sprites//attack_1");
+            //attack_2 = Content.Load<Texture2D>("Sprites//attack_2");
 
             //button loading
             play_hover = Content.Load<Texture2D>("Sprites//Play_hover");
@@ -462,7 +462,7 @@ namespace Game1
             #region Inventory
             if (gameState == GameState.Inventory)
             {
-                spriteBatch.Draw(levelScreen, new Vector2(0, 0), Color.White);
+                spriteBatch.Draw(inventory, new Vector2(0, 0), Color.White);
                 foreach (string item in player.InvList)
                 {
                     spriteBatch.Draw(player.Inventory[item].Texture, new Rectangle(50 + (player.InvList.IndexOf(item)/3 * 150), 
