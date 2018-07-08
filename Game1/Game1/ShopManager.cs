@@ -9,9 +9,8 @@ namespace Game1
     class ShopManager
     {
         //fields
-        int cost;
         List<Item> shopInv;
-
+        Dictionary<string, int> itemCosts;
 
         //properties
         public List<Item> ShopInv
@@ -20,18 +19,31 @@ namespace Game1
             set { shopInv = value; }
         }
 
-        //constructor
-        public ShopManager(List<Item> shopInv)
+        public Dictionary<string, int> ItemCosts
         {
-            this.shopInv = shopInv;
+            get { return itemCosts; }
+            set { itemCosts = value; }
+        }
+
+        //constructor
+        public ShopManager()
+        {
+            shopInv = new List<Item>();
+            itemCosts = new Dictionary<string, int>();
+        }
+
+        public void AddToShop(Item item, int cost)
+        {
+            shopInv.Add(item);
+            itemCosts.Add(item.Name, cost);
         }
 
 
         public string BuyItem(Player player, Item item)
         {
-            if(player.Currency <= cost)
+            if(player.Currency >= itemCosts[item.Name])
             {
-                player.Currency -= cost;
+                player.Currency -= itemCosts[item.Name];
                 player.Inventory.Add(item.Name, item);
                 player.InvList.Add(item.Name);
                 shopInv.Remove(item);

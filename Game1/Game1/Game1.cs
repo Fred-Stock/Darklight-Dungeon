@@ -42,6 +42,11 @@ namespace Game1
         ShopManager shop;
         Door testDoor;
 
+        //temp fields (will be replaced when other parts of the game are developed
+        bool usedShop; //level loading should handle this in someway
+        string shopMessage; //not sure if this will get replaced but would probably be cleaner if there is a way to skip this
+
+
         //helper fields
         KeyboardState previous; //keyboardstate to help with tracking single keyboard inputs
 
@@ -111,10 +116,11 @@ namespace Game1
 
             enemyList = new List<Enemies>();
             rng = new Random();
-            
-            //Initialize fields
 
-            
+            //Initialize fields
+            usedShop = false;
+
+
             //initialize the player
             player = new Player(0, playerWeapon, playerArmor, 100, 20, new Rectangle(100, 100, 50, 50), player_forward); //all values in hereare just for test as well
 
@@ -124,7 +130,7 @@ namespace Game1
 
             gameState = GameState.MainMenu;
 
-            previous = kbState;
+            
 
             base.Initialize();
         }
@@ -169,9 +175,9 @@ namespace Game1
             testCurrency = new Item("smallCoin", new Rectangle(200, 500, 20, 20), rock_large);
             playerArmor = new Armor(ArmorType.test, "testA", new Rectangle(50, 50, 10, 10), door_locked); //all values in here are just for test too
             List<Item> testShopInv = new List<Item>();
-            testShopInv.Add(playerWeapon);
-            testShopInv.Add(playerArmor);
-            shop = new ShopManager(testShopInv);
+            shop = new ShopManager();
+            shop.AddToShop(playerWeapon, 0);
+            shop.AddToShop(playerArmor, 4);
         }
 
         /// <summary>
@@ -343,6 +349,26 @@ namespace Game1
             #region Shop
             if (gameState == GameState.Shop)
             {
+                //if player trys to buy something that doesn't exist it will crash.
+                //currently thinking that the player will only be able to buy one item at a shop and therefore no need to fix this
+                if (!usedShop)
+                {
+                    if (SingleButtonPress(Keys.D1))
+                    {
+                        shopMessage = shop.BuyItem(player, shop.ShopInv[0]);
+                        usedShop = true;
+                    }
+                    if (SingleButtonPress(Keys.D2))
+                    {
+                        shopMessage = shop.BuyItem(player, shop.ShopInv[1]);
+                        usedShop = true;
+                    }
+                    if (SingleButtonPress(Keys.D3))
+                    {
+                        shopMessage = shop.BuyItem(player, shop.ShopInv[2]);
+                        usedShop = true;
+                    }
+                }
                 if (kbState.IsKeyDown(Keys.Enter))
                 {
                     //move the player back one pixel so that the game does not instantly send them back in
@@ -351,10 +377,6 @@ namespace Game1
                     temp.X--;
                     player.Position = temp;
                     gameState = GameState.Game;
-                    if (SingleButtonPress(Keys.D1))
-                    {
-                        shop.BuyItem(player, shop.ShopInv[0]);
-                    }
                 }
             }
             #endregion
@@ -365,6 +387,7 @@ namespace Game1
             }
             #endregion
 
+            previous = kbState;
             base.Update(gameTime);
         }
 
@@ -451,6 +474,10 @@ namespace Game1
                 for(int i = 0; i < shop.ShopInv.Count; i++)
                 {
                     spriteBatch.Draw(shop.ShopInv[i].Texture, new Rectangle(GraphicsDevice.Viewport.Width / 3 + (200 * i), GraphicsDevice.Viewport.Height / 2 - 50, 100, 100), Color.White);
+                    spriteBatch.DrawString(Arial12, shop.ShopInv[i].Name, new Vector2(25 + GraphicsDevice.Viewport.Width / 3 + (200 * i), 110 + GraphicsDevice.Viewport.Height / 2 - 50), Color.White);
+                    spriteBatch.DrawString(Arial12, "Currency: " + player.Currency, new Vector2(25, 25), Color.White);
+
+
                 }
             }
             #endregion
@@ -472,12 +499,10 @@ namespace Game1
         {
             if (kbState.IsKeyDown(key) && !previous.IsKeyDown(key))
             {
-                previous = kbState;
                 return true;
             }
             else
             {
-                previous = kbState;
                 return false;
             }
 

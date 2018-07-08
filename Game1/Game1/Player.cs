@@ -67,9 +67,12 @@ namespace Game1
 
         public void PickUpItem(Item item)
         {
-            inventory.Add(item.Name, item);
-            invList.Add(item.Name);
-            item.Visible = false;
+            if (!inventory.ContainsKey(item.Name))
+            {
+                inventory.Add(item.Name, item);
+                invList.Add(item.Name);
+                item.Visible = false;
+            }
         }
 
         public void PickUpCurrency(Item item)
