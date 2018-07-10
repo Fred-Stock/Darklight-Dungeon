@@ -72,8 +72,37 @@ namespace Game1
         Texture2D player_backward;
         Texture2D rock_large;
         Texture2D rock_small;
-        Texture2D attack_1;
-        Texture2D attack_2;
+
+        //attack sprites
+        //attack 1
+        Texture2D attack_1_1;
+        Texture2D attack_1_2;
+        Texture2D attack_1_3;
+        Texture2D attack_1_4;
+        Texture2D attack_1_5;
+        Texture2D attack_1_6;
+        Texture2D attack_1_7;
+        Texture2D attack_1_8;
+        Texture2D attack_1_9;
+        Texture2D attack_1_10;
+        Texture2D attack_1_11;
+        Texture2D attack_1_12;
+        Texture2D attack_1_13;
+
+        //attack 2
+        Texture2D attack_2_1;
+        Texture2D attack_2_2;
+        Texture2D attack_2_3;
+        Texture2D attack_2_4;
+        Texture2D attack_2_5;
+        Texture2D attack_2_6;
+        Texture2D attack_2_7;
+        Texture2D attack_2_8;
+        Texture2D attack_2_9;
+        Texture2D attack_2_10;
+        Texture2D attack_2_11;
+        Texture2D attack_2_12;
+        Texture2D attack_2_13;
 
         //buttons
         Texture2D play_hover;
@@ -168,8 +197,36 @@ namespace Game1
             //sprite loading
             player_forward = Content.Load<Texture2D>("Sprites//player_forward");
             player_backward = Content.Load<Texture2D>("Sprites//player_backward");
-            //attack_1 = Content.Load<Texture2D>("Sprites//attack_1");
-            //attack_2 = Content.Load<Texture2D>("Sprites//attack_2");
+            //attack sprite loadaing
+            //attack 1
+            attack_1_1 = Content.Load<Texture2D>("Sprites//AttackSprites//attack_1a");
+            attack_1_2 = Content.Load<Texture2D>("Sprites//AttackSprites//attack_1b");
+            attack_1_3 = Content.Load<Texture2D>("Sprites//AttackSprites//attack_1c");
+            attack_1_4 = Content.Load<Texture2D>("Sprites//AttackSprites//attack_1d");
+            attack_1_5 = Content.Load<Texture2D>("Sprites//AttackSprites//attack_1e");
+            attack_1_6 = Content.Load<Texture2D>("Sprites//AttackSprites//attack_1f");
+            attack_1_7 = Content.Load<Texture2D>("Sprites//AttackSprites//attack_1g");
+            attack_1_8 = Content.Load<Texture2D>("Sprites//AttackSprites//attack_1h");
+            attack_1_9 = Content.Load<Texture2D>("Sprites//AttackSprites//attack_1i");
+            attack_1_10 = Content.Load<Texture2D>("Sprites//AttackSprites//attack_1j");
+            attack_1_11 = Content.Load<Texture2D>("Sprites//AttackSprites//attack_1k");
+            attack_1_12 = Content.Load<Texture2D>("Sprites//AttackSprites//attack_1l");
+            attack_1_13 = Content.Load<Texture2D>("Sprites//AttackSprites//attack_1m");
+
+            //attack 2
+            attack_2_1 = Content.Load<Texture2D>("Sprites//AttackSprites//attack_2a");
+            attack_2_2 = Content.Load<Texture2D>("Sprites//AttackSprites//attack_2b");
+            attack_2_3 = Content.Load<Texture2D>("Sprites//AttackSprites//attack_2c");
+            attack_2_4 = Content.Load<Texture2D>("Sprites//AttackSprites//attack_2d");
+            attack_2_5 = Content.Load<Texture2D>("Sprites//AttackSprites//attack_2e");
+            attack_2_6 = Content.Load<Texture2D>("Sprites//AttackSprites//attack_2f");
+            attack_2_7 = Content.Load<Texture2D>("Sprites//AttackSprites//attack_2g");
+            attack_2_8 = Content.Load<Texture2D>("Sprites//AttackSprites//attack_2h");
+            attack_2_9 = Content.Load<Texture2D>("Sprites//AttackSprites//attack_2i");
+            attack_2_10 = Content.Load<Texture2D>("Sprites//AttackSprites//attack_2j");
+            attack_2_11 = Content.Load<Texture2D>("Sprites//AttackSprites//attack_2k");
+            attack_2_12 = Content.Load<Texture2D>("Sprites//AttackSprites//attack_2l");
+            attack_2_13 = Content.Load<Texture2D>("Sprites//AttackSprites//attack_2m");
 
             //button loading
             play_hover = Content.Load<Texture2D>("Sprites//Play_hover");
