@@ -197,7 +197,7 @@ namespace Game1
             //sprite loading
             player_forward = Content.Load<Texture2D>("Sprites//player_forward");
             player_backward = Content.Load<Texture2D>("Sprites//player_backward");
-            //attack sprite loadaing
+            //attack sprite loading
             //attack 1
             attack_1_1 = Content.Load<Texture2D>("Sprites//AttackSprites//attack_1a");
             attack_1_2 = Content.Load<Texture2D>("Sprites//AttackSprites//attack_1b");
