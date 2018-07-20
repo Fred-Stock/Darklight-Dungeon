@@ -37,6 +37,7 @@ namespace Game1
         Weapon playerWeapon;
         Weapon playerWeapon2;
         Armor playerArmor;
+        Armor playerArmor2;
         Manager manager;
         Item testCurrency;
         ShopManager shop;
@@ -168,8 +169,8 @@ namespace Game1
             //sprite loading
             player_forward = Content.Load<Texture2D>("Sprites//player_forward");
             player_backward = Content.Load<Texture2D>("Sprites//player_backward");
-            attack_1 = Content.Load<Texture2D>("Sprites//Attack_1");
-            attack_2 = Content.Load<Texture2D>("Sprites//Attack_2");
+            //attack_1 = Content.Load<Texture2D>("Sprites//Attack_1");
+            //attack_2 = Content.Load<Texture2D>("Sprites//Attack_2");
 
             //button loading
             play_hover = Content.Load<Texture2D>("Sprites//Play_hover");
@@ -177,13 +178,15 @@ namespace Game1
             #endregion
             testDoor = new Door(new Rectangle(500, 50, door_open.Width, door_open.Height), door_locked, door_open_animation, door_open);
             playerWeapon = new Weapon(WeaponType.test, "testW", new Rectangle(50, 250, 40, 40), rock_small); //all values in here are just for test
-            playerWeapon2 = new Weapon(WeaponType.test, "testW2", new Rectangle(50, 400, 40, 40), rock_small); //all values in here are just for test
+            playerWeapon2 = new Weapon(WeaponType.test, "testW", new Rectangle(50, 400, 40, 40), rock_small); //all values in here are just for test
             testCurrency = new Item("smallCoin", new Rectangle(200, 500, 20, 20), rock_large);
             playerArmor = new Armor(ArmorType.test, "testA", new Rectangle(50, 50, 10, 10), door_locked); //all values in here are just for test too
+            playerArmor2 = new Armor(ArmorType.test, "testA2", new Rectangle(50, 50, 10, 10), door_locked);//test value
             List<Item> testShopInv = new List<Item>();
             shop = new ShopManager();
             shop.AddToShop(playerWeapon, 0);
             shop.AddToShop(playerArmor, 4);
+            manager.ItemList.Add(playerArmor2);
         }
 
         /// <summary>
@@ -331,22 +334,29 @@ namespace Game1
                     }
                 }
                 //transition to inventory screen
-                if (kbState.IsKeyDown(Keys.I))
+                if (SingleButtonPress(Keys.I))
                 {
                     gameState = GameState.Inventory;
+                }
+                if (SingleButtonPress(Keys.P))
+                {
+                    gameState = GameState.Pause;
                 }
             }
             #endregion
             #region Pause
             if (gameState == GameState.Pause)
             {
-
+                if (SingleButtonPress(Keys.Enter))
+                {
+                    gameState = GameState.Game;
+                }
             }
             #endregion
             #region Inventory
             if (gameState == GameState.Inventory)
             {
-                if (kbState.IsKeyDown(Keys.I))
+                if (SingleButtonPress(Keys.Enter))
                 {
                     gameState = GameState.Game;
                 }
@@ -380,7 +390,7 @@ namespace Game1
                     //move the player back one pixel so that the game does not instantly send them back in
                     //this is a temporary solution will need to be adjusted based on position of player according to the door
                     Rectangle temp = player.Position;
-                    temp.X--;
+                    temp.X -= 5;
                     player.Position = temp;
                     gameState = GameState.Game;
                 }
@@ -456,19 +466,19 @@ namespace Game1
             #region Pause
             if (gameState == GameState.Pause)
             {
-
+                spriteBatch.Draw(levelScreen, new Vector2(0, 0), Color.White);
             }
             #endregion
             #region Inventory
             if (gameState == GameState.Inventory)
             {
-                spriteBatch.Draw(levelScreen, new Vector2(0, 0), Color.White);
+                spriteBatch.Draw(inventory, new Vector2(0, 0), Color.White);
                 foreach (string item in player.InvList)
                 {
-                    spriteBatch.Draw(player.Inventory[item].Texture, new Rectangle(50 + (player.InvList.IndexOf(item)/3 * 150), 
-                        50 + player.InvList.IndexOf(item)%2 * 150,
-                        100, 100), Color.White);
-                    spriteBatch.DrawString(Arial12, item, new Vector2(60 + (player.InvList.IndexOf(item)/3 * 150), 160 + player.InvList.IndexOf(item)%2 * 160), Color.White);
+                    spriteBatch.Draw(player.Inventory[item].Texture, new Rectangle(555 + (player.InvList.IndexOf(item)/3 * 170), 
+                        330 + player.InvList.IndexOf(item)%3 * 165,
+                        135, 135), Color.White);
+                    //spriteBatch.DrawString(Arial12, item, new Vector2(60 + (player.InvList.IndexOf(item)/3 * 150), 160 + player.InvList.IndexOf(item)%2 * 160), Color.White);
                 }
                 spriteBatch.DrawString(Arial12, "Currency: " + player.Currency, new Vector2(25, 25), Color.White);
             }

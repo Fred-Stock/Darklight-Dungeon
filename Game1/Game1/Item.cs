@@ -19,6 +19,7 @@ namespace Game1
         public string Name
         {
             get { return name; }
+            set { name = value; }
         }
 
         public bool Visible

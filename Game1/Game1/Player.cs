@@ -65,15 +65,48 @@ namespace Game1
             invList = new List<string>();
         }
 
+        //these next two methods are almost identical but are needed otherwise errors occur if an item with the same name
+        //is in the shop and in the level
+        /// <summary>
+        /// method for handling items picked up from the ground
+        /// </summary>
+        /// <param name="item"></param>
         public void PickUpItem(Item item)
         {
+            //collision maanagement
             if (!inventory.ContainsKey(item.Name))
             {
                 inventory.Add(item.Name, item);
                 invList.Add(item.Name);
                 item.Visible = false;
             }
+            //temp solution but if there is a collision then add a 1 to the end of the name and keep doing that until no collision
+            else
+            {
+                item.Name = item.Name + "1";
+                PickUpItem(item);
+            }
         }
+        /// <summary>
+        /// method for handling items  bought from the store
+        /// </summary>
+        /// <param name="item"></param>
+        public void buyItem(Item item)
+        {
+            //collision maanagement
+            if (!inventory.ContainsKey(item.Name))
+            {
+                inventory.Add(item.Name, item);
+                invList.Add(item.Name);
+            }
+            //temp solution but if there is a collision then add a 1 to the end of the name and keep doing that until no collision
+            else
+            {
+                item.Name = item.Name + "1";
+                PickUpItem(item);
+            }
+        }
+        
 
         public void PickUpCurrency(Item item)
         {
