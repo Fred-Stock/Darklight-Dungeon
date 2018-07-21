@@ -43,6 +43,10 @@ namespace Game1
         ShopManager shop;
         Door testDoor;
 
+        //lists sprites for animations
+        List<Texture2D> attack1;
+        List<Texture2D> attack2;
+
         //temp fields (will be replaced when other parts of the game are developed
         bool usedShop; //level loading should handle this in someway
         string shopMessage; //not sure if this will get replaced but would probably be cleaner if there is a way to skip this
@@ -154,12 +158,13 @@ namespace Game1
             usedShop = false;
 
 
-            //initialize the player
-            player = new Player(0, playerWeapon, playerArmor, 100, 20, new Rectangle(100, 100, 50, 50), player_forward); //all values in hereare just for test as well
 
             manager = new Manager(player);
 
             Arial12 = Content.Load<SpriteFont>("arial12");
+
+            attack1 = new List<Texture2D>();
+            attack2 = new List<Texture2D>();
 
             gameState = GameState.MainMenu;
 
@@ -201,37 +206,66 @@ namespace Game1
             //attack sprite loading
             //attack 1
             attack_1_1 = Content.Load<Texture2D>("Sprites//AttackSprites//attack_1a");
+            attack1.Add(attack_1_1);
             attack_1_2 = Content.Load<Texture2D>("Sprites//AttackSprites//attack_1b");
+            attack1.Add(attack_1_2);
             attack_1_3 = Content.Load<Texture2D>("Sprites//AttackSprites//attack_1c");
+            attack1.Add(attack_1_3);
             attack_1_4 = Content.Load<Texture2D>("Sprites//AttackSprites//attack_1d");
+            attack1.Add(attack_1_4);
             attack_1_5 = Content.Load<Texture2D>("Sprites//AttackSprites//attack_1e");
+            attack1.Add(attack_1_5);
             attack_1_6 = Content.Load<Texture2D>("Sprites//AttackSprites//attack_1f");
+            attack1.Add(attack_1_6);
             attack_1_7 = Content.Load<Texture2D>("Sprites//AttackSprites//attack_1g");
+            attack1.Add(attack_1_7);
             attack_1_8 = Content.Load<Texture2D>("Sprites//AttackSprites//attack_1h");
+            attack1.Add(attack_1_8);
             attack_1_9 = Content.Load<Texture2D>("Sprites//AttackSprites//attack_1i");
+            attack1.Add(attack_1_9);
             attack_1_10 = Content.Load<Texture2D>("Sprites//AttackSprites//attack_1j");
+            attack1.Add(attack_1_10);
             attack_1_11 = Content.Load<Texture2D>("Sprites//AttackSprites//attack_1k");
+            attack1.Add(attack_1_11);
             attack_1_12 = Content.Load<Texture2D>("Sprites//AttackSprites//attack_1l");
+            attack1.Add(attack_1_12);
             attack_1_13 = Content.Load<Texture2D>("Sprites//AttackSprites//attack_1m");
+            attack1.Add(attack_1_13);
 
             //attack 2
             attack_2_1 = Content.Load<Texture2D>("Sprites//AttackSprites//attack_2a");
+            attack2.Add(attack_2_1);
             attack_2_2 = Content.Load<Texture2D>("Sprites//AttackSprites//attack_2b");
+            attack2.Add(attack_2_2);
             attack_2_3 = Content.Load<Texture2D>("Sprites//AttackSprites//attack_2c");
+            attack2.Add(attack_2_3);
             attack_2_4 = Content.Load<Texture2D>("Sprites//AttackSprites//attack_2d");
+            attack2.Add(attack_2_4);
             attack_2_5 = Content.Load<Texture2D>("Sprites//AttackSprites//attack_2e");
+            attack2.Add(attack_2_5);
             attack_2_6 = Content.Load<Texture2D>("Sprites//AttackSprites//attack_2f");
+            attack2.Add(attack_2_6);
             attack_2_7 = Content.Load<Texture2D>("Sprites//AttackSprites//attack_2g");
+            attack2.Add(attack_2_7);
             attack_2_8 = Content.Load<Texture2D>("Sprites//AttackSprites//attack_2h");
+            attack2.Add(attack_2_8);
             attack_2_9 = Content.Load<Texture2D>("Sprites//AttackSprites//attack_2i");
+            attack2.Add(attack_2_9);
             attack_2_10 = Content.Load<Texture2D>("Sprites//AttackSprites//attack_2j");
+            attack2.Add(attack_2_10);
             attack_2_11 = Content.Load<Texture2D>("Sprites//AttackSprites//attack_2k");
+            attack2.Add(attack_2_11);
             attack_2_12 = Content.Load<Texture2D>("Sprites//AttackSprites//attack_2l");
+            attack2.Add(attack_2_12);
             attack_2_13 = Content.Load<Texture2D>("Sprites//AttackSprites//attack_2m");
+            attack2.Add(attack_2_13);
 
             //button loading
             play_hover = Content.Load<Texture2D>("Sprites//Play_hover");
             quit_hover = Content.Load<Texture2D>("Sprites//quit_hover");
+
+            //initialize the player
+            player = new Player(0, playerWeapon, playerArmor, 100, 20, new Rectangle(100, 100, 75, 75), player_forward); //all values in here are just for test as well
             #endregion
             testDoor = new Door(new Rectangle(500, 50, door_open.Width, door_open.Height), door_locked, door_open_animation, door_open);
             playerWeapon = new Weapon(WeaponType.test, "testW", new Rectangle(50, 250, 40, 40), rock_small); //all values in here are just for test
@@ -336,6 +370,15 @@ namespace Game1
             {
                 player.Move(player);
 
+                if (kbState.IsKeyDown(Keys.W))
+                {
+                    player.CurrentSprite = player_backward;
+                }
+                else
+                {
+                    player.CurrentSprite = player_forward;
+                }
+
                 manager.ItemList.Add(playerWeapon);
                 manager.ItemList.Add(playerWeapon2);
                 manager.ItemList.Add(testCurrency);
@@ -367,29 +410,64 @@ namespace Game1
                     {
                         if (enemyList[i].Position.Intersects(player.Position))
                         {
-                            if (kbState.IsKeyDown(Keys.J))
+
+                            enemyList[i].TakeDamage(player, enemyList[i]);
+                            if(player.Health <= 0)
                             {
-                                enemyList[i].TakeDamage(enemyList[i], player);
-                                if (enemyList[i].Health <= 0)
-                                {
-                                    enemyList.RemoveAt(i);
-                                    enemyList.Insert(i, null);
-                                }
-                            }
-                            else
-                            {
-                                enemyList[i].TakeDamage(player, enemyList[i]);
-                                if(player.Health <= 0)
-                                {
-                                    gameState = GameState.EndGame;
-                                }
+                                gameState = GameState.EndGame;
                             }
 
                         }
 
-                        enemyList[i].Move(enemyList[i]);
+                        if(enemyList != null)
+                        {
+                            enemyList[i].Move(enemyList[i]);
+
+                        }
                     }
                 }
+                List<Enemies> hitEnemies = new List<Enemies>();
+                if (SingleButtonPress(Keys.J))
+                {
+                    player.Attacking = true;
+                    for(int i = 0; i < enemyList.Count; i++)
+                    {
+                        if(enemyList[i] != null)
+                        {
+                            if(kbState.IsKeyDown(Keys.D) && new Rectangle(player.Position.X + player.Position.Width, player.Position.Y, 100, 100).Intersects(enemyList[i].Position))
+                            {
+                                hitEnemies.Add(enemyList[i]);
+                            }
+                            else if (kbState.IsKeyDown(Keys.A) && new Rectangle(player.Position.X, player.Position.Y, 100, 100).Intersects(enemyList[i].Position))
+                            {
+                                hitEnemies.Add(enemyList[i]);
+                            }
+
+                        }
+                    }
+
+                }
+                //if moving left use left attack
+                if (kbState.IsKeyDown(Keys.A))
+                {
+                    player.Attack(player, hitEnemies, attack2);
+                }
+                //else use right attack
+                else
+                {
+                    player.Attack(player, hitEnemies, attack1);
+                }
+                for(int i = 0; i < hitEnemies.Count; i++)
+                {
+                    if (enemyList[i].Health <= 0)
+                    {
+                        enemyList.RemoveAt(i);
+                        enemyList.Insert(i, null);
+                    }
+
+                }
+
+
                 //transition to inventory screen
                 if (SingleButtonPress(Keys.I))
                 {
@@ -483,6 +561,15 @@ namespace Game1
             if (gameState == GameState.MainMenu)
             {
                 spriteBatch.Draw(mainMenu, new Vector2(0, 0), Color.White);
+                if (new Rectangle(210, 530, 405, 140).Contains(mouseState.Position))
+                {
+                    spriteBatch.Draw(play_hover, new Rectangle(240, 550, play_hover.Width, play_hover.Height), Color.White);
+
+                }
+                if (new Rectangle(210, 670, 380, 230).Contains(mouseState.Position))
+                {
+                    spriteBatch.Draw(quit_hover, new Rectangle(245, 730, quit_hover.Width, quit_hover.Height), Color.White);
+                }
             }
             #endregion
             #region Instructions
@@ -501,8 +588,26 @@ namespace Game1
             if (gameState == GameState.Game)
             {
                 spriteBatch.Draw(levelScreen, new Vector2(0, 0), Color.White);
-                spriteBatch.Draw(player_forward, player.Position, Color.White);
-                spriteBatch.Draw(testDoor.CurrentTexture, testDoor.Position, Color.White);
+                spriteBatch.Draw(player.CurrentSprite, new Rectangle(player.Position.X, player.Position.Y, 100, 100), Color.White);
+
+                if(testDoor.CurrentTexture == door_open_animation)
+                {
+                    spriteBatch.Draw(testDoor.CurrentTexture, testDoor.Position, new Rectangle(testDoor.Timer/20, 0, 128, 120), Color.White);
+                }
+                else
+                {
+                    spriteBatch.Draw(testDoor.CurrentTexture, testDoor.Position, Color.White);
+                }
+
+                if (player.Attacking && kbState.IsKeyDown(Keys.A))
+                { 
+                    spriteBatch.Draw(player.CurrentAtkSprite, new Rectangle(player.Position.X - 25, player.Position.Y, 50, 50), Color.White);
+                }
+                else if(player.Attacking)
+                {
+                    spriteBatch.Draw(player.CurrentAtkSprite, new Rectangle(player.Position.X + player.Position.Width, player.Position.Y, 50, 50), Color.White);
+
+                }
                 for (int i = 0; i < manager.ItemList.Count; i++)
                 {
                     if (manager.ItemList[i].Visible)

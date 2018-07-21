@@ -43,6 +43,10 @@ namespace Game1
             get { return activated; }
             set { activated = value; }
         }
+        public int Timer
+        {
+            get { return timer; }
+        }
 
         //constructor
         public Door(Rectangle position, Texture2D initialTexture, Texture2D middleSprite, Texture2D finalSprite) : base(position, initialTexture)
@@ -65,11 +69,11 @@ namespace Game1
             if (activated)
             {
                 timer++;
-                if(timer == 20)
+                if(timer < 160)
                 {
                     currentTexture = middleSprite;
                 }
-                if (timer == 40)
+                if (timer == 160)
                 {
                     currentTexture = finalSprite;
                     timer = 0;

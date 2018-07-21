@@ -18,6 +18,11 @@ namespace Game1
         private Dictionary<string, Item> inventory;
         private List<string> invList;
         private int currency;
+        private Texture2D currentSprite; //texture2D for holding current player sprite
+        private Texture2D currentAtkSprite; //texture2D for holding current frame of attack animation
+        private int timer;
+        private bool attacking;
+        private bool attacking2;
 
         //properties
         public int Score
@@ -53,16 +58,40 @@ namespace Game1
             get { return currency; }
             set { currency = value; }
         }
+        public Texture2D CurrentSprite
+        {
+            get { return currentSprite; }
+            set { currentSprite = value; }
+        }
+        public Texture2D CurrentAtkSprite
+        {
+            get { return currentAtkSprite; }
+        }
+        public bool Attacking
+        {
+            get { return attacking; }
+            set { attacking = value; }
+        }
+        public bool Attacking2
+        {
+            get { return attacking2; }
+            set { attacking2 = value; }
+        }
+
+
+
 
         //constructor
         public Player(int score, Weapon weapon, Armor armor, int health, int damage, Rectangle position, Texture2D texture ) : base(health, damage, position, texture)
         {
             this.score = score;
             this.weapon = weapon;
-
+            currentSprite = texture;
             this.armor = armor;
             inventory = new Dictionary<string, Item>();
             invList = new List<string>();
+            timer = 0;
+            attacking = false;
         }
 
         //these next two methods are almost identical but are needed otherwise errors occur if an item with the same name
@@ -91,7 +120,7 @@ namespace Game1
         /// method for handling items  bought from the store
         /// </summary>
         /// <param name="item"></param>
-        public void buyItem(Item item)
+        public void BuyItem(Item item)
         {
             //collision maanagement
             if (!inventory.ContainsKey(item.Name))
@@ -121,5 +150,28 @@ namespace Game1
             item.Visible = false;
         }
 
+        public void Attack(Player player, List<Enemies> enemys, List<Texture2D> animation)
+        {
+            if (attacking)
+            {
+                timer++;
+                if(enemys != null)
+                {
+                    for(int i = 0; i < enemys.Count; i++)
+                    {
+                        enemys[i].Health -= player.damage;
+                    }
+                }
+                if(timer < 13)
+                {
+                    currentAtkSprite = animation[timer];
+                }
+                if (timer > 13)
+                {
+                    attacking = false;
+                    timer = 0;
+                }
+            }
+        }
     }
 }

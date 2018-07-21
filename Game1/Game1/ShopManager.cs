@@ -44,7 +44,7 @@ namespace Game1
             if(player.Currency >= itemCosts[item.Name])
             {
                 player.Currency -= itemCosts[item.Name];
-                player.buyItem(item);
+                player.BuyItem(item);
                 shopInv.Remove(item);
 
                 return "Item Purchased";
