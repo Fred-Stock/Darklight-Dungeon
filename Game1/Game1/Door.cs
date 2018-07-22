@@ -82,7 +82,23 @@ namespace Game1
             }
             return currentTexture;
         }
-
+        
+        /// <summary>
+        /// method for transfering between levels
+        /// </summary>
+        /// <param name="game"></param>
+        /// <param name="player"></param>
+        public void DoorTransistion(Game game, Player player)
+        {
+            int prevSpeed = player.MoveSpeed;
+            player.MoveSpeed = 0;
+            Activated = true;
+            if(timer >= 160)
+            {
+                player.MoveSpeed = prevSpeed;
+              
+            }
+        }
 
 
     }

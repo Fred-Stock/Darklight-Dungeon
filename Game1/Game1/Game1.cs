@@ -343,14 +343,12 @@ namespace Game1
                     if(ButtonClicked(210, 530, 615, 670))
                     {
                         gameState = GameState.Game;
-
                     }
                     if(ButtonClicked(210, 670, 590, 900))
                     {
-                        gameState = GameState.Options;
+                        Exit();
                     }
                 }
-
             }
             #endregion
             #region Instructions
@@ -592,7 +590,7 @@ namespace Game1
 
                 if(testDoor.CurrentTexture == door_open_animation)
                 {
-                    spriteBatch.Draw(testDoor.CurrentTexture, testDoor.Position, new Rectangle(testDoor.Timer/20, 0, 128, 120), Color.White);
+                    spriteBatch.Draw(testDoor.CurrentTexture, testDoor.Position, new Rectangle(testDoor.Timer/20 * 128, 0, 128, 120), Color.White);
                 }
                 else
                 {

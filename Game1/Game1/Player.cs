@@ -23,6 +23,7 @@ namespace Game1
         private int timer;
         private bool attacking;
         private bool attacking2;
+        private int moveSpeed;
 
         //properties
         public int Score
@@ -77,7 +78,11 @@ namespace Game1
             get { return attacking2; }
             set { attacking2 = value; }
         }
-
+        public int MoveSpeed
+        {
+            get { return moveSpeed; }
+            set { moveSpeed = value; }
+        }
 
 
 
@@ -92,6 +97,7 @@ namespace Game1
             invList = new List<string>();
             timer = 0;
             attacking = false;
+            moveSpeed = 3;
         }
 
         //these next two methods are almost identical but are needed otherwise errors occur if an item with the same name
@@ -172,6 +178,29 @@ namespace Game1
                     timer = 0;
                 }
             }
+        }
+
+        public override void Move(Characters character)
+        {
+            Rectangle temp = character.Position;
+            kbstate = Keyboard.GetState();
+            if (kbstate.IsKeyDown(Keys.W))
+            {
+                temp.Y -= moveSpeed;
+            }
+            if (kbstate.IsKeyDown(Keys.S))
+            {
+                temp.Y += moveSpeed;
+            }
+            if (kbstate.IsKeyDown(Keys.A))
+            {
+                temp.X -= moveSpeed;
+            }
+            if (kbstate.IsKeyDown(Keys.D))
+            {
+                temp.X += moveSpeed;
+            }
+            character.Position = temp;
         }
     }
 }
