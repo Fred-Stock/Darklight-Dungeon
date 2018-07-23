@@ -19,6 +19,7 @@ namespace Game1
         private Texture2D currentTexture;
         private int timer;
         private bool activated;
+        private Level nextLevel;
 
         //properites
         public Texture2D MiddleSprite
@@ -56,6 +57,7 @@ namespace Game1
             currentTexture = initialTexture;
             activated = false;
             timer = 0;
+
         }
 
         //methods

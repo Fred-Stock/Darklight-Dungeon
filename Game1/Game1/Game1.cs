@@ -3,6 +3,8 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
 using System;
+using System.IO;
+
 
 namespace Game1
 {
@@ -42,6 +44,11 @@ namespace Game1
         Item testCurrency;
         ShopManager shop;
         Door testDoor;
+        Level currentLevel;
+
+        //create stream reader and writer
+        StreamReader reader;
+        StreamWriter writer;
 
         //lists sprites for animations
         List<Texture2D> attack1;
@@ -54,6 +61,9 @@ namespace Game1
 
         //helper fields
         KeyboardState previous; //keyboardstate to help with tracking single keyboard inputs
+        bool levelLoaded;
+        string levelData;
+        
 
 
         // sprite fields
@@ -165,7 +175,7 @@ namespace Game1
 
             attack1 = new List<Texture2D>();
             attack2 = new List<Texture2D>();
-
+            levelLoaded = false;
             gameState = GameState.MainMenu;
 
             
@@ -278,6 +288,7 @@ namespace Game1
             shop.AddToShop(playerWeapon, 0);
             shop.AddToShop(playerArmor, 4);
             manager.ItemList.Add(playerArmor2);
+            currentLevel = new Level(LevelIO("TestLevel"));
         }
 
         /// <summary>
@@ -326,6 +337,8 @@ namespace Game1
             mouseState = Mouse.GetState();
             kbState = Keyboard.GetState();
 
+            
+
 
             if(enemyList.Count < 1)//this prevents infinite creation of enemies. When loading a level this value will have to be set from file I/O
             {
@@ -366,7 +379,14 @@ namespace Game1
             #region Game
             if (gameState == GameState.Game)
             {
+                if (!levelLoaded)
+                {
+                    levelData = LevelInfo(currentLevel.LevelArray);
+                    
+                }
+
                 player.Move(player);
+                
 
                 if (kbState.IsKeyDown(Keys.W))
                 {
@@ -377,12 +397,11 @@ namespace Game1
                     player.CurrentSprite = player_forward;
                 }
 
-                manager.ItemList.Add(playerWeapon);
-                manager.ItemList.Add(playerWeapon2);
-                manager.ItemList.Add(testCurrency);
+                //manager.ItemList.Add(playerWeapon);
+                //manager.ItemList.Add(playerWeapon2);
+                //manager.ItemList.Add(testCurrency);
                 if (player.Position.Intersects(testDoor.Position))
-                {
-                    
+                {                    
                     testDoor.Activated = true;
                     gameState = GameState.Shop;
                 }
@@ -408,19 +427,15 @@ namespace Game1
                     {
                         if (enemyList[i].Position.Intersects(player.Position))
                         {
-
                             enemyList[i].TakeDamage(player, enemyList[i]);
                             if(player.Health <= 0)
                             {
                                 gameState = GameState.EndGame;
                             }
-
                         }
-
                         if(enemyList != null)
                         {
                             enemyList[i].Move(enemyList[i]);
-
                         }
                     }
                 }
@@ -551,7 +566,7 @@ namespace Game1
             // TODO: Add your drawing code here
             spriteBatch.Begin();
             mouseState = Mouse.GetState();
-
+            
             //show mouse placement for button placements
 
             // gamestates
@@ -585,17 +600,23 @@ namespace Game1
             #region Game
             if (gameState == GameState.Game)
             {
-                spriteBatch.Draw(levelScreen, new Vector2(0, 0), Color.White);
-                spriteBatch.Draw(player.CurrentSprite, new Rectangle(player.Position.X, player.Position.Y, 100, 100), Color.White);
 
-                if(testDoor.CurrentTexture == door_open_animation)
+                spriteBatch.Draw(levelScreen, new Vector2(0, 0), Color.White);
+                //spriteBatch.Draw(player.CurrentSprite, new Rectangle(player.Position.X, player.Position.Y, 100, 100), Color.White);
+
+                for(int i = 1; i < currentLevel.LevelArray.GetLength(1); i++) //start at the second row because first row is level info
                 {
-                    spriteBatch.Draw(testDoor.CurrentTexture, testDoor.Position, new Rectangle(testDoor.Timer/20 * 128, 0, 128, 120), Color.White);
+                    for(int j = 0; j < currentLevel.LevelArray.GetLength(0); j++)
+                    {
+                        if (currentLevel.LevelArray[j, i] == '-')
+                        {
+                            spriteBatch.Draw(rock_large, new Rectangle(j * 60, (i - 1) * 60, 60, 60), Color.White);
+                        }
+
+                    }
                 }
-                else
-                {
-                    spriteBatch.Draw(testDoor.CurrentTexture, testDoor.Position, Color.White);
-                }
+
+               
 
                 if (player.Attacking && kbState.IsKeyDown(Keys.A))
                 { 
@@ -614,13 +635,6 @@ namespace Game1
                     }
                 }
 
-                for(int i = 0; i < enemyList.Count; i++)
-                {
-                    if(enemyList[i] != null)
-                    {
-                        spriteBatch.Draw(enemyList[i].Texture, enemyList[i].Position, Color.White);
-                    }
-                }
             }
             #endregion
             #region Pause
@@ -682,7 +696,62 @@ namespace Game1
             {
                 return false;
             }
-
         }
+        
+        public char[,] LevelIO(string levelName)
+        {
+            char[,] levelArray = new char[32, 19];
+            try
+            {
+                reader = new StreamReader("../../../../" + levelName + ".txt");
+                string line = reader.ReadLine();
+                while (line != null)
+                {
+                    for (int i = 0; i < 19; i++)
+                    {
+                        for (int j = 0; j < line.Length; j++)
+                        {
+                            levelArray[j, i] = line[j];
+                        }
+                        line = reader.ReadLine();
+                    }
+                } 
+
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            reader.Close();
+            return levelArray;
+        }
+        
+        public string LevelInfo(char[,] level)
+        {
+            string levelInfo = null;
+            for (int i = 1; i < level.GetLength(1); i++) //start at the second row because first row is level info
+            {
+                for (int j = 0; j < level.GetLength(0); j++)
+                {
+                    if (level[j, i] == 'D')
+                    { 
+                        levelInfo = levelInfo + "d"+ i + j + ",";
+                    }
+                    if (level[j, i] == 'E')
+                    {
+                        levelInfo = levelInfo + "e" + i + j + ",";
+                    }
+                    if (level[j, i] == 'P')
+                    {
+                        levelInfo = levelInfo + "p" + i + j + ",";
+                    }
+
+                }
+            }
+            levelLoaded = true;
+            return levelInfo;
+        }
+
+
     }
 }
