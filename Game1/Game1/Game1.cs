@@ -408,19 +408,16 @@ namespace Game1
                     {
                         if (enemyList[i].Position.Intersects(player.Position))
                         {
-
                             enemyList[i].TakeDamage(player, enemyList[i]);
                             if(player.Health <= 0)
                             {
                                 gameState = GameState.EndGame;
                             }
-
                         }
 
                         if(enemyList != null)
                         {
                             enemyList[i].Move(enemyList[i]);
-
                         }
                     }
                 }
