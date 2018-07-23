@@ -45,6 +45,7 @@ namespace Game1
         ShopManager shop;
         Door testDoor;
         Level currentLevel;
+        Rectangle temp;
 
         //create stream reader and writer
         StreamReader reader;
@@ -303,25 +304,7 @@ namespace Game1
          MouseState mouseState = new MouseState();
 
 
-        /// <summary>
-        /// method for checking button presses
-        /// </summary>
-        /// <param name="tlx">top left corner y coordinate</param>
-        /// <param name="tly">top left corner x coordinate</param>
-        /// <param name="brx">bottom right corner y coordinate</param>
-        /// <param name="bry">bottom right corner x coordinate</param>
-        /// <returns></returns>
-        public bool ButtonClicked(int tlx, int tly, int brx, int bry)
-        {
-            if((mouseState.X >= tlx && mouseState.Y >= tly) && (mouseState.X < brx && mouseState.Y < bry))
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
+      
 
         /// <summary>
         /// Allows the game to run logic such as updating the world,
@@ -382,9 +365,37 @@ namespace Game1
                 if (!levelLoaded)
                 {
                     levelData = LevelInfo(currentLevel.LevelArray);
+                    for(int i = 0; i < levelData.Length; i++)
+                    {
+                        if(levelData[i].Equals("p"))
+                        {
+                            temp = player.Position;
+                            temp.X = levelData[(i + 1) * 60];
+                            temp.Y = levelData[(i + 2) * 60];
+                            player.Position = temp;
+                        }
+                        if (levelData[i].Equals("e"))
+                        {
+                            enemyList.Add(new Enemies(rng, 10, 20, temp, player_forward));
+                            temp = enemyList[enemyList.Count].Position;
+                            temp.X = levelData[(i + 1) * 60];
+                            temp.Y = levelData[(i + 2) * 60];
+                            enemyList[enemyList.Count].Position = temp;
+                            
+                        }
+                        if (levelData[i].Equals("d"))
+                        {
+                            manager.DoorList.Add(new Door(temp, door_locked, door_open_animation, door_open));
+                            temp = manager.DoorList[manager.DoorList.Count].Position;
+                            temp.X = levelData[(i + 1) * 69];
+                            temp.Y = levelData[(i + 2) * 69];
+                            manager.DoorList[manager.DoorList.Count].Position = temp;
+                        }
+                    }
+
                     
                 }
-
+                
                 player.Move(player);
                 
 
@@ -610,12 +621,26 @@ namespace Game1
                     {
                         if (currentLevel.LevelArray[j, i] == '-')
                         {
-                            spriteBatch.Draw(rock_large, new Rectangle(j * 60, (i - 1) * 60, 60, 60), Color.White);
+                            spriteBatch.Draw(wall, new Rectangle(j * 60, (i - 1) * 60, 60, 60), Color.White);
                         }
 
                     }
                 }
 
+                spriteBatch.Draw(player.Texture, player.Position, Color.White);
+
+                for(int i = 0; i < manager.DoorList.Count; i++)
+                {
+                    spriteBatch.Draw(manager.DoorList[i].CurrentTexture, manager.DoorList[i].Position, Color.White);
+                }
+                
+                for(int i = 0; i < enemyList.Count; i++)
+                {
+                    if(enemyList[i] != null)
+                    {
+                        spriteBatch.Draw(enemyList[i].Texture, enemyList[i].Position, Color.White);
+                    }
+                }
                
 
                 if (player.Attacking && kbState.IsKeyDown(Keys.A))
@@ -624,7 +649,7 @@ namespace Game1
                 }
                 else if(player.Attacking)
                 {
-                    spriteBatch.Draw(player.CurrentAtkSprite, new Rectangle(player.Position.X + player.Position.Width, player.Position.Y, 50, 50), Color.White);
+                    spriteBatch.Draw(player.CurrentAtkSprite, new Rectangle(player.Position.X + 50, player.Position.Y, 50, 50), Color.White);
 
                 }
                 for (int i = 0; i < manager.ItemList.Count; i++)
@@ -752,6 +777,25 @@ namespace Game1
             return levelInfo;
         }
 
+        /// <summary>
+        /// method for checking button presses
+        /// </summary>
+        /// <param name="tlx">top left corner y coordinate</param>
+        /// <param name="tly">top left corner x coordinate</param>
+        /// <param name="brx">bottom right corner y coordinate</param>
+        /// <param name="bry">bottom right corner x coordinate</param>
+        /// <returns></returns>
+        public bool ButtonClicked(int tlx, int tly, int brx, int bry)
+        {
+            if ((mouseState.X >= tlx && mouseState.Y >= tly) && (mouseState.X < brx && mouseState.Y < bry))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
 
     }
 }
