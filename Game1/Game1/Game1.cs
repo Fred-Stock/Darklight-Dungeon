@@ -64,6 +64,7 @@ namespace Game1
         KeyboardState previous; //keyboardstate to help with tracking single keyboard inputs
         bool levelLoaded;
         string levelData;
+        Rectangle prevPos;
         
 
 
@@ -127,9 +128,6 @@ namespace Game1
         //spritefont
         SpriteFont Arial12;
 
-        //list of all enemies probably hould be reworked later but for now good enough
-        List<Enemies> enemyList;
-
         //keyboardstate fields
         KeyboardState kbState;
 
@@ -161,8 +159,7 @@ namespace Game1
             graphics.PreferredBackBufferHeight = 1080;   // set this value to the desired height of your window
             this.IsMouseVisible = true;
             graphics.ApplyChanges();
-
-            enemyList = new List<Enemies>();
+            
             rng = new Random();
 
             //Initialize fields
@@ -274,7 +271,7 @@ namespace Game1
             //button loading
             play_hover = Content.Load<Texture2D>("Sprites//Play_hover");
             quit_hover = Content.Load<Texture2D>("Sprites//quit_hover");
-
+            
             //initialize the player
             player = new Player(0, playerWeapon, playerArmor, 100, 20, new Rectangle(100, 100, 75, 75), player_forward); //all values in here are just for test as well
             #endregion
@@ -284,10 +281,11 @@ namespace Game1
             playerArmor = new Armor(ArmorType.test, "testA", new Rectangle(50, 50, 10, 10), door_locked); //all values in here are just for test too
             playerArmor2 = new Armor(ArmorType.test, "testA2", new Rectangle(50, 50, 10, 10), door_locked);//test value
             List<Item> testShopInv = new List<Item>();
+            prevPos = player.Position;
             shop = new ShopManager();
             shop.AddToShop(playerWeapon, 0);
             shop.AddToShop(playerArmor, 4);
-            currentLevel = new Level(LevelIO("testlevel"));
+            currentLevel = new Level(LevelIO("testlevel"), manager);
         }
 
         /// <summary>
@@ -379,7 +377,7 @@ namespace Game1
                                 coord += levelData[k];
                                 k++;
                             }
-                            temp.X = int.Parse(coord) * 60;
+                            temp.X = int.Parse(coord) * 120;
                             k++;
                             coord = null;
                             while (levelData[k] != ',')
@@ -387,9 +385,10 @@ namespace Game1
                                 coord += levelData[k];
                                 k++;
                             }
-                            temp.Y = int.Parse(coord) * 60;
+                            temp.Y = int.Parse(coord) * 120;
                             player.Position = temp;
                         }
+
                         //spawn enemies
                         if (levelData[i].Equals('E'))
                         {
@@ -402,7 +401,7 @@ namespace Game1
                                 coord += levelData[k];
                                 k++;
                             }
-                            temp.X = int.Parse(coord) * 60;
+                            temp.X = int.Parse(coord) * 120;
                             k++;
                             coord = null;
                             while (levelData[k] != ',')
@@ -410,8 +409,8 @@ namespace Game1
                                 coord += levelData[k];
                                 k++;
                             }
-                            temp.Y = int.Parse(coord) * 60;
-                            enemyList.Add(new Enemies(rng, 10, 20, new Rectangle(temp.X, temp.Y, 100, 100), player_forward));
+                            temp.Y = int.Parse(coord) * 120;
+                            manager.EnemyList.Add(new Enemies(rng, 10, 20, new Rectangle(temp.X, temp.Y, 100, 100), player_forward));
                             
                             
                         }
@@ -427,7 +426,7 @@ namespace Game1
                                 coord += levelData[k];
                                 k++;
                             }
-                            temp.X = int.Parse(coord) * 60;
+                            temp.X = int.Parse(coord) * 120;
                             k++;
                             coord = null;
                             while (levelData[k] != ',')
@@ -435,7 +434,7 @@ namespace Game1
                                 coord += levelData[k];
                                 k++;
                             }
-                            temp.Y = int.Parse(coord) * 60;
+                            temp.Y = int.Parse(coord) * 120;
                             manager.DoorList.Add(new Door(new Rectangle(temp.X, temp.Y, 100, 100), door_locked, door_open_animation, door_open, nextLevel));
                         }
                         //spawn stores
@@ -449,7 +448,7 @@ namespace Game1
                                 coord += levelData[k];
                                 k++;
                             }
-                            temp.X = int.Parse(coord) * 60;
+                            temp.X = int.Parse(coord) * 120;
                             k++;
                             coord = null;
                             while (levelData[k] != ',')
@@ -457,10 +456,21 @@ namespace Game1
                                 coord += levelData[k];
                                 k++;
                             }
-                            temp.Y = int.Parse(coord) * 60;
+                            temp.Y = int.Parse(coord) * 120;
                             manager.ItemList.Add(new Item("store", new Rectangle(temp.X, temp.Y, 60, 60), rock_large));
                         }
-                    }             
+                    }
+                    //spawn walls
+                    for (int i = 1; i < currentLevel.LevelArray.GetLength(1); i++) //start at the second row because first row is level info
+                    {
+                        for (int j = 0; j < currentLevel.LevelArray.GetLength(0); j++)
+                        {
+                            if (currentLevel.LevelArray[j, i] == '-')
+                            {
+                                currentLevel.WallList.Add(new Obstacle(new Rectangle(j * 120, (i - 1) * 120, 128, 120), wall));
+                            }
+                        }
+                    }
                 }
                 
                 player.Move(player);
@@ -477,18 +487,23 @@ namespace Game1
                 //check door activations
                 for(int i = 0; i < manager.DoorList.Count; i++)
                 {
-                    if (player.Position.Intersects(manager.DoorList[i].Position))
+                    if (player.Position.Intersects(manager.DoorList[i].Position) && currentLevel.WinCheck())
                     {
                         manager.DoorList[i].DoorActivation();
                         if (manager.DoorList[i].DoorTransistion(player))
                         {
-                            currentLevel = new Level(LevelIO(manager.DoorList[i].NextLevel));
+                            currentLevel = new Level(LevelIO(manager.DoorList[i].NextLevel), manager);
                             levelLoaded = false;
                         }
                     }
                 }
 
+                //check wall collision
 
+                for(int i = 0; i < currentLevel.WallList.Count; i++)
+                {
+                    currentLevel.WallList[i].Collision(player, prevPos);
+                }
 
                 //check items
                 for(int i = 0; i < manager.ItemList.Count; i++)
@@ -511,46 +526,47 @@ namespace Game1
                 }
 
                 //check enemies
-                for(int i = 0; i < enemyList.Count; i++)
+                for(int i = 0; i < manager.EnemyList.Count; i++)
                 {
-                    if(enemyList[i] != null)
+                    if(manager.EnemyList[i] != null)
                     {
-                        if (enemyList[i].Position.Intersects(player.Position))
+                        if (manager.EnemyList[i].Position.Intersects(player.Position))
                         {
-                            enemyList[i].TakeDamage(player, enemyList[i]);
+                            manager.EnemyList[i].TakeDamage(player, manager.EnemyList[i]);
                             if(player.Health <= 0)
                             {
                                 gameState = GameState.EndGame;
                             }
                         }
-                        if(enemyList != null)
+                        if(manager.EnemyList != null)
                         {
-                            enemyList[i].Move(enemyList[i]);
+                            manager.EnemyList[i].Move(manager.EnemyList[i]);
                         }
                     }
                 }
+
                 //check if enemies are hit by player
                 List<Enemies> hitEnemies = new List<Enemies>();
                 if (SingleButtonPress(Keys.J))
                 {
                     player.Attacking = true;
-                    for(int i = 0; i < enemyList.Count; i++)
+                    for(int i = 0; i < manager.EnemyList.Count; i++)
                     {
-                        if(enemyList[i] != null)
+                        if(manager.EnemyList[i] != null)
                         {
-                            if(kbState.IsKeyDown(Keys.D) && new Rectangle(player.Position.X + player.Position.Width, player.Position.Y, 100, 100).Intersects(enemyList[i].Position))
+                            if(kbState.IsKeyDown(Keys.D) && new Rectangle(player.Position.X + player.Position.Width, player.Position.Y, 100, 100).Intersects(manager.EnemyList[i].Position))
                             {
-                                hitEnemies.Add(enemyList[i]);
+                                hitEnemies.Add(manager.EnemyList[i]);
                             }
-                            else if (kbState.IsKeyDown(Keys.A) && new Rectangle(player.Position.X, player.Position.Y, 100, 100).Intersects(enemyList[i].Position))
+                            else if (kbState.IsKeyDown(Keys.A) && new Rectangle(player.Position.X - attack_1_1.Width, player.Position.Y, 100, 100).Intersects(manager.EnemyList[i].Position))
                             {
-                                hitEnemies.Add(enemyList[i]);
+                                hitEnemies.Add(manager.EnemyList[i]);
                             }
 
                         }
                     }
-
                 }
+
                 //deal damage to enemies and determine attack animation
                 //if moving left use left attack
                 if (kbState.IsKeyDown(Keys.A))
@@ -564,10 +580,10 @@ namespace Game1
                 }
                 for(int i = 0; i < hitEnemies.Count; i++)
                 {
-                    if (enemyList[i].Health <= 0)
+                    if (manager.EnemyList[i].Health <= 0)
                     {
-                        enemyList.RemoveAt(i);
-                        enemyList.Insert(i, null);
+                        manager.EnemyList.RemoveAt(i);
+                        manager.EnemyList.Insert(i, null);
                     }
 
                 }
@@ -582,6 +598,8 @@ namespace Game1
                 {
                     gameState = GameState.Pause;
                 }
+
+                prevPos = player.Position;
             }
             #endregion
             #region Pause
@@ -644,6 +662,7 @@ namespace Game1
             #endregion
 
             previous = kbState;
+
             base.Update(gameTime);
         }
 
@@ -696,15 +715,9 @@ namespace Game1
                 spriteBatch.Draw(levelScreen, new Vector2(0, 0), Color.White);
 
                 //draw walls
-                for(int i = 1; i < currentLevel.LevelArray.GetLength(1); i++) //start at the second row because first row is level info
-                {
-                    for(int j = 0; j < currentLevel.LevelArray.GetLength(0); j++)
-                    {
-                        if (currentLevel.LevelArray[j, i] == '-')
-                        {
-                            spriteBatch.Draw(wall, new Rectangle(j * 60, (i - 1) * 60, 60, 60), Color.White);
-                        }
-                    }
+                for(int i = 0; i < currentLevel.WallList.Count; i++)
+                {                   
+                   spriteBatch.Draw(currentLevel.WallList[i].Texture, currentLevel.WallList[i].Position, Color.White);
                 }
 
                 //draw player
@@ -734,11 +747,11 @@ namespace Game1
                 }
 
                 //draw all enemies on level
-                for(int i = 0; i < enemyList.Count; i++)
+                for(int i = 0; i < manager.EnemyList.Count; i++)
                 {
-                    if(enemyList[i] != null)
+                    if(manager.EnemyList[i] != null)
                     {
-                        spriteBatch.Draw(enemyList[i].Texture, enemyList[i].Position, Color.White);
+                        spriteBatch.Draw(manager.EnemyList[i].Texture, manager.EnemyList[i].Position, Color.White);
                     }
                 }
                
@@ -822,15 +835,15 @@ namespace Game1
             //clear lists before next level is loaded otherwise things may carry over through levels
             manager.DoorList.Clear();
             manager.ItemList.Clear();
-            enemyList.Clear();
-            char[,] levelArray = new char[32, 19];
+            manager.EnemyList.Clear();
+            char[,] levelArray = new char[16, 10];
             try
             {
                 reader = new StreamReader("../../../../" + levelName + ".txt");
                 string line = reader.ReadLine();
                 while (line != null)
                 {
-                    for (int i = 0; i < 19; i++)
+                    for (int i = 0; i < 10; i++)
                     {
                         for (int j = 0; j < line.Length; j++)
                         {

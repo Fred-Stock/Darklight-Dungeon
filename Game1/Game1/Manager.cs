@@ -23,6 +23,11 @@ namespace Game1
         {
             get { return doorList; }
         }
+        public List<Enemies> EnemyList
+        {
+            get { return enemyList; }
+        }
+
 
         //global entities
         Player player;

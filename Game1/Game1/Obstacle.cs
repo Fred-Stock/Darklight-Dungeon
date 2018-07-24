@@ -11,10 +11,21 @@ namespace Game1
 {
     class Obstacle : GameObject
     {
+        //fields
+        
         //constructor
         public Obstacle(Rectangle position, Texture2D texture) : base(position, texture)
         {
 
+        }
+
+        //methods
+        public void Collision(Player player, Rectangle prevPos)
+        {
+            if (player.Position.Intersects(Position))
+            {
+                player.Position = prevPos;
+            }
         }
     }
 }

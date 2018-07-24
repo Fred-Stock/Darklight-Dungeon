@@ -12,31 +12,27 @@ namespace Game1
         private char[,] levelArray;
         private bool won;
         private List<Enemies> enemyList;
-        private List<Item> itemList;
+        private List<Obstacle> wallList;
 
         //properties
         public char[,] LevelArray
         {
             get { return levelArray; }
         }
+        public List<Obstacle> WallList
+        {
+            get { return wallList; }
+        }
         public bool Won
         {
             get { return won; }
         }
-        public List<Enemies> EnemyList
-        {
-            get { return enemyList; }
-            set { enemyList = value; }
-        }
-        public List<Item> ItemList
-        {
-            get { return itemList; }
-            set { itemList = value; }
-        }
 
         //constructor
-        public Level(char[,] levelArray)
+        public Level(char[,] levelArray, Manager manager)
         {
+            wallList = new List<Obstacle>();
+            enemyList = manager.EnemyList;
             this.levelArray = levelArray;
             won = false;
         }
