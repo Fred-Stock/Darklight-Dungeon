@@ -89,6 +89,7 @@ namespace Game1
         Texture2D player_backward;
         Texture2D rock_large;
         Texture2D rock_small;
+        Texture2D enemy_1;
 
         //attack sprites
         //attack 1
@@ -211,6 +212,7 @@ namespace Game1
             //sprite loading
             player_forward = Content.Load<Texture2D>("Sprites//player_forward");
             player_backward = Content.Load<Texture2D>("Sprites//player_backward");
+            enemy_1 = Content.Load<Texture2D>("Sprites//enemy_1");
             //attack sprite loading
             //attack 1
             attack_1_1 = Content.Load<Texture2D>("Sprites//AttackSprites//attack_1a");
