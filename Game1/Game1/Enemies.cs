@@ -12,13 +12,29 @@ namespace Game1
     class Enemies : Characters
     {
         //fields
-        Random rng;
-        int initialX;
-        int initialY;
-        int direction;
+        private Random rng;
+        private int initialX;
+        private int initialY;
+        private int direction;
+        private bool hit;
+        private Rectangle prevPos;
+        
+        //properties
+        public bool Hit
+        {
+            get { return hit; }
+            set { hit = value; }
+        }
+        public Rectangle PrevPos
+        {
+            get { return prevPos; }
+            set { prevPos = value; }
+        }
+
         //constructor
         public Enemies(Random rng, int health, int damage, Rectangle position, Texture2D texture) : base(health, damage, position, texture)
         {
+            hit = false;
             this.rng = rng;
             initialX = Position.X;
             initialY = Position.Y;
@@ -76,7 +92,7 @@ namespace Game1
         {
             if (damager.Position.Intersects(damaged.Position))
             {
-                damaged.Health -= 50;
+                damaged.Health -= damage;
             }
         }
     }

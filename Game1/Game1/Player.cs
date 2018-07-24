@@ -24,6 +24,7 @@ namespace Game1
         private bool attacking;
         private bool attacking2;
         private int moveSpeed;
+        private bool hit;
 
         //properties
         public int Score
@@ -83,12 +84,17 @@ namespace Game1
             get { return moveSpeed; }
             set { moveSpeed = value; }
         }
-
+        public bool Hit
+        {
+            get { return hit; }
+            set { hit = value; }
+        }
 
 
         //constructor
         public Player(int score, Weapon weapon, Armor armor, int health, int damage, Rectangle position, Texture2D texture ) : base(health, damage, position, texture)
         {
+            hit = false;
             this.score = score;
             this.weapon = weapon;
             currentSprite = texture;
@@ -158,6 +164,7 @@ namespace Game1
 
         public void Attack(Player player, List<Enemies> enemys, List<Texture2D> animation)
         {
+            Enemies tempEnemy;
             if (attacking)
             {
                 timer++;
@@ -165,7 +172,9 @@ namespace Game1
                 {
                     for(int i = 0; i < enemys.Count; i++)
                     {
-                        enemys[i].Health -= player.damage;
+                        tempEnemy = enemys[i];
+                        tempEnemy.Health -= player.damage;
+                        enemys[i] = tempEnemy;
                     }
                 }
                 if(timer < 13)

@@ -20,11 +20,11 @@ namespace Game1
         }
 
         //methods
-        public void Collision(Player player, Rectangle prevPos)
+        public void Collision(Characters character, Rectangle prevPos)
         {
-            if (player.Position.Intersects(Position))
+            if (character.Position.Intersects(Position))
             {
-                player.Position = prevPos;
+                character.Position = prevPos;
             }
         }
     }

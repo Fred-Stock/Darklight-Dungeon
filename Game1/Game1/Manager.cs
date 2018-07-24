@@ -26,6 +26,7 @@ namespace Game1
         public List<Enemies> EnemyList
         {
             get { return enemyList; }
+            set { enemyList = value; }
         }
 
 

@@ -67,6 +67,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Icon.ico" />
+    <Content Include="level1.txt" />
+    <Content Include="level2.txt" />
     <Content Include="testlevel.txt" />
     <Content Include="store.txt" />
   </ItemGroup>

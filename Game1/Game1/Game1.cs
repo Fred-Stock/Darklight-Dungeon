@@ -273,7 +273,7 @@ namespace Game1
             quit_hover = Content.Load<Texture2D>("Sprites//quit_hover");
             
             //initialize the player
-            player = new Player(0, playerWeapon, playerArmor, 100, 20, new Rectangle(100, 100, 75, 75), player_forward); //all values in here are just for test as well
+            player = new Player(0, playerWeapon, playerArmor, 100, 2000, new Rectangle(100, 100, 75, 75), player_forward); //all values in here are just for test as well
             #endregion
             playerWeapon = new Weapon(WeaponType.test, "testW", new Rectangle(50, 250, 40, 40), rock_small); //all values in here are just for test
             playerWeapon2 = new Weapon(WeaponType.test, "testW", new Rectangle(50, 400, 40, 40), rock_small); //all values in here are just for test
@@ -285,7 +285,7 @@ namespace Game1
             shop = new ShopManager();
             shop.AddToShop(playerWeapon, 0);
             shop.AddToShop(playerArmor, 4);
-            currentLevel = new Level(LevelIO("testlevel"), manager);
+            currentLevel = new Level(LevelIO("level1"), manager);
         }
 
         /// <summary>
@@ -410,7 +410,7 @@ namespace Game1
                                 k++;
                             }
                             temp.Y = int.Parse(coord) * 120;
-                            manager.EnemyList.Add(new Enemies(rng, 10, 20, new Rectangle(temp.X, temp.Y, 100, 100), player_forward));
+                            manager.EnemyList.Add(new Enemies(rng, 10, 2, new Rectangle(temp.X, temp.Y, 100, 100), player_forward));
                             
                             
                         }
@@ -499,10 +499,17 @@ namespace Game1
                 }
 
                 //check wall collision
-
                 for(int i = 0; i < currentLevel.WallList.Count; i++)
                 {
                     currentLevel.WallList[i].Collision(player, prevPos);
+
+                    for(int k = 0; k < manager.EnemyList.Count; k++)
+                    {
+                        if(manager.EnemyList[k] != null)
+                        {
+                            currentLevel.WallList[k].Collision(manager.EnemyList[k], manager.EnemyList[k].PrevPos);
+                        }
+                    }
                 }
 
                 //check items
@@ -532,7 +539,11 @@ namespace Game1
                     {
                         if (manager.EnemyList[i].Position.Intersects(player.Position))
                         {
-                            manager.EnemyList[i].TakeDamage(player, manager.EnemyList[i]);
+                            if (!player.Hit)
+                            {
+                                manager.EnemyList[i].TakeDamage(player, manager.EnemyList[i]);
+                                player.Hit = true;
+                            }
                             if(player.Health <= 0)
                             {
                                 gameState = GameState.EndGame;
@@ -544,6 +555,7 @@ namespace Game1
                         }
                     }
                 }
+                player.Hit = false;
 
                 //check if enemies are hit by player
                 List<Enemies> hitEnemies = new List<Enemies>();
@@ -578,16 +590,17 @@ namespace Game1
                 {
                     player.Attack(player, hitEnemies, attack1);
                 }
-                for(int i = 0; i < hitEnemies.Count; i++)
+                for(int i = 0; i < manager.EnemyList.Count; i++)
                 {
-                    if (manager.EnemyList[i].Health <= 0)
+                    if (manager.EnemyList[i] != null)
                     {
-                        manager.EnemyList.RemoveAt(i);
-                        manager.EnemyList.Insert(i, null);
+                        if (manager.EnemyList[i].Health <= 0)
+                        {
+                            manager.EnemyList.RemoveAt(i);
+                            manager.EnemyList.Insert(i, null);
+                        }
                     }
-
                 }
-
 
                 //transition to inventory screen
                 if (SingleButtonPress(Keys.I))
@@ -599,7 +612,15 @@ namespace Game1
                     gameState = GameState.Pause;
                 }
 
+                //set previous positions for wall collision
                 prevPos = player.Position;
+                for(int i = 0; i < manager.EnemyList.Count; i++)
+                {
+                    if(manager.EnemyList[i] != null)
+                    {
+                        manager.EnemyList[i].PrevPos = manager.EnemyList[i].Position;
+                    }
+                }
             }
             #endregion
             #region Pause
@@ -657,7 +678,16 @@ namespace Game1
             #region End Game
             if (gameState == GameState.EndGame)
             {
-
+                //button logic
+                if(ButtonClicked(700, 560, 1205, 600))//resart
+                {
+                    currentLevel = new Level(LevelIO("level1"), manager);
+                    gameState = GameState.Game;
+                }
+                if(ButtonClicked(640, 740, 1275, 835))//main menu
+                {
+                    gameState = GameState.MainMenu;
+                }
             }
             #endregion
 
@@ -721,7 +751,15 @@ namespace Game1
                 }
 
                 //draw player
-                spriteBatch.Draw(player.Texture, player.Position, Color.White);
+                if (kbState.IsKeyDown(Keys.W))
+                {
+                    player.CurrentSprite = player_backward;
+                }
+                else
+                {
+                    player.CurrentSprite = player_forward;
+                }
+                spriteBatch.Draw(player.CurrentSprite, player.Position, Color.White);
 
                 //draw all doors on level
                 for(int i = 0; i < manager.DoorList.Count; i++)
@@ -916,7 +954,7 @@ namespace Game1
         /// <returns></returns>
         public bool ButtonClicked(int tlx, int tly, int brx, int bry)
         {
-            if ((mouseState.X >= tlx && mouseState.Y >= tly) && (mouseState.X < brx && mouseState.Y < bry))
+            if ((mouseState.X >= tlx && mouseState.Y >= tly) && (mouseState.X < brx && mouseState.Y < bry) && mouseState.LeftButton == ButtonState.Pressed)
             {
                 return true;
             }
