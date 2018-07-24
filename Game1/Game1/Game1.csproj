@@ -67,8 +67,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Icon.ico" />
-    <Content Include="TestLevel.txt" />
-    <Content Include="TextFile1.txt" />
+    <Content Include="testlevel.txt" />
+    <Content Include="store.txt" />
   </ItemGroup>
   <ItemGroup>
     <MonoGameContentReference Include="Content\Content.mgcb" />

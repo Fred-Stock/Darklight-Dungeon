@@ -19,7 +19,7 @@ namespace Game1
         private Texture2D currentTexture;
         private int timer;
         private bool activated;
-        private Level nextLevel;
+        private string nextLevel;
 
         //properites
         public Texture2D MiddleSprite
@@ -48,16 +48,20 @@ namespace Game1
         {
             get { return timer; }
         }
+        public string NextLevel
+        {
+            get { return nextLevel; }
+        }
 
         //constructor
-        public Door(Rectangle position, Texture2D initialTexture, Texture2D middleSprite, Texture2D finalSprite) : base(position, initialTexture)
+        public Door(Rectangle position, Texture2D initialTexture, Texture2D middleSprite, Texture2D finalSprite, string nextLevel) : base(position, initialTexture)
         {
             this.middleSprite = middleSprite;
             this.finalSprite = finalSprite;
             currentTexture = initialTexture;
             activated = false;
             timer = 0;
-
+            this.nextLevel = nextLevel;
         }
 
         //methods
@@ -78,27 +82,36 @@ namespace Game1
                 if (timer == 160)
                 {
                     currentTexture = finalSprite;
-                    timer = 0;
+                    
                     activated = false;
                 }
             }
             return currentTexture;
         }
-        
+
         /// <summary>
         /// method for transfering between levels
         /// </summary>
         /// <param name="game"></param>
         /// <param name="player"></param>
-        public void DoorTransistion(Game game, Player player)
+        int prevSpeed = 0;
+        public bool DoorTransistion(Player player)
         {
-            int prevSpeed = player.MoveSpeed;
-            player.MoveSpeed = 0;
+            if (timer == 0)
+            {
+                prevSpeed = player.MoveSpeed;
+                player.MoveSpeed = 0;
+            }
+
             Activated = true;
             if(timer >= 160)
             {
                 player.MoveSpeed = prevSpeed;
-              
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
 

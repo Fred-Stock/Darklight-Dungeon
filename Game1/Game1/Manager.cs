@@ -12,6 +12,7 @@ namespace Game1
         private List<Obstacle> obstacleList = new List<Obstacle>();
         private List<Enemies> enemyList = new List<Enemies>();
         private List<Item> itemList = new List<Item>();
+        
         private List<Door> doorList = new List<Door>();
         //properties
         public List<Item> ItemList
