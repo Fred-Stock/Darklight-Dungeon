@@ -275,7 +275,7 @@ namespace Game1
             quit_hover = Content.Load<Texture2D>("Sprites//quit_hover");
             
             //initialize the player
-            player = new Player(0, playerWeapon, playerArmor, 100, 2000, new Rectangle(100, 100, 75, 75), player_forward); //all values in here are just for test as well
+            player = new Player(0, playerWeapon, playerArmor, 100, 2000, new Rectangle(100, 100, 40, 75), player_forward); //all values in here are just for test as well
             #endregion
             playerWeapon = new Weapon(WeaponType.test, "testW", new Rectangle(50, 250, 40, 40), rock_small); //all values in here are just for test
             playerWeapon2 = new Weapon(WeaponType.test, "testW", new Rectangle(50, 400, 40, 40), rock_small); //all values in here are just for test
@@ -412,7 +412,7 @@ namespace Game1
                                 k++;
                             }
                             temp.Y = int.Parse(coord) * 120;
-                            manager.EnemyList.Add(new Enemies(rng, 10, 2, new Rectangle(temp.X, temp.Y, 100, 100), player_forward));
+                            manager.EnemyList.Add(new Enemies(rng, 10, 2, new Rectangle(temp.X, temp.Y, 100, 100), enemy_1));
                             
                             
                         }
@@ -572,7 +572,7 @@ namespace Game1
                             {
                                 hitEnemies.Add(manager.EnemyList[i]);
                             }
-                            else if (kbState.IsKeyDown(Keys.A) && new Rectangle(player.Position.X - attack_1_1.Width, player.Position.Y, 100, 100).Intersects(manager.EnemyList[i].Position))
+                            else if (kbState.IsKeyDown(Keys.A) && new Rectangle(player.Position.X - 100, player.Position.Y, 100, 100).Intersects(manager.EnemyList[i].Position))
                             {
                                 hitEnemies.Add(manager.EnemyList[i]);
                             }
@@ -798,14 +798,14 @@ namespace Game1
                 //draw attacking sprites
                 if (player.Attacking && kbState.IsKeyDown(Keys.A))
                 { 
-                    spriteBatch.Draw(player.CurrentAtkSprite, new Rectangle(player.Position.X - 25, player.Position.Y, 50, 50), Color.White);
+                    spriteBatch.Draw(player.CurrentAtkSprite,
+                        new Rectangle(player.Position.X - 100, player.Position.Y - 10, 100, 100), Color.White);
                 }
                 else if(player.Attacking)
                 {
-                    spriteBatch.Draw(player.CurrentAtkSprite, new Rectangle(player.Position.X + 50, player.Position.Y, 50, 50), Color.White);
+                    spriteBatch.Draw(player.CurrentAtkSprite,
+                        new Rectangle(player.Position.X + player.Position.Width, player.Position.Y - 10, 100, 100), Color.White);
                 }
-
-
             }
             #endregion
             #region Pause
