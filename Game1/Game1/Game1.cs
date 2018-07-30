@@ -286,7 +286,7 @@ namespace Game1
             prevPos = player.Position;
             shop = new ShopManager();
             shop.AddToShop(playerWeapon, 0);
-            shop.AddToShop(playerArmor, 4);
+            shop.AddToShop(playerArmor, 0);
             currentLevel = new Level(LevelIO("level1"), manager);
         }
 
@@ -576,7 +576,6 @@ namespace Game1
                             {
                                 hitEnemies.Add(manager.EnemyList[i]);
                             }
-
                         }
                     }
                 }
@@ -680,14 +679,23 @@ namespace Game1
             #region End Game
             if (gameState == GameState.EndGame)
             {
+                levelLoaded = false;
+                manager.EnemyList.Clear();
+                manager.ItemList.Clear();
+                manager.DoorList.Clear();
+                player.Inventory.Clear();
+                player.InvList.Clear();
+                player.Health = 100;
+                
                 //button logic
-                if(ButtonClicked(700, 560, 1205, 600))//resart
+                if(ButtonClicked(700, 560, 1205, 660))//resart
                 {
                     currentLevel = new Level(LevelIO("level1"), manager);
                     gameState = GameState.Game;
                 }
                 if(ButtonClicked(640, 740, 1275, 835))//main menu
                 {
+                    player.Health = 100;
                     gameState = GameState.MainMenu;
                 }
             }
@@ -794,17 +802,22 @@ namespace Game1
                         spriteBatch.Draw(manager.EnemyList[i].Texture, manager.EnemyList[i].Position, Color.White);
                     }
                 }
-               
+
                 //draw attacking sprites
+                Color atkColor = Color.White;
+                if (player.Inventory.ContainsKey("testW"))
+                {
+                    atkColor = Color.Red;
+                }
                 if (player.Attacking && kbState.IsKeyDown(Keys.A))
                 { 
                     spriteBatch.Draw(player.CurrentAtkSprite,
-                        new Rectangle(player.Position.X - 100, player.Position.Y - 10, 100, 100), Color.White);
+                        new Rectangle(player.Position.X - 100, player.Position.Y - 10, 100, 100), atkColor);
                 }
                 else if(player.Attacking)
                 {
                     spriteBatch.Draw(player.CurrentAtkSprite,
-                        new Rectangle(player.Position.X + player.Position.Width, player.Position.Y - 10, 100, 100), Color.White);
+                        new Rectangle(player.Position.X + player.Position.Width, player.Position.Y - 10, 100, 100), atkColor);
                 }
             }
             #endregion
@@ -821,9 +834,10 @@ namespace Game1
                 foreach (string item in player.InvList)
                 {
                     spriteBatch.Draw(player.Inventory[item].Texture, new Rectangle(555 + (player.InvList.IndexOf(item)/3 * 170), 
-                        330 + player.InvList.IndexOf(item)%3 * 165,
+                        330 + player.InvList.IndexOf(item)%3 * 205,
                         135, 135), Color.White);
-                    //spriteBatch.DrawString(Arial12, item, new Vector2(60 + (player.InvList.IndexOf(item)/3 * 150), 160 + player.InvList.IndexOf(item)%2 * 160), Color.White);
+                    spriteBatch.DrawString(Arial12, item, new Vector2(560 + (player.InvList.IndexOf(item)/3 * 170),
+                         490 + player.InvList.IndexOf(item)%3 * 205), Color.Black);
                 }
                 spriteBatch.DrawString(Arial12, "Currency: " + player.Currency, new Vector2(25, 25), Color.White);
             }
@@ -965,6 +979,8 @@ namespace Game1
                 return false;
             }
         }
+
+        
 
     }
 }
