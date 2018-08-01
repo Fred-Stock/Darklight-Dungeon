@@ -630,9 +630,17 @@ namespace Game1
             #region Pause
             if (gameState == GameState.Pause)
             {
-                if (SingleButtonPress(Keys.Enter))
+                if (ButtonClicked(735, 595, 1185, 685))
                 {
                     gameState = GameState.Game;
+                }
+                if (ButtonClicked(800, 720, 1120, 805))
+                {
+                    gameState = GameState.MainMenu;
+                }
+                if (ButtonClicked(830, 840, 1090, 925))
+                {
+                    Exit();
                 }
             }
             #endregion
