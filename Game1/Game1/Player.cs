@@ -84,11 +84,6 @@ namespace Game1
             get { return moveSpeed; }
             set { moveSpeed = value; }
         }
-        public bool Hit
-        {
-            get { return hit; }
-            set { hit = value; }
-        }
 
 
         //constructor
@@ -176,6 +171,8 @@ namespace Game1
                         tempEnemy = enemys[i];
                         tempEnemy.Health -= player.damage;
                         enemys[i] = tempEnemy;
+                        enemys.RemoveAt(i);
+                        i--;
                     }
                 }
                 if(timer < 13)

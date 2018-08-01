@@ -274,7 +274,7 @@ namespace Game1
             quit_hover = Content.Load<Texture2D>("Sprites//quit_hover");
             
             //initialize the player
-            player = new Player(0, playerWeapon, playerArmor, 100, 2000, new Rectangle(100, 100, 40, 75), player_forward); //all values in here are just for test as well
+            player = new Player(0, playerWeapon, playerArmor, 100, 10, new Rectangle(100, 100, 40, 75), player_forward); //all values in here are just for test as well
             #endregion
             playerWeapon = new Weapon(WeaponType.test, "testW", new Rectangle(50, 250, 40, 40), rock_small); //all values in here are just for test
             playerWeapon2 = new Weapon(WeaponType.test, "testW", new Rectangle(50, 400, 40, 40), rock_small); //all values in here are just for test
@@ -411,7 +411,7 @@ namespace Game1
                                 k++;
                             }
                             temp.Y = int.Parse(coord) * 120;
-                            manager.EnemyList.Add(new Enemies(rng, 10, 2, new Rectangle(temp.X, temp.Y, 100, 100), enemy_1));
+                            manager.EnemyList.Add(new Enemies(rng, 40, 2, new Rectangle(temp.X, temp.Y, 100, 100), enemy_1));
                             
                             
                         }
@@ -544,11 +544,10 @@ namespace Game1
                     {
                         if (manager.EnemyList[i].Position.Intersects(player.Position))
                         {
-                            if (!player.Hit)
-                            {
-                                manager.EnemyList[i].TakeDamage(player, manager.EnemyList[i]);
-                                player.Hit = true;
-                            }
+
+                            manager.EnemyList[i].TakeDamage(player, manager.EnemyList[i]);
+                            player.Knockback(manager.EnemyList[i]);
+                            
                             if(player.Health <= 0)
                             {
                                 gameState = GameState.EndGame;
@@ -560,7 +559,7 @@ namespace Game1
                         }
                     }
                 }
-                player.Hit = false;
+
 
                 //check if enemies are hit by player
                 List<Enemies> hitEnemies = new List<Enemies>();
@@ -583,15 +582,25 @@ namespace Game1
                     }
                 }
 
-                //deal damage to enemies and determine attack animation
+                //deal damage to enemies, do knockback, and determine attack animation
                 //if moving left use left attack
                 if (kbState.IsKeyDown(Keys.A))
                 {
-                    player.Attack(player, hitEnemies, attack2);
+                    for(int i = 0; i < hitEnemies.Count; i++)
+                    {
+                        hitEnemies[i].Knockback(player);
+                    }
+
+                    player.Attack(player, hitEnemies, attack2);               
                 }
                 //else use right attack
                 else
                 {
+                    for(int i = 0; i < hitEnemies.Count; i++)
+                    {
+                        hitEnemies[i].Knockback(player);
+                    }
+
                     player.Attack(player, hitEnemies, attack1);
                 }
                 for(int i = 0; i < manager.EnemyList.Count; i++)

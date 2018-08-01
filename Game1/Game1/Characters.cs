@@ -18,6 +18,10 @@ namespace Game1
 
         protected KeyboardState kbstate;
 
+        protected bool invulnerable;
+
+        private int timer;
+
         public int Health
         {
             get { return health; }
@@ -27,6 +31,12 @@ namespace Game1
         public int Damage
         {
             get { return damage; }
+        }
+
+        public bool Invulnerable
+        {
+            get { return invulnerable; }
+            set { invulnerable = value; }
         }
 
         //constructor
@@ -66,6 +76,35 @@ namespace Game1
             character.Position = temp;
         }
 
-
+        /// <summary>
+        /// method for determining knockback
+        /// </summary>
+        /// <param name="attacker">character that damaged the character getting knocked backwards</param>
+        public virtual void Knockback(Characters attacker)
+        {
+            
+            Rectangle temp = Position;
+            
+           
+            if(attacker.Position.X < Position.X) //attack from the left
+            {
+                temp.X += 100;
+            }
+            if(attacker.Position.X > Position.X) //attack from the right
+            {
+                temp.X -= 100;
+            }
+            if(attacker.Position.Y < Position.Y) //attack from above
+            {
+                temp.Y += 100;
+            }
+            if(attacker.Position.Y > Position.Y) //attack from below
+            {
+                temp.Y -= 100;
+            }
+            Position = temp;
+            timer++;
+        }
     }
+
 }
