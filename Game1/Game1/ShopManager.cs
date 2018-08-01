@@ -1,8 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
+using System;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace Game1
 {
@@ -54,5 +57,7 @@ namespace Game1
                 return "not enough currency";
             }
         }
+
+
     }
 }

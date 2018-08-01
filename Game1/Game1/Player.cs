@@ -139,6 +139,7 @@ namespace Game1
             {
                 inventory.Add(item.Name, item);
                 invList.Add(item.Name);
+                weapon = new Weapon(WeaponType.test, item.Name, item.Position, item.Texture);
             }
             //temp solution but if there is a collision then add a 1 to the end of the name and keep doing that until no collision
             else

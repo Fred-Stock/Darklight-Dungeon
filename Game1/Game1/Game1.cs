@@ -43,7 +43,6 @@ namespace Game1
         Manager manager;
         Item testCurrency;
         ShopManager shop;
-        Door testDoor;
         Level currentLevel;
         Rectangle temp;
 
@@ -459,6 +458,10 @@ namespace Game1
                                 k++;
                             }
                             temp.Y = int.Parse(coord) * 120;
+                            shop.ShopInv.Clear();
+                            shop.ItemCosts.Clear();
+                            usedShop = false;
+                            FillShop(player, shop);
                             manager.ItemList.Add(new Item("store", new Rectangle(temp.X, temp.Y, 60, 60), rock_large));
                         }
                     }
@@ -805,7 +808,7 @@ namespace Game1
 
                 //draw attacking sprites
                 Color atkColor = Color.White;
-                if (player.Inventory.ContainsKey("testW"))
+                if (player.Inventory.ContainsKey("+1weapon"))
                 {
                     atkColor = Color.Red;
                 }
@@ -848,6 +851,7 @@ namespace Game1
                 spriteBatch.Draw(levelScreen, new Vector2(0, 0), Color.White);
                 for(int i = 0; i < shop.ShopInv.Count; i++)
                 {
+                    
                     spriteBatch.Draw(shop.ShopInv[i].Texture, new Rectangle(GraphicsDevice.Viewport.Width / 3 + (200 * i), GraphicsDevice.Viewport.Height / 2 - 50, 100, 100), Color.White);
                     spriteBatch.DrawString(Arial12, shop.ShopInv[i].Name, new Vector2(25 + GraphicsDevice.Viewport.Width / 3 + (200 * i), 110 + GraphicsDevice.Viewport.Height / 2 - 50), Color.White);
                     spriteBatch.DrawString(Arial12, "Currency: " + player.Currency, new Vector2(25, 25), Color.White);
@@ -980,7 +984,65 @@ namespace Game1
             }
         }
 
-        
+        private void FillShop(Player player, ShopManager store)
+        {
+            if (!player.Inventory.ContainsKey("weapon"))
+            {
+                store.AddToShop(new Item("weapon", new Rectangle(50, 50, 10, 10), rock_small), 0);
+            }
+            else
+            {
+                //determining random weapon upgrade
+                int weaponVersion = rng.Next(4);
+
+                //determining random weapon upgrade
+                if(weaponVersion == 0)
+                {
+                    store.AddToShop(new Item("+1" + player.Weapon.Name, new Rectangle(50, 50, 10, 10), rock_small), 0);
+                }
+                else if(weaponVersion == 1)
+                {
+                    store.AddToShop(new Item(player.Weapon.Name + " of shock", new Rectangle(50, 50, 10, 10), rock_small), 0);
+                }
+                else if(weaponVersion == 2)
+                {
+                    store.AddToShop(new Item(player.Weapon.Name + " of fire", new Rectangle(50, 50, 10, 10), rock_small), 0);
+                }
+                else if(weaponVersion == 3)
+                {
+                    store.AddToShop(new Item(player.Weapon.Name + " of frost", new Rectangle(50, 50, 10, 10), rock_small), 0);
+                }
+
+            }
+            if (!player.Inventory.ContainsKey("armor"))
+            {
+                store.AddToShop(new Item("armor", new Rectangle(50, 50, 10, 10), door_locked), 0);
+            }
+            else
+            {
+                //determining random armor upgrade
+                int armorVersion = rng.Next(4);
+
+
+                if(armorVersion == 0)
+                {
+                    store.AddToShop(new Item("+1" + player.Armor.Name, new Rectangle(50, 50, 10, 10), rock_small), 0);
+                }
+                else if(armorVersion == 1)
+                {
+                    store.AddToShop(new Item(player.Armor.Name + "of thorns", new Rectangle(50, 50, 10, 10), door_locked), 0);
+
+                }
+                else if(armorVersion == 2)
+                {
+                    store.AddToShop(new Item(player.Armor.Name + "of shielding", new Rectangle(50, 50, 10, 10), door_locked), 0);
+                }
+                else if(armorVersion == 3)
+                {
+                    store.AddToShop(new Item(player.Armor.Name + "of speed", new Rectangle(50, 50, 10, 10), door_locked), 0);
+                }
+            }
+        }
 
     }
 }
