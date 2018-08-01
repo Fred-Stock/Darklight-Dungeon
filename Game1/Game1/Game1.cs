@@ -825,6 +825,7 @@ namespace Game1
             if (gameState == GameState.Pause)
             {
                 spriteBatch.Draw(levelScreen, new Vector2(0, 0), Color.White);
+                spriteBatch.Draw(pause, new Vector2(0, 0), Color.White);
             }
             #endregion
             #region Inventory
