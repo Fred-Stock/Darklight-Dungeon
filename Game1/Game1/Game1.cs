@@ -82,10 +82,13 @@ namespace Game1
         Texture2D door_open;
         Texture2D door_open_animation;
         Texture2D wall;
+        Texture2D base_weapon;
+        Texture2D base_armor;
 
         //sprites
         Texture2D player_forward;
         Texture2D player_backward;
+        Texture2D player_walk_side;
         Texture2D rock_large;
         Texture2D rock_small;
         Texture2D enemy_1;
@@ -205,10 +208,13 @@ namespace Game1
             door_open_animation = Content.Load<Texture2D>("Sprites//door_unlocking_animated");
             rock_large = Content.Load<Texture2D>("Sprites//rock_big");
             rock_small = Content.Load<Texture2D>("Sprites//rock_small");
+            base_weapon = Content.Load<Texture2D>("Sprites//base_weapon");
+            base_armor = Content.Load<Texture2D>("Sprites//base_armor");
 
             //sprite loading
             player_forward = Content.Load<Texture2D>("Sprites//player_forward");
             player_backward = Content.Load<Texture2D>("Sprites//player_backward");
+            player_walk_side = Content.Load<Texture2D>("Sprites//player_walk_side");
             enemy_1 = Content.Load<Texture2D>("Sprites//enemy_1");
             //attack sprite loading
             //attack 1
