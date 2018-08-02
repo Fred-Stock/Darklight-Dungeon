@@ -25,6 +25,7 @@ namespace Game1
         private bool attacking2;
         private int moveSpeed;
         private bool hit;
+        private Rectangle prevPos;
 
         //properties
         public int Score
@@ -32,29 +33,24 @@ namespace Game1
             get { return score; }
             set { score = value; }
         }
-
         public Weapon Weapon
         {
             get { return weapon; }
             set { weapon = value; }
         }
-
         public Armor Armor
         {
             get { return armor; }
             set { armor = value; }
         }
-
         public List<string> InvList
         {
             get { return invList; }
         }
-
         public Dictionary<string, Item> Inventory
         {
             get { return inventory; }
         }
-
         public int Currency
         {
             get { return currency; }
@@ -83,6 +79,11 @@ namespace Game1
         {
             get { return moveSpeed; }
             set { moveSpeed = value; }
+        }
+        public Rectangle PrevPos
+        {
+            get { return prevPos; }
+            set { prevPos = value; }
         }
 
 
@@ -189,6 +190,7 @@ namespace Game1
 
         public override void Move(Characters character)
         {
+            prevPos = Position;
             Rectangle temp = character.Position;
             kbstate = Keyboard.GetState();
             if (kbstate.IsKeyDown(Keys.W))

@@ -85,7 +85,6 @@ namespace Game1
             
             Rectangle temp = Position;
             
-           
             if(attacker.Position.X < Position.X) //attack from the left
             {
                 temp.X += 100;

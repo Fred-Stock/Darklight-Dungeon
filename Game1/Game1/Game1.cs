@@ -63,7 +63,6 @@ namespace Game1
         KeyboardState previous; //keyboardstate to help with tracking single keyboard inputs
         bool levelLoaded;
         string levelData;
-        Rectangle prevPos;
         
 
 
@@ -282,7 +281,6 @@ namespace Game1
             playerArmor = new Armor(ArmorType.test, "testA", new Rectangle(50, 50, 10, 10), door_locked); //all values in here are just for test too
             playerArmor2 = new Armor(ArmorType.test, "testA2", new Rectangle(50, 50, 10, 10), door_locked);//test value
             List<Item> testShopInv = new List<Item>();
-            prevPos = player.Position;
             shop = new ShopManager();
             shop.AddToShop(playerWeapon, 0);
             shop.AddToShop(playerArmor, 0);
@@ -514,13 +512,13 @@ namespace Game1
                 //check wall collision
                 for(int i = 0; i < currentLevel.WallList.Count; i++)
                 {
-                    currentLevel.WallList[i].Collision(player, prevPos);
+                    currentLevel.WallList[i].Collision(player, player.PrevPos);
 
                     for(int k = 0; k < manager.EnemyList.Count; k++)
                     {
                         if(manager.EnemyList[k] != null)
                         {
-                            currentLevel.WallList[k].Collision(manager.EnemyList[k], manager.EnemyList[k].PrevPos);
+                            currentLevel.WallList[i].Collision(manager.EnemyList[k], manager.EnemyList[k].PrevPos);
                         }
                     }
                 }
@@ -567,7 +565,6 @@ namespace Game1
                         }
                     }
                 }
-
 
                 //check if enemies are hit by player
                 List<Enemies> hitEnemies = new List<Enemies>();
@@ -632,16 +629,7 @@ namespace Game1
                 {
                     gameState = GameState.Pause;
                 }
-
-                //set previous positions for wall collision
-                prevPos = player.Position;
-                for(int i = 0; i < manager.EnemyList.Count; i++)
-                {
-                    if(manager.EnemyList[i] != null)
-                    {
-                        manager.EnemyList[i].PrevPos = manager.EnemyList[i].Position;
-                    }
-                }
+                
             }
             #endregion
             #region Pause

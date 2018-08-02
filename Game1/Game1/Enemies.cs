@@ -44,20 +44,22 @@ namespace Game1
 
         public override void Move(Characters player)
         {
-
+            prevPos = Position;
             int xDist = player.Position.X - Position.X;
             int yDist = player.Position.Y - Position.Y;
             Double tDist = DistanceTo(player.Position.X, player.Position.Y, Position.X, Position.Y);
 
-            double ratio = 5 / tDist;
+            double ratio = 3 / tDist;
 
             int xMov = (int)(ratio * xDist);
             int yMov = (int)(ratio * yDist);
 
+            
             Rectangle temp = Position;
             temp.X += xMov;
             temp.Y += yMov;
             Position = temp;
+
         }
 
         public override void TakeDamage(Characters damaged, Characters damager)
