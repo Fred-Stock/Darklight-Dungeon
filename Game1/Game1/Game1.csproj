@@ -56,7 +56,9 @@
     <Compile Include="Player.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Rock.cs" />
     <Compile Include="ShopManager.cs" />
+    <Compile Include="Wall.cs" />
     <Compile Include="Weapon.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -68,7 +70,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Icon.ico" />
-    <Content Include="level1.txt" />
+    <Content Include="level1_1.txt" />
+    <Content Include="level1_2.txt" />
     <Content Include="level2.txt" />
     <Content Include="testlevel.txt" />
     <Content Include="store.txt" />

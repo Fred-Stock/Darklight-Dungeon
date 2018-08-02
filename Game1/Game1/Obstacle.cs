@@ -20,7 +20,7 @@ namespace Game1
         }
 
         //methods
-        public void Collision(Characters character, Rectangle prevPos)
+        public virtual void Collision(Characters character, Rectangle prevPos, Game1 game)
         {
             if (character.Position.Intersects(Position))
             {

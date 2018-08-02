@@ -30,6 +30,7 @@ namespace Game1
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        
 
         // specified fields
         GameState gameState = GameState.MainMenu;
@@ -140,9 +141,7 @@ namespace Game1
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-
-
-            //temp door object
+            
         }
 
         /// <summary>
@@ -284,7 +283,8 @@ namespace Game1
             shop = new ShopManager();
             shop.AddToShop(playerWeapon, 0);
             shop.AddToShop(playerArmor, 0);
-            currentLevel = new Level(LevelIO("level1"), manager);
+            currentLevel = new Level(LevelIO("level1_1"), manager);
+            
         }
 
         /// <summary>
@@ -389,7 +389,7 @@ namespace Game1
                         }
 
                         //spawn enemies
-                        if (levelData[i].Equals('E'))
+                        if (levelData[i].Equals('E') || levelData[i].Equals('F'))
                         {
                             
                             k = i + 1;
@@ -409,9 +409,9 @@ namespace Game1
                                 k++;
                             }
                             temp.Y = int.Parse(coord) * 120;
-                            if(rng.Next(2) == 1)
+                            if(levelData[i] == 'F')
                             {
-                                manager.EnemyList.Add(new Fly(rng, 40, 2, new Rectangle(temp.X, temp.Y, 50, 50), enemy_1));
+                                manager.EnemyList.Add(new Fly(rng, 20, 2, new Rectangle(temp.X, temp.Y, 50, 50), enemy_1));
                             }
                             else
                             {
@@ -471,14 +471,18 @@ namespace Game1
                             manager.ItemList.Add(new Item("store", new Rectangle(temp.X, temp.Y, 60, 60), rock_large));
                         }
                     }
-                    //spawn walls
+                    //spawn obstacles
                     for (int i = 1; i < currentLevel.LevelArray.GetLength(1); i++) //start at the second row because first row is level info
                     {
                         for (int j = 0; j < currentLevel.LevelArray.GetLength(0); j++)
                         {
                             if (currentLevel.LevelArray[j, i] == '-')
                             {
-                                currentLevel.WallList.Add(new Obstacle(new Rectangle(j * 120, (i - 1) * 120, 128, 120), wall));
+                                currentLevel.WallList.Add(new Wall(new Rectangle(j * 120, (i - 1) * 120, 128, 120), wall));
+                            }
+                            if(currentLevel.LevelArray[j, i] == 'R')
+                            {
+                                currentLevel.WallList.Add(new Rock(new Rectangle(j * 120, (i - 1) * 120, 120, 120), rock_small));
                             }
                         }
                     }
@@ -512,13 +516,13 @@ namespace Game1
                 //check wall collision
                 for(int i = 0; i < currentLevel.WallList.Count; i++)
                 {
-                    currentLevel.WallList[i].Collision(player, player.PrevPos);
+                    currentLevel.WallList[i].Collision(player, player.PrevPos, this);
 
                     for(int k = 0; k < manager.EnemyList.Count; k++)
                     {
                         if(manager.EnemyList[k] != null)
                         {
-                            currentLevel.WallList[i].Collision(manager.EnemyList[k], manager.EnemyList[k].PrevPos);
+                            currentLevel.WallList[i].Collision(manager.EnemyList[k], manager.EnemyList[k].PrevPos, this);
                         }
                     }
                 }
@@ -955,21 +959,9 @@ namespace Game1
                     }
                     else
                     {
-                        if (level[j, i] == 'D')
-                        { 
-                            levelInfo = levelInfo + "D"+ j + ","+ (i - 1) + ",";
-                        }
-                        if (level[j, i] == 'E')
+                        if(level[j,i] != '-' & level[j,i] != '\0')
                         {
-                            levelInfo = levelInfo + "E" + j + "," + (i - 1) + ",";
-                        }
-                        if (level[j, i] == 'P')
-                        {
-                            levelInfo = levelInfo + "P" + j + "," + (i - 1) + ",";                            
-                        }
-                        if(level[j, i] == 'S')
-                        {
-                            levelInfo = levelInfo + "S" + j + "," + (i - 1) + ",";
+                            levelInfo = levelInfo + level[j, i].ToString() + j + "," + (i - 1) + ",";
                         }
                     }
                 }
