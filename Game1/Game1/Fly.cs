@@ -20,7 +20,7 @@ namespace Game1
         public Fly(Random rng, int health, int damage, Rectangle position, Texture2D texture) :
             base(rng, health, damage, position, texture)
         {
-            
+
         }
 
         //methods
@@ -42,28 +42,16 @@ namespace Game1
             int xMov = (int)(ratio * xDist);
             int yMov = (int)(ratio * yDist);
 
-
-            yMov +=(int)(3 * Math.Sin((timer * Math.PI) / 32));
+            if (yMov != 0)
+            {
+                yMov += (int)(3 * Math.Sin((timer * Math.PI) / 32));
+            }
             timer++;
-            
 
             Rectangle temp = Position;
             temp.X += xMov;
             temp.Y += yMov;
             Position = temp;
-        }
-
-        /// <summary>
-        /// method that calculates the distance from two points using pythag
-        /// </summary>
-        /// <param name="coord1"></param>
-        /// <param name="coord2"></param>
-        /// <returns></returns>
-        private Double DistanceTo(int coord1X, int coord1Y, int coord2X, int coord2Y)
-        {
-            int xDist = coord1X - coord2X;
-            int yDist = coord1Y - coord2Y;
-            return Math.Pow(Math.Pow(xDist, 2) + Math.Pow(yDist, 2), .5);
         }
     }
 }

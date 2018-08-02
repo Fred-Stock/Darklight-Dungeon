@@ -411,10 +411,17 @@ namespace Game1
                                 k++;
                             }
                             temp.Y = int.Parse(coord) * 120;
-                            manager.EnemyList.Add(new Fly(rng, 40, 2, new Rectangle(temp.X, temp.Y, 100, 100), enemy_1));
-                            
-                            
+                            if(rng.Next(2) == 1)
+                            {
+                                manager.EnemyList.Add(new Fly(rng, 40, 2, new Rectangle(temp.X, temp.Y, 50, 50), enemy_1));
+                            }
+                            else
+                            {
+                                manager.EnemyList.Add(new Enemies(rng, 40, 2, new Rectangle(temp.X, temp.Y, 100, 100), enemy_1));
+                            }
+
                         }
+
                         //spawn doors
                         if (levelData[i].Equals('D'))
                         {
@@ -438,6 +445,7 @@ namespace Game1
                             temp.Y = int.Parse(coord) * 120;
                             manager.DoorList.Add(new Door(new Rectangle(temp.X, temp.Y, 100, 100), door_locked, door_open_animation, door_open, nextLevel));
                         }
+
                         //spawn stores
                         if (levelData[i].Equals('S'))
                         {

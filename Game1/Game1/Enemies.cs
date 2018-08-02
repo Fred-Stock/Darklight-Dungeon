@@ -42,52 +42,24 @@ namespace Game1
             direction = rng.Next(0, 4);
         }
 
-        public override void Move(Characters character)
+        public override void Move(Characters player)
         {
 
+            int xDist = player.Position.X - Position.X;
+            int yDist = player.Position.Y - Position.Y;
+            Double tDist = DistanceTo(player.Position.X, player.Position.Y, Position.X, Position.Y);
+
+            double ratio = 5 / tDist;
+
+            int xMov = (int)(ratio * xDist);
+            int yMov = (int)(ratio * yDist);
 
             Rectangle temp = Position;
-
-            if (direction == 0)
-            {
-                temp.Y -= 2;
-                if(temp.Y < initialY - 100)
-                {
-                    direction = rng.Next(0, 4);
-                }
-
-            }
-            if (direction == 1)
-            {
-               
-                temp.X += 2;
-                if (temp.X > initialX + 100)
-                {
-                    direction = rng.Next(0, 4);
-                }
-
-            }
-            if (direction == 2)
-            {
-                temp.Y += 2;
-                if (temp.Y > initialY + 100)
-                {
-                    direction = rng.Next(0, 4);
-                }
-            }
-            if (direction == 3)
-            {
-                
-                temp.X -= 2;
-                if (temp.X < initialX - 100)
-                {
-                    direction = rng.Next(0, 4);
-                }
-            }
-
-            
+            temp.X += xMov;
+            temp.Y += yMov;
             Position = temp;
         }
+
         public override void TakeDamage(Characters damaged, Characters damager)
         {
             if (damager.Position.Intersects(damaged.Position))
@@ -95,5 +67,19 @@ namespace Game1
                 damaged.Health -= damage;
             }
         }
+
+        /// <summary>
+        /// method that calculates the distance from two points using pythag
+        /// </summary>
+        /// <param name="coord1"></param>
+        /// <param name="coord2"></param>
+        /// <returns></returns>
+        protected Double DistanceTo(int coord1X, int coord1Y, int coord2X, int coord2Y)
+        {
+            int xDist = coord1X - coord2X;
+            int yDist = coord1Y - coord2Y;
+            return Math.Pow(Math.Pow(xDist, 2) + Math.Pow(yDist, 2), .5);
+        }
     }
 }
+
