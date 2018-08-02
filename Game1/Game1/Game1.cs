@@ -411,7 +411,7 @@ namespace Game1
                                 k++;
                             }
                             temp.Y = int.Parse(coord) * 120;
-                            manager.EnemyList.Add(new Enemies(rng, 40, 2, new Rectangle(temp.X, temp.Y, 100, 100), enemy_1));
+                            manager.EnemyList.Add(new Fly(rng, 40, 2, new Rectangle(temp.X, temp.Y, 100, 100), enemy_1));
                             
                             
                         }
@@ -555,7 +555,7 @@ namespace Game1
                         }
                         if(manager.EnemyList != null)
                         {
-                            manager.EnemyList[i].Move(manager.EnemyList[i]);
+                            manager.EnemyList[i].Move(player);
                         }
                     }
                 }

@@ -45,6 +45,7 @@
     <Compile Include="Characters.cs" />
     <Compile Include="Door.cs" />
     <Compile Include="Enemies.cs" />
+    <Compile Include="Fly.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="GameKey.cs" />
     <Compile Include="GameObject.cs" />
