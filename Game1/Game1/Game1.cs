@@ -514,20 +514,6 @@ namespace Game1
                     }
                 }
 
-                //check wall collision
-                for(int i = 0; i < currentLevel.WallList.Count; i++)
-                {
-                    currentLevel.WallList[i].Collision(player, player.PrevPos, this);
-
-                    for(int k = 0; k < manager.EnemyList.Count; k++)
-                    {
-                        if(manager.EnemyList[k] != null)
-                        {
-                            currentLevel.WallList[i].Collision(manager.EnemyList[k], manager.EnemyList[k].PrevPos, this);
-                        }
-                    }
-                }
-
                 //check items
                 for(int i = 0; i < manager.ItemList.Count; i++)
                 {
@@ -625,6 +611,20 @@ namespace Game1
                     }
                 }
 
+                //check wall collision
+                for(int i = 0; i < currentLevel.WallList.Count; i++)
+                {
+                    currentLevel.WallList[i].Collision(player, player.PrevPos, this);
+
+                    for(int k = 0; k < manager.EnemyList.Count; k++)
+                    {
+                        if(manager.EnemyList[k] != null)
+                        {
+                            currentLevel.WallList[i].Collision(manager.EnemyList[k], manager.EnemyList[k].PrevPos, this);
+                        }
+                    }
+                }
+
                 //transition to inventory screen
                 if (SingleButtonPress(Keys.I))
                 {
@@ -634,7 +634,7 @@ namespace Game1
                 {
                     gameState = GameState.Pause;
                 }
-                
+                //player.PrevPos = player.Position;
             }
             #endregion
             #region Pause

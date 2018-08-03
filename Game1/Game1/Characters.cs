@@ -114,24 +114,24 @@ namespace Game1
         /// <param name="attacker">character that damaged the character getting knocked backwards</param>
         public virtual void Knockback(Characters attacker)
         {
-            
+            PrevPos = Position;
             Rectangle temp = Position;
             
             if(attacker.Position.X < Position.X) //attack from the left
             {
-                temp.X += 100;
+                temp.X += 50;
             }
             if(attacker.Position.X > Position.X) //attack from the right
             {
-                temp.X -= 100;
+                temp.X -= 50;
             }
             if(attacker.Position.Y < Position.Y) //attack from above
             {
-                temp.Y += 100;
+                temp.Y += 50;
             }
             if(attacker.Position.Y > Position.Y) //attack from below
             {
-                temp.Y -= 100;
+                temp.Y -= 50;
             }
             Position = temp;
             timer++;

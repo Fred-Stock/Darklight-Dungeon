@@ -119,6 +119,7 @@ namespace Game1
             atkTimer = 0;
             attacking = false;
             moveSpeed = 3;
+            prevPos = position;
             this.sidewaysWalk = sidewaysWalk;
             this.walkDown = walkDown;
             this.walkUp = walkUp;
