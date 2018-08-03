@@ -257,6 +257,12 @@ namespace Game1
                     walkTimer = 0;
                 }
             }
+            else if(!kbstate.IsKeyDown(Keys.D) && !kbstate.IsKeyDown(Keys.S) && !kbstate.IsKeyDown(Keys.A) && !kbstate.IsKeyDown(Keys.W))
+            {
+                walkLeft = false;
+                walkRight = false;
+                currentSprite = walkDown;
+            }
             character.Position = temp;
         }
     }
