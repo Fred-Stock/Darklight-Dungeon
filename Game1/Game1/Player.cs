@@ -20,12 +20,18 @@ namespace Game1
         private int currency;
         private Texture2D currentSprite; //texture2D for holding current player sprite
         private Texture2D currentAtkSprite; //texture2D for holding current frame of attack animation
-        private int timer;
+        private int atkTimer;
+        private int walkTimer;
         private bool attacking;
         private bool attacking2;
+        private bool walkRight;
+        private bool walkLeft;
         private int moveSpeed;
         private bool hit;
         private Rectangle prevPos;
+        private Texture2D sidewaysWalk;
+        private Texture2D walkUp;
+        private Texture2D walkDown;
 
         //properties
         public int Score
@@ -85,10 +91,23 @@ namespace Game1
             get { return prevPos; }
             set { prevPos = value; }
         }
+        public int WalkTimer
+        {
+            get { return walkTimer; }
+        }
+        public bool WalkRight
+        {
+            get { return walkRight; }
+        }
+        public bool WalkLeft
+        {
+            get { return walkLeft; }
+        }
+        
 
 
         //constructor
-        public Player(int score, Weapon weapon, Armor armor, int health, int damage, Rectangle position, Texture2D texture ) : base(health, damage, position, texture)
+        public Player(int score, Weapon weapon, Armor armor, Texture2D sidewaysWalk, Texture2D walkUp, Texture2D walkDown, int health, int damage, Rectangle position, Texture2D texture ) : base(health, damage, position, texture)
         {
             hit = false;
             this.score = score;
@@ -97,9 +116,12 @@ namespace Game1
             this.armor = armor;
             inventory = new Dictionary<string, Item>();
             invList = new List<string>();
-            timer = 0;
+            atkTimer = 0;
             attacking = false;
             moveSpeed = 3;
+            this.sidewaysWalk = sidewaysWalk;
+            this.walkDown = walkDown;
+            this.walkUp = walkUp;
         }
 
         //these next two methods are almost identical but are needed otherwise errors occur if an item with the same name
@@ -164,7 +186,7 @@ namespace Game1
             Enemies tempEnemy;
             if (attacking)
             {
-                timer++;
+                atkTimer++;
                 if(enemys != null)
                 {
                     for(int i = 0; i < enemys.Count; i++)
@@ -176,14 +198,14 @@ namespace Game1
                         i--;
                     }
                 }
-                if(timer < 13)
+                if(atkTimer < 13)
                 {
-                    currentAtkSprite = animation[timer];
+                    currentAtkSprite = animation[atkTimer];
                 }
-                if (timer > 13)
+                if (atkTimer > 13)
                 {
                     attacking = false;
-                    timer = 0;
+                    atkTimer = 0;
                 }
             }
         }
@@ -195,19 +217,45 @@ namespace Game1
             kbstate = Keyboard.GetState();
             if (kbstate.IsKeyDown(Keys.W))
             {
+                currentSprite = walkUp;
+                walkLeft = false;
+                walkRight = false;
                 temp.Y -= moveSpeed;
             }
             if (kbstate.IsKeyDown(Keys.S))
             {
+                currentSprite = walkDown;
+                walkRight = false;
+                walkLeft = false;
                 temp.Y += moveSpeed;
             }
             if (kbstate.IsKeyDown(Keys.A))
             {
+                walkRight = false;
+                walkTimer++;
                 temp.X -= moveSpeed;
+                currentSprite = sidewaysWalk;
+
+                walkLeft = true;
+
+                if(walkTimer >= 30)
+                {
+                    walkTimer = 0;   
+                }
+
             }
             if (kbstate.IsKeyDown(Keys.D))
             {
+                walkLeft = false;
+                walkTimer++;
                 temp.X += moveSpeed;
+                currentSprite = sidewaysWalk;
+                walkRight = true;
+
+                if (walkTimer >= 30)
+                {
+                    walkTimer = 0;
+                }
             }
             character.Position = temp;
         }

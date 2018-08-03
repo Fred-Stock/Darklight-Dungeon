@@ -278,7 +278,7 @@ namespace Game1
             quit_hover = Content.Load<Texture2D>("Sprites//quit_hover");
             
             //initialize the player
-            player = new Player(0, playerWeapon, playerArmor, 100, 10, new Rectangle(100, 100, 40, 75), player_forward); //all values in here are just for test as well
+            player = new Player(0, playerWeapon, playerArmor, player_walk_side, player_backward, player_forward, 100, 10, new Rectangle(100, 100, 40, 75), player_forward); //all values in here are just for test as well
             #endregion
             playerWeapon = new Weapon(WeaponType.test, "testW", new Rectangle(50, 250, 40, 40), rock_small); //all values in here are just for test
             playerWeapon2 = new Weapon(WeaponType.test, "testW", new Rectangle(50, 400, 40, 40), rock_small); //all values in here are just for test
@@ -496,14 +496,14 @@ namespace Game1
                 
                 player.Move(player);
                 
-                if (kbState.IsKeyDown(Keys.W))
-                {
-                    player.CurrentSprite = player_backward;
-                }
-                else
-                {
-                    player.CurrentSprite = player_forward;
-                }
+                //if (kbState.IsKeyDown(Keys.W))
+                //{
+                //    player.CurrentSprite = player_backward;
+                //}
+                //else
+                //{
+                //    player.CurrentSprite = player_forward;
+                //}
 
                 //check door activations
                 for(int i = 0; i < manager.DoorList.Count; i++)
@@ -787,15 +787,18 @@ namespace Game1
                 }
 
                 //draw player
-                if (kbState.IsKeyDown(Keys.W))
+                if (player.WalkRight)
                 {
-                    player.CurrentSprite = player_backward;
+                    spriteBatch.Draw(player.CurrentSprite, player.Position, new Rectangle((player.WalkTimer / 3) * 60, 0, 60, 127), Color.White);
                 }
-                else
+                if (player.WalkLeft)
                 {
-                    player.CurrentSprite = player_forward;
+                    spriteBatch.Draw(player.CurrentSprite, player.Position, new Rectangle((player.WalkTimer / 3) * 60, 0, 60, 127), Color.White, 0, Vector2.Zero, SpriteEffects.FlipHorizontally, 0f);
                 }
-                spriteBatch.Draw(player.CurrentSprite, player.Position, Color.White);
+                else if(!player.WalkLeft && !player.WalkRight)
+                {
+                    spriteBatch.Draw(player.CurrentSprite, player.Position, Color.White);
+                }
 
                 //draw all doors on level
                 for(int i = 0; i < manager.DoorList.Count; i++)
@@ -807,7 +810,6 @@ namespace Game1
                     else
                     {
                         spriteBatch.Draw(manager.DoorList[i].CurrentTexture, manager.DoorList[i].Position, Color.White);
-
                     }
                 }
                 
