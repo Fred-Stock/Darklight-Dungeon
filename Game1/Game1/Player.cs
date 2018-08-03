@@ -28,10 +28,10 @@ namespace Game1
         private bool walkLeft;
         private int moveSpeed;
         private bool hit;
-        private Rectangle prevPos;
         private Texture2D sidewaysWalk;
         private Texture2D walkUp;
         private Texture2D walkDown;
+        
 
         //properties
         public int Score

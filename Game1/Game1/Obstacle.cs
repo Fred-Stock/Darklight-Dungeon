@@ -22,10 +22,29 @@ namespace Game1
         //methods
         public virtual void Collision(Characters character, Rectangle prevPos, Game1 game)
         {
-            if (character.Position.Intersects(Position))
+
+            Rectangle leftX = new Rectangle(character.Position.X - 1, character.Position.Y, 1, character.Position.Height);
+            Rectangle rightX = new Rectangle(character.Position.X + character.Position.Width + 1, character.Position.Y, 1, character.Position.Height);
+            Rectangle topY = new Rectangle(character.Position.X + 2, character.Position.Y - 1, character.Position.Width - 2, 1);
+            Rectangle bottomY = new Rectangle(character.Position.X + 2, character.Position.Y + character.Position.Height + 1, character.Position.Width - 2, 1);
+            
+
+            // X Check
+            if (leftX.Intersects(Position) || rightX.Intersects(Position))
             {
-                character.Position = prevPos;
+                Rectangle temp = character.Position;
+                temp.X = character.PrevPos.X;
+                character.Position = temp;
             }
+
+            // Y check
+            if (topY.Intersects(Position) || bottomY.Intersects(Position))
+            {
+                Rectangle temp = character.Position;
+                temp.Y = character.PrevPos.Y;
+                character.Position = temp;
+            }
+
         }
     }
 }

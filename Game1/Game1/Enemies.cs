@@ -17,7 +17,6 @@ namespace Game1
         private int initialY;
         private int direction;
         private bool hit;
-        private Rectangle prevPos;
         
         //properties
         public bool Hit

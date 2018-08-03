@@ -22,6 +22,8 @@ namespace Game1
 
         private int timer;
 
+        protected Rectangle prevPos;
+
         public int Health
         {
             get { return health; }
@@ -38,6 +40,13 @@ namespace Game1
             get { return invulnerable; }
             set { invulnerable = value; }
         }
+
+        public Rectangle PrevPos
+        {
+            get { return prevPos; }
+            set { prevPos = value; }
+        }
+
 
         //constructor
         public Characters(int health, int damage, Rectangle position, Texture2D texture) : base(position, texture)
