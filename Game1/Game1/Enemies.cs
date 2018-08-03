@@ -17,6 +17,7 @@ namespace Game1
         private int initialY;
         private int direction;
         private bool hit;
+        protected bool affected;
         
         //properties
         public bool Hit
@@ -24,11 +25,12 @@ namespace Game1
             get { return hit; }
             set { hit = value; }
         }
-        public Rectangle PrevPos
+        public bool Affected
         {
-            get { return prevPos; }
-            set { prevPos = value; }
+            get { return affected; }
+            set { affected = value; }
         }
+
 
         //constructor
         public Enemies(Random rng, int health, int damage, Rectangle position, Texture2D texture) : base(health, damage, position, texture)
@@ -37,7 +39,7 @@ namespace Game1
             this.rng = rng;
             initialX = Position.X;
             initialY = Position.Y;
-
+            moveSpeed = 3;
             direction = rng.Next(0, 4);
         }
 
@@ -48,7 +50,7 @@ namespace Game1
             int yDist = player.Position.Y - Position.Y;
             Double tDist = DistanceTo(player.Position.X, player.Position.Y, Position.X, Position.Y);
 
-            double ratio = 3 / tDist;
+            double ratio = moveSpeed / tDist;
 
             int xMov = (int)(ratio * xDist);
             int yMov = (int)(ratio * yDist);

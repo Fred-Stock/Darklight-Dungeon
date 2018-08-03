@@ -278,10 +278,9 @@ namespace Game1
             quit_hover = Content.Load<Texture2D>("Sprites//quit_hover");
             
             //initialize the player
+            playerWeapon = new FireWeapon(WeaponType.frost, "frost", new Rectangle(50, 250, 40, 40), rock_small); //all values in here are just for test
             player = new Player(0, playerWeapon, playerArmor, player_walk_side, player_backward, player_forward, 100, 10, new Rectangle(100, 100, 45, 75), player_forward); //all values in here are just for test as well
             #endregion
-            playerWeapon = new Weapon(WeaponType.test, "testW", new Rectangle(50, 250, 40, 40), rock_small); //all values in here are just for test
-            playerWeapon2 = new Weapon(WeaponType.test, "testW", new Rectangle(50, 400, 40, 40), rock_small); //all values in here are just for test
             testCurrency = new Item("smallCoin", new Rectangle(200, 500, 20, 20), rock_large);
             playerArmor = new Armor(ArmorType.test, "testA", new Rectangle(50, 50, 10, 10), door_locked); //all values in here are just for test too
             playerArmor2 = new Armor(ArmorType.test, "testA2", new Rectangle(50, 50, 10, 10), door_locked);//test value
@@ -290,6 +289,7 @@ namespace Game1
             shop.AddToShop(playerWeapon, 0);
             shop.AddToShop(playerArmor, 0);
             currentLevel = new Level(LevelIO("level1_1"), manager);
+            
             
         }
 
@@ -549,11 +549,8 @@ namespace Game1
                             {
                                 gameState = GameState.EndGame;
                             }
-                        }
-
-                        
+                        }                      
                             manager.EnemyList[i].Move(player);
-                        
                     }
                 }
 
@@ -569,14 +566,23 @@ namespace Game1
                             if(kbState.IsKeyDown(Keys.D) && new Rectangle(player.Position.X + player.Position.Width, player.Position.Y, 100, 100).Intersects(manager.EnemyList[i].Position))
                             {
                                 hitEnemies.Add(manager.EnemyList[i]);
+                                if(player.Weapon.Type != WeaponType.basic)
+                                {
+                                    manager.EnemyList[i].Affected = true;
+                                }
                             }
                             else if (kbState.IsKeyDown(Keys.A) && new Rectangle(player.Position.X - 100, player.Position.Y, 100, 100).Intersects(manager.EnemyList[i].Position))
                             {
                                 hitEnemies.Add(manager.EnemyList[i]);
+                                if (player.Weapon.Type != WeaponType.basic)
+                                {
+                                    manager.EnemyList[i].Affected = true;
+                                }
                             }
                         }
                     }
                 }
+                manager.WeaponAffects(player);
 
                 //deal damage to enemies, do knockback, and determine attack animation
                 //if moving left use left attack
@@ -634,7 +640,6 @@ namespace Game1
                 {
                     gameState = GameState.Pause;
                 }
-                //player.PrevPos = player.Position;
             }
             #endregion
             #region Pause

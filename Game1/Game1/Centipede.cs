@@ -24,6 +24,7 @@ namespace Game1
         //constructor
         public Centipede(Player player, Random rng, int health, int damage, Rectangle position, Texture2D texture) : base(rng, health, damage, position, texture)
         {
+            moveSpeed = 2;
             timer = 0;
             SelectDirection(player);
         }
@@ -36,19 +37,19 @@ namespace Game1
             timer++;
             if (moveUp)
             {
-                temp.Y -= 2;
+                temp.Y -= moveSpeed;
             }
             if (moveDown)
             {
-                temp.Y += 2;
+                temp.Y += moveSpeed;
             }
             if (moveLeft)
             {
-                temp.X -= 2;
+                temp.X -= moveSpeed;
             }
             if (moveRight)
             {
-                temp.X += 2;
+                temp.X += moveSpeed;
             }
             if(timer >= 50)
             {

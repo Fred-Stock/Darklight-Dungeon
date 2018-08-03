@@ -26,7 +26,6 @@ namespace Game1
         private bool attacking2;
         private bool walkRight;
         private bool walkLeft;
-        private int moveSpeed;
         private bool hit;
         private Texture2D sidewaysWalk;
         private Texture2D walkUp;
@@ -80,16 +79,6 @@ namespace Game1
         {
             get { return attacking2; }
             set { attacking2 = value; }
-        }
-        public int MoveSpeed
-        {
-            get { return moveSpeed; }
-            set { moveSpeed = value; }
-        }
-        public Rectangle PrevPos
-        {
-            get { return prevPos; }
-            set { prevPos = value; }
         }
         public int WalkTimer
         {
@@ -158,7 +147,6 @@ namespace Game1
             {
                 inventory.Add(item.Name, item);
                 invList.Add(item.Name);
-                weapon = new Weapon(WeaponType.test, item.Name, item.Position, item.Texture);
             }
             //temp solution but if there is a collision then add a 1 to the end of the name and keep doing that until no collision
             else

@@ -24,6 +24,8 @@ namespace Game1
 
         protected Rectangle prevPos;
 
+        protected int moveSpeed;
+
         public int Health
         {
             get { return health; }
@@ -47,13 +49,20 @@ namespace Game1
             set { prevPos = value; }
         }
 
+        public int MoveSpeed
+        {
+            get { return moveSpeed; }
+            set { moveSpeed = value; }
+        }
+
+
 
         //constructor
         public Characters(int health, int damage, Rectangle position, Texture2D texture) : base(position, texture)
         {
             this.damage = damage;
             this.health = health;
-            
+            moveSpeed = 3;
         }
 
         //methods
@@ -68,19 +77,19 @@ namespace Game1
             kbstate = Keyboard.GetState();
             if (kbstate.IsKeyDown(Keys.W))
             {
-                temp.Y -= 3;
+                temp.Y -= moveSpeed;
             }
             if (kbstate.IsKeyDown(Keys.S))
             {
-                temp.Y += 3;
+                temp.Y += moveSpeed;
             }
             if (kbstate.IsKeyDown(Keys.A))
             {
-                temp.X -= 3;
+                temp.X -= moveSpeed;
             }
             if (kbstate.IsKeyDown(Keys.D))
             {
-                temp.X += 3;
+                temp.X += moveSpeed;
             }
             Position = temp;
         }

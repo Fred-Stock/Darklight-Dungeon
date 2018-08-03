@@ -11,6 +11,7 @@ namespace Game1
         //data structures
         private List<Obstacle> obstacleList = new List<Obstacle>();
         private List<Enemies> enemyList = new List<Enemies>();
+        private List<Enemies> affectedEnemies = new List<Enemies>();
         private List<Item> itemList = new List<Item>();
         
         private List<Door> doorList = new List<Door>();
@@ -28,6 +29,12 @@ namespace Game1
             get { return enemyList; }
             set { enemyList = value; }
         }
+        public List<Enemies> AffectedEnemies
+        {
+            get { return affectedEnemies; }
+            set { affectedEnemies = value; }
+        }
+
 
 
         //global entities
@@ -38,5 +45,18 @@ namespace Game1
         {
             this.player = player; //send in the player to alter it
         }
+
+        //methods
+        public void WeaponAffects(Player player)
+        {
+            for(int i = 0; i < enemyList.Count; i++)
+            {
+                if(enemyList[i] != null)
+                {
+                    player.Weapon.WeaponAction(enemyList[i]);
+                }
+            }
+        }
+
     }
 }

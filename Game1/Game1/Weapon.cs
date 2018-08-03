@@ -13,27 +13,33 @@ namespace Game1
 {
     enum WeaponType
     {
-        test = 4,
+        basic,
+        plus1,
+        shock,
+        frost,
+        fire,
     }
 
     class Weapon : Item
     {
         //fields
-        WeaponType type;
-        
+        private WeaponType type;
+        protected int affectDuration;
+
+        //properties
         public WeaponType Type
         {
             get { return type; }
         }
 
-
+        //constructor
         public Weapon(WeaponType weapon, string name, Rectangle position, Texture2D texture) : base(name, position, texture)
         {
-            this.type = weapon;
+            type = weapon;
         }
 
         //methods
-        public void WeaponAction()
+        public virtual void WeaponAction(Enemies attacked)
         {
 
         }
