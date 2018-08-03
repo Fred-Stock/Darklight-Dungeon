@@ -1002,7 +1002,7 @@ namespace Game1
         {
             if (!player.Inventory.ContainsKey("weapon"))
             {
-                store.AddToShop(new Item("weapon", new Rectangle(50, 50, 10, 10), rock_small), 0);
+                store.AddToShop(new Item("weapon", new Rectangle(50, 50, 10, 10), base_weapon), 0);
             }
             else
             {
@@ -1012,25 +1012,25 @@ namespace Game1
                 //determining random weapon upgrade
                 if(weaponVersion == 0)
                 {
-                    store.AddToShop(new Item("+1" + player.Weapon.Name, new Rectangle(50, 50, 10, 10), rock_small), 0);
+                    store.AddToShop(new Item("+1" + player.Weapon.Name, new Rectangle(50, 50, 10, 10), base_weapon), 0);
                 }
                 else if(weaponVersion == 1)
                 {
-                    store.AddToShop(new Item(player.Weapon.Name + " of shock", new Rectangle(50, 50, 10, 10), rock_small), 0);
+                    store.AddToShop(new Item(player.Weapon.Name + " of shock", new Rectangle(50, 50, 10, 10), base_weapon), 0);
                 }
                 else if(weaponVersion == 2)
                 {
-                    store.AddToShop(new Item(player.Weapon.Name + " of fire", new Rectangle(50, 50, 10, 10), rock_small), 0);
+                    store.AddToShop(new Item(player.Weapon.Name + " of fire", new Rectangle(50, 50, 10, 10), base_weapon), 0);
                 }
                 else if(weaponVersion == 3)
                 {
-                    store.AddToShop(new Item(player.Weapon.Name + " of frost", new Rectangle(50, 50, 10, 10), rock_small), 0);
+                    store.AddToShop(new Item(player.Weapon.Name + " of frost", new Rectangle(50, 50, 10, 10), base_weapon), 0);
                 }
 
             }
             if (!player.Inventory.ContainsKey("armor"))
             {
-                store.AddToShop(new Item("armor", new Rectangle(50, 50, 10, 10), door_locked), 0);
+                store.AddToShop(new Item("armor", new Rectangle(50, 50, 10, 10), base_armor), 0);
             }
             else
             {
@@ -1040,20 +1040,20 @@ namespace Game1
 
                 if(armorVersion == 0)
                 {
-                    store.AddToShop(new Item("+1" + player.Armor.Name, new Rectangle(50, 50, 10, 10), rock_small), 0);
+                    store.AddToShop(new Item("+1" + player.Armor.Name, new Rectangle(50, 50, 10, 10), base_armor), 0);
                 }
                 else if(armorVersion == 1)
                 {
-                    store.AddToShop(new Item(player.Armor.Name + "of thorns", new Rectangle(50, 50, 10, 10), door_locked), 0);
+                    store.AddToShop(new Item(player.Armor.Name + "of thorns", new Rectangle(50, 50, 10, 10), base_armor), 0);
 
                 }
                 else if(armorVersion == 2)
                 {
-                    store.AddToShop(new Item(player.Armor.Name + "of shielding", new Rectangle(50, 50, 10, 10), door_locked), 0);
+                    store.AddToShop(new Item(player.Armor.Name + "of shielding", new Rectangle(50, 50, 10, 10), base_armor), 0);
                 }
                 else if(armorVersion == 3)
                 {
-                    store.AddToShop(new Item(player.Armor.Name + "of speed", new Rectangle(50, 50, 10, 10), door_locked), 0);
+                    store.AddToShop(new Item(player.Armor.Name + "of speed", new Rectangle(50, 50, 10, 10), base_armor), 0);
                 }
             }
         }
