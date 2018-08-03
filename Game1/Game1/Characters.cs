@@ -64,7 +64,7 @@ namespace Game1
 
         public virtual void Move(Characters character)
         {
-            Rectangle temp = character.Position;
+            Rectangle temp = Position;
             kbstate = Keyboard.GetState();
             if (kbstate.IsKeyDown(Keys.W))
             {
@@ -82,7 +82,30 @@ namespace Game1
             {
                 temp.X += 3;
             }
-            character.Position = temp;
+            Position = temp;
+        }
+
+        public virtual void Move()
+        {
+            Rectangle temp = Position;
+            kbstate = Keyboard.GetState();
+            if (kbstate.IsKeyDown(Keys.W))
+            {
+                temp.Y -= 3;
+            }
+            if (kbstate.IsKeyDown(Keys.S))
+            {
+                temp.Y += 3;
+            }
+            if (kbstate.IsKeyDown(Keys.A))
+            {
+                temp.X -= 3;
+            }
+            if (kbstate.IsKeyDown(Keys.D))
+            {
+                temp.X += 3;
+            }
+            Position = temp;
         }
 
         /// <summary>

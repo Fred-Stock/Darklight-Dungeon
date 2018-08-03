@@ -210,10 +210,10 @@ namespace Game1
             }
         }
 
-        public override void Move(Characters character)
+        public override void Move()
         {
             prevPos = Position;
-            Rectangle temp = character.Position;
+            Rectangle temp = Position;
             kbstate = Keyboard.GetState();
             if (kbstate.IsKeyDown(Keys.W))
             {
@@ -263,7 +263,7 @@ namespace Game1
                 walkRight = false;
                 currentSprite = walkDown;
             }
-            character.Position = temp;
+            Position = temp;
         }
     }
 }

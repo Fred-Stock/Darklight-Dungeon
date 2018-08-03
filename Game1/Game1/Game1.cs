@@ -395,7 +395,7 @@ namespace Game1
                         }
 
                         //spawn enemies
-                        if (levelData[i].Equals('E') || levelData[i].Equals('F'))
+                        if (levelData[i].Equals('E') || levelData[i].Equals('F') || levelData[i].Equals('C'))
                         {
                             
                             k = i + 1;
@@ -418,6 +418,10 @@ namespace Game1
                             if(levelData[i] == 'F')
                             {
                                 manager.EnemyList.Add(new Fly(rng, 20, 2, new Rectangle(temp.X, temp.Y, 50, 50), enemy_1));
+                            }
+                            else if(levelData[i] == 'C')
+                            {
+                                manager.EnemyList.Add(new Centipede(player, rng, 30, 2, new Rectangle(temp.X, temp.Y, 75, 75), enemy_1));
                             }
                             else
                             {
@@ -494,16 +498,7 @@ namespace Game1
                     }
                 }
                 
-                player.Move(player);
-                
-                //if (kbState.IsKeyDown(Keys.W))
-                //{
-                //    player.CurrentSprite = player_backward;
-                //}
-                //else
-                //{
-                //    player.CurrentSprite = player_forward;
-                //}
+                player.Move();
 
                 //check door activations
                 for(int i = 0; i < manager.DoorList.Count; i++)
@@ -569,10 +564,10 @@ namespace Game1
                                 gameState = GameState.EndGame;
                             }
                         }
-                        if(manager.EnemyList != null)
-                        {
+
+                        
                             manager.EnemyList[i].Move(player);
-                        }
+                        
                     }
                 }
 
@@ -967,7 +962,7 @@ namespace Game1
                     }
                     else
                     {
-                        if(level[j,i] != '-' & level[j,i] != '\0')
+                        if(level[j,i] != '-' & level[j,i] != ' ')
                         {
                             levelInfo = levelInfo + level[j, i].ToString() + j + "," + (i - 1) + ",";
                         }
