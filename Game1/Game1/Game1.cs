@@ -662,6 +662,23 @@ namespace Game1
             #region Inventory
             if (gameState == GameState.Inventory)
             {
+                foreach (string item in player.InvList)
+                {
+                    if(ButtonClicked(555 + (player.InvList.IndexOf(item) / 3 * 170), 330 + player.InvList.IndexOf(item) % 3 * 205,
+                        690 + (player.InvList.IndexOf(item) / 3 * 170), 465 + player.InvList.IndexOf(item) % 3 * 205))
+                    {
+                        if(player.Inventory[item] is Weapon)
+                        {
+                            player.WeaponSwap((Weapon)player.Inventory[item]);
+                        }
+                        else if(player.Inventory[item] is Armor)
+                        {
+                            player.ArmorSwap((Armor)player.Inventory[item]);
+                        }
+                    }
+
+                }
+
                 if (SingleButtonPress(Keys.Enter))
                 {
                     gameState = GameState.Game;

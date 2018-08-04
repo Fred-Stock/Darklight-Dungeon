@@ -252,9 +252,9 @@ namespace Game1
             kbstate = Keyboard.GetState();
             int moveIncrease = 0;
 
-            if (armor is SpeedArmor)
+            if (armor is SpeedArmor tempArmor)
             {
-                SpeedArmor tempArmor = (SpeedArmor)armor;
+                tempArmor = (SpeedArmor)armor;
                 moveIncrease = tempArmor.SpeedBoost;
             }
             if (kbstate.IsKeyDown(Keys.W))
@@ -307,5 +307,55 @@ namespace Game1
             }
             Position = temp;
         }
+
+        /// <summary>
+        /// method for swapping the currently equipped piece of armor 
+        /// </summary>
+        /// <param name="newArmor"></param>
+        public void ArmorSwap(Armor newArmor)
+        {
+            if(newArmor is SpeedArmor)
+            {
+                armor = (SpeedArmor)newArmor;
+            }
+            if(newArmor is ShieldArmor)
+            {
+                armor = (ShieldArmor)newArmor;
+            }
+            if(newArmor is ThornArmor)
+            {
+                armor = (ThornArmor)newArmor;
+            }
+            else
+            {
+                armor = newArmor;
+            }
+        }
+        
+        /// <summary>
+        /// method for swapping the currently equipped weapon
+        /// </summary>
+        /// <param name="newWeapon"></param>
+        public void WeaponSwap(Weapon newWeapon)
+        {
+            if(newWeapon is FireWeapon)
+            {
+                weapon = (FireWeapon)newWeapon;
+            }
+            if(newWeapon is ShockWeapon)
+            {
+                weapon = (ShockWeapon)newWeapon;
+            }
+            if (newWeapon is FrostWeapon)
+            {
+                weapon = (FrostWeapon)newWeapon;
+            }
+            else
+            {
+                weapon = newWeapon;
+            }
+        }
+
+        
     }
 }
