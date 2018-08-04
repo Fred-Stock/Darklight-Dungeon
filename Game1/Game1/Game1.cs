@@ -278,11 +278,11 @@ namespace Game1
             quit_hover = Content.Load<Texture2D>("Sprites//quit_hover");
             
             //initialize the player
-            playerWeapon = new ShockWeapon(WeaponType.frost, "weapon", new Rectangle(50, 250, 40, 40), rock_small); //all values in here are just for test
-            player = new Player(0, playerWeapon, playerArmor, player_walk_side, player_backward, player_forward, 100, 10, new Rectangle(100, 100, 45, 75), player_forward); //all values in here are just for test as well
+            playerWeapon = new Weapon(WeaponType.basic, "weapon", new Rectangle(50, 250, 40, 40), base_weapon); //all values in here are just for test
+            playerArmor = new Armor(ArmorType.test, "armor", new Rectangle(50, 50, 10, 10), base_armor); //all values in here are just for test too
+            player = new Player(0, playerWeapon, playerArmor, player_walk_side, player_backward, player_forward, 10, 5, new Rectangle(100, 100, 45, 75), player_forward); //all values in here are just for test as well
             #endregion
             testCurrency = new Item("smallCoin", new Rectangle(200, 500, 20, 20), rock_large);
-            playerArmor = new Armor(ArmorType.test, "testA", new Rectangle(50, 50, 10, 10), door_locked); //all values in here are just for test too
             playerArmor2 = new Armor(ArmorType.test, "testA2", new Rectangle(50, 50, 10, 10), door_locked);//test value
             List<Item> testShopInv = new List<Item>();
             shop = new ShopManager();
@@ -417,15 +417,15 @@ namespace Game1
                             temp.Y = int.Parse(coord) * 120;
                             if(levelData[i] == 'F')
                             {
-                                manager.EnemyList.Add(new Fly(rng, 20, 2, new Rectangle(temp.X, temp.Y, 50, 50), enemy_1));
+                                manager.EnemyList.Add(new Fly(rng, 20, 4, new Rectangle(temp.X, temp.Y, 50, 50), enemy_1));
                             }
                             else if(levelData[i] == 'C')
                             {
-                                manager.EnemyList.Add(new Centipede(player, rng, 30, 2, new Rectangle(temp.X, temp.Y, 75, 75), enemy_1));
+                                manager.EnemyList.Add(new Centipede(player, rng, 30, 8, new Rectangle(temp.X, temp.Y, 75, 75), enemy_1));
                             }
                             else
                             {
-                                manager.EnemyList.Add(new Enemies(rng, 40, 2, new Rectangle(temp.X, temp.Y, 100, 100), enemy_1));
+                                manager.EnemyList.Add(new Enemies(rng, 40, 6, new Rectangle(temp.X, temp.Y, 100, 100), enemy_1));
                             }
 
                         }
@@ -716,7 +716,7 @@ namespace Game1
                 //button logic
                 if(ButtonClicked(700, 560, 1205, 660))//resart
                 {
-                    currentLevel = new Level(LevelIO("level1"), manager);
+                    currentLevel = new Level(LevelIO("level1_1"), manager);
                     gameState = GameState.Game;
                 }
                 if(ButtonClicked(640, 740, 1275, 835))//main menu
@@ -1044,15 +1044,15 @@ namespace Game1
                 }
                 else if(armorVersion == 1)
                 {
-                    store.AddToShop(new Item(player.Armor.Name + "of thorns", new Rectangle(50, 50, 10, 10), base_armor), 0);
+                    store.AddToShop(new ThornArmor(ArmorType.test, "Armor of thorns", new Rectangle(50, 50, 10, 10), base_armor), 0);
                 }
                 else if(armorVersion == 2)
                 {
-                    store.AddToShop(new Item(player.Armor.Name + "of shielding", new Rectangle(50, 50, 10, 10), base_armor), 0);
+                    store.AddToShop(new ShieldArmor(ArmorType.test, "Armor of shielding", new Rectangle(50, 50, 10, 10), base_armor), 0);
                 }
                 else if(armorVersion == 3)
                 {
-                    store.AddToShop(new Item(player.Armor.Name + "of speed", new Rectangle(50, 50, 10, 10), base_armor), 0);
+                    store.AddToShop(new SpeedArmor(ArmorType.test, "Armor of speed", new Rectangle(50, 50, 10, 10), base_armor), 0);
                 }
             }
         }

@@ -66,7 +66,7 @@ namespace Game1
         }
 
         //methods
-        public virtual void TakeDamage(Characters damaged, Characters damager)
+        public virtual void TakeDamage(Player damaged, Characters damager)
         {
             damaged.Health -= damager.Damage;
         }

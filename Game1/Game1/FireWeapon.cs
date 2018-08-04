@@ -22,6 +22,7 @@ namespace Game1
         {
             timer = 0;
             affectDuration = 120;
+            damage = 5;
         }
 
         //methods

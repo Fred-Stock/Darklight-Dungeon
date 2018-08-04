@@ -25,17 +25,24 @@ namespace Game1
         //fields
         private WeaponType type;
         protected int affectDuration;
+        protected int damage;
 
         //properties
         public WeaponType Type
         {
             get { return type; }
         }
+        public int Damage
+        {
+            get { return damage; }
+            set { damage = value; }
+        }
 
         //constructor
         public Weapon(WeaponType weapon, string name, Rectangle position, Texture2D texture) : base(name, position, texture)
         {
             type = weapon;
+            damage = 5;
         }
 
         //methods

@@ -23,6 +23,7 @@ namespace Game1
         {
             timer = 0;
             affectDuration = 45;
+            damage = 7;
         }
 
         int prevMoveSpeed = 0;

@@ -64,11 +64,31 @@ namespace Game1
 
         }
 
-        public override void TakeDamage(Characters damaged, Characters damager)
+        public override void TakeDamage(Player damaged, Characters damager)
         {
             if (damager.Position.Intersects(damaged.Position))
             {
-                damaged.Health -= damage;
+                if(damaged.Armor is ThornArmor)
+                {
+                    damaged.Armor.ArmorAction(this);
+                }
+                else
+                {
+                    damaged.Armor.ArmorAction();
+                }
+                if(damaged.Armor is ShieldArmor temp)
+                {
+                    temp = (ShieldArmor)damaged.Armor;
+                    if (temp.Popped)
+                    {
+                        damaged.Health -= damage - damaged.Armor.Defense;
+                    }
+                }
+                else
+                {
+                    damaged.Health -= damage - damaged.Armor.Defense;
+
+                }
             }
         }
     }

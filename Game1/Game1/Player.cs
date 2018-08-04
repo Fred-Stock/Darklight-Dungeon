@@ -98,21 +98,24 @@ namespace Game1
         //constructor
         public Player(int score, Weapon weapon, Armor armor, Texture2D sidewaysWalk, Texture2D walkUp, Texture2D walkDown, int health, int damage, Rectangle position, Texture2D texture ) : base(health, damage, position, texture)
         {
-            hit = false;
+            moveSpeed = 3;
             this.score = score;
             this.weapon = weapon;
-            currentSprite = texture;
             this.armor = armor;
+            damage = weapon.Damage;
+
             inventory = new Dictionary<string, Item>();
             invList = new List<string>();
-            //inventory.Add(armor.Name, armor);
-            //invList.Add(armor.Name);
             inventory.Add(weapon.Name, weapon);
             invList.Add(weapon.Name);
+            inventory.Add(armor.Name, armor);
+            invList.Add(armor.Name);
+
             atkTimer = 0;
             attacking = false;
-            moveSpeed = 3;
             prevPos = position;
+            currentSprite = texture;
+
             this.sidewaysWalk = sidewaysWalk;
             this.walkDown = walkDown;
             this.walkUp = walkUp;
@@ -168,6 +171,26 @@ namespace Game1
                     else
                     {
                         weapon = (Weapon)item;
+                    }
+                    damage = weapon.Damage;
+                }
+                if(item is Armor)
+                {
+                    if(item is SpeedArmor)
+                    {
+                        armor = (SpeedArmor)item;
+                    }
+                    if (item is ShieldArmor)
+                    {
+                        armor = (ShieldArmor)item;
+                    }
+                    if (item is ThornArmor)
+                    {
+                        armor = (ThornArmor)item;
+                    }
+                    else
+                    {
+                        armor = (Armor)item;
                     }
                 }
             }
@@ -227,25 +250,32 @@ namespace Game1
             prevPos = Position;
             Rectangle temp = Position;
             kbstate = Keyboard.GetState();
+            int moveIncrease = 0;
+
+            if (armor is SpeedArmor)
+            {
+                SpeedArmor tempArmor = (SpeedArmor)armor;
+                moveIncrease = tempArmor.SpeedBoost;
+            }
             if (kbstate.IsKeyDown(Keys.W))
             {
                 currentSprite = walkUp;
                 walkLeft = false;
                 walkRight = false;
-                temp.Y -= moveSpeed;
+                temp.Y -= moveSpeed + moveIncrease;
             }
             if (kbstate.IsKeyDown(Keys.S))
             {
                 currentSprite = walkDown;
                 walkRight = false;
                 walkLeft = false;
-                temp.Y += moveSpeed;
+                temp.Y += moveSpeed + moveIncrease;
             }
             if (kbstate.IsKeyDown(Keys.A))
             {
                 walkRight = false;
                 walkTimer++;
-                temp.X -= moveSpeed;
+                temp.X -= moveSpeed + moveIncrease;
                 currentSprite = sidewaysWalk;
 
                 walkLeft = true;
@@ -260,7 +290,7 @@ namespace Game1
             {
                 walkLeft = false;
                 walkTimer++;
-                temp.X += moveSpeed;
+                temp.X += moveSpeed + moveIncrease;
                 currentSprite = sidewaysWalk;
                 walkRight = true;
 
