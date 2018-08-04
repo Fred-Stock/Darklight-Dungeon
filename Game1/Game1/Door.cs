@@ -95,18 +95,32 @@ namespace Game1
         /// <param name="game"></param>
         /// <param name="player"></param>
         int prevSpeed = 0;
+        int prevArmorSpeed = 0;
         public bool DoorTransistion(Player player)
         {
             if (timer == 0)
             {
                 prevSpeed = player.MoveSpeed;
                 player.MoveSpeed = 0;
+                if(player.Armor is SpeedArmor tempAr)
+                {
+                    tempAr = (SpeedArmor)player.Armor;
+                    prevArmorSpeed = tempAr.SpeedBoost;
+                    tempAr.SpeedBoost = 0;
+                    player.Armor = tempAr;
+                }
             }
 
             Activated = true;
             if(timer >= 160)
             {
                 player.MoveSpeed = prevSpeed;
+                if(player.Armor is SpeedArmor tempAr)
+                {
+                    tempAr = (SpeedArmor)player.Armor;
+                    tempAr.SpeedBoost = prevArmorSpeed;
+                    player.Armor = tempAr;
+                }
                 return true;
             }
             else

@@ -288,7 +288,6 @@ namespace Game1
             shop = new ShopManager();
             currentLevel = new Level(LevelIO("level1_1"), manager);
             
-            
         }
 
         /// <summary>

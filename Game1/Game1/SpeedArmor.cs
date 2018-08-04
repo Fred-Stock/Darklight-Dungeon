@@ -18,6 +18,7 @@ namespace Game1
         public int SpeedBoost
         {
             get { return speedBoost; }
+            set { speedBoost = value; }
         }
 
 
