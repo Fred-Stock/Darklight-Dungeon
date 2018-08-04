@@ -27,6 +27,7 @@ namespace Game1
         {
             popped = false;
             defense = 0;
+            cost = 20;
         }
 
         //methods

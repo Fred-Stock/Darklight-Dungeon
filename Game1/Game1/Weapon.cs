@@ -43,6 +43,7 @@ namespace Game1
         {
             type = weapon;
             damage = 5;
+            cost = 8;
         }
 
         //methods

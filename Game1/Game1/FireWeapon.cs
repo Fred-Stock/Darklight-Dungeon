@@ -23,6 +23,7 @@ namespace Game1
             timer = 0;
             affectDuration = 120;
             damage = 5;
+            cost = 25;
         }
 
         //methods

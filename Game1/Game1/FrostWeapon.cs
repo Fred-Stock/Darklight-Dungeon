@@ -24,6 +24,7 @@ namespace Game1
             timer = 0;
             affectDuration = 120;
             damage = 10;
+            cost = 15;
         }
 
         int prevMoveSpeed = 0;

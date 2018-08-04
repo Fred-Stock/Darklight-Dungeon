@@ -286,8 +286,6 @@ namespace Game1
             playerArmor2 = new Armor(ArmorType.test, "testA2", new Rectangle(50, 50, 10, 10), door_locked);//test value
             List<Item> testShopInv = new List<Item>();
             shop = new ShopManager();
-            shop.AddToShop(playerWeapon, 0);
-            shop.AddToShop(playerArmor, 0);
             currentLevel = new Level(LevelIO("level1_1"), manager);
             
             
@@ -611,6 +609,16 @@ namespace Game1
                     {
                         if (manager.EnemyList[i].Health <= 0)
                         {
+                            if (rng.Next(4) == 1)
+                            {
+                                manager.ItemList.Add(new Item("largeCoin", new Rectangle(manager.EnemyList[i].Position.X, manager.EnemyList[i].Position.Y,
+                                    50, 50), rock_large));
+                            }
+                            else
+                            {
+                                manager.ItemList.Add(new Item("smallCoin", new Rectangle(manager.EnemyList[i].Position.X, manager.EnemyList[i].Position.Y,
+                                    50, 50), rock_small));
+                            }
                             manager.EnemyList.RemoveAt(i);
                             manager.EnemyList.Insert(i, null);
                         }
@@ -631,11 +639,13 @@ namespace Game1
                     }
                 }
 
+
                 //transition to inventory screen
                 if (SingleButtonPress(Keys.I))
                 {
                     gameState = GameState.Inventory;
                 }
+                //transition to pause screen
                 if (SingleButtonPress(Keys.P))
                 {
                     gameState = GameState.Pause;
@@ -664,17 +674,21 @@ namespace Game1
             {
                 foreach (string item in player.InvList)
                 {
-                    if(ButtonClicked(555 + (player.InvList.IndexOf(item) / 3 * 170), 330 + player.InvList.IndexOf(item) % 3 * 205,
-                        690 + (player.InvList.IndexOf(item) / 3 * 170), 465 + player.InvList.IndexOf(item) % 3 * 205))
+                    if (currentLevel.WinCheck())
                     {
-                        if(player.Inventory[item] is Weapon)
+                        if(ButtonClicked(555 + (player.InvList.IndexOf(item) / 3 * 170), 330 + player.InvList.IndexOf(item) % 3 * 205,
+                            690 + (player.InvList.IndexOf(item) / 3 * 170), 465 + player.InvList.IndexOf(item) % 3 * 205))
                         {
-                            player.WeaponSwap((Weapon)player.Inventory[item]);
+                            if(player.Inventory[item] is Weapon)
+                            {
+                                player.WeaponSwap((Weapon)player.Inventory[item]);
+                            }
+                            else if(player.Inventory[item] is Armor)
+                            {
+                                player.ArmorSwap((Armor)player.Inventory[item]);
+                            }
                         }
-                        else if(player.Inventory[item] is Armor)
-                        {
-                            player.ArmorSwap((Armor)player.Inventory[item]);
-                        }
+
                     }
 
                 }
@@ -885,7 +899,7 @@ namespace Game1
                     spriteBatch.DrawString(Arial12, item, new Vector2(560 + (player.InvList.IndexOf(item)/3 * 170),
                          490 + player.InvList.IndexOf(item)%3 * 205), Color.Black);
                 }
-                spriteBatch.DrawString(Arial12, "Currency: " + player.Currency, new Vector2(25, 25), Color.White);
+                spriteBatch.DrawString(Arial12, player.Currency.ToString(), new Vector2(345, 275), Color.White);
             }
             #endregion
             #region Shop
@@ -1019,57 +1033,48 @@ namespace Game1
         {
             if (!player.Inventory.ContainsKey("weapon"))
             {
-                store.AddToShop(new Weapon(WeaponType.basic, "weapon", new Rectangle(50, 50, 10, 10), base_weapon), 0);
+                store.AddToShop(new Weapon(WeaponType.basic, "weapon", new Rectangle(50, 50, 10, 10), base_weapon));
             }
             else
             {
                 //determining random weapon upgrade
-                int weaponVersion = rng.Next(4);
+                int weaponVersion = rng.Next(3);
 
                 //determining random weapon upgrade
                 if(weaponVersion == 0)
                 {
-                    store.AddToShop(new Weapon(WeaponType.basic, "+1" + player.Weapon.Name, new Rectangle(50, 50, 10, 10), base_weapon), 0);
+                    store.AddToShop(new ShockWeapon(WeaponType.shock, "Weapon of shock", new Rectangle(50, 50, 10, 10), base_weapon));
                 }
                 else if(weaponVersion == 1)
                 {
-                    store.AddToShop(new ShockWeapon(WeaponType.shock, "Weapon of shock", new Rectangle(50, 50, 10, 10), base_weapon), 0);
+                    store.AddToShop(new FireWeapon(WeaponType.fire, "weapon of fire", new Rectangle(50, 50, 10, 10), base_weapon));
                 }
                 else if(weaponVersion == 2)
                 {
-                    store.AddToShop(new FireWeapon(WeaponType.fire, "weapon of fire", new Rectangle(50, 50, 10, 10), base_weapon), 0);
-                }
-                else if(weaponVersion == 3)
-                {
-                    store.AddToShop(new FrostWeapon(WeaponType.frost, "weapon of frost", new Rectangle(50, 50, 10, 10), base_weapon), 0);
+                    store.AddToShop(new FrostWeapon(WeaponType.frost, "weapon of frost", new Rectangle(50, 50, 10, 10), base_weapon));
                 }
 
             }
             if (!player.Inventory.ContainsKey("armor"))
             {
-                store.AddToShop(new Item("armor", new Rectangle(50, 50, 10, 10), base_armor), 0);
+                store.AddToShop(new Item("armor", new Rectangle(50, 50, 10, 10), base_armor));
             }
             else
             {
                 //determining random armor upgrade
-                int armorVersion = rng.Next(4);
-
+                int armorVersion = rng.Next(3);
 
                 if(armorVersion == 0)
                 {
-                    store.AddToShop(new Item("+1" + player.Armor.Name, new Rectangle(50, 50, 10, 10), base_armor), 0);
+                    store.AddToShop(new ThornArmor(ArmorType.test, "Armor of thorns", new Rectangle(50, 50, 10, 10), base_armor));
                 }
                 else if(armorVersion == 1)
                 {
-                    store.AddToShop(new ThornArmor(ArmorType.test, "Armor of thorns", new Rectangle(50, 50, 10, 10), base_armor), 0);
+                    store.AddToShop(new ShieldArmor(ArmorType.test, "Armor of shielding", new Rectangle(50, 50, 10, 10), base_armor));
                 }
                 else if(armorVersion == 2)
                 {
-                    store.AddToShop(new ShieldArmor(ArmorType.test, "Armor of shielding", new Rectangle(50, 50, 10, 10), base_armor), 0);
-                }
-                else if(armorVersion == 3)
-                {
-                    store.AddToShop(new SpeedArmor(ArmorType.test, "Armor of speed", new Rectangle(50, 50, 10, 10), base_armor), 0);
+                    store.AddToShop(new SpeedArmor(ArmorType.test, "Armor of speed", new Rectangle(50, 50, 10, 10), base_armor));
                 }
             }
         }

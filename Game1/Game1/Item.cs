@@ -14,6 +14,7 @@ namespace Game1
         //fields
         private string name;
         private bool visible;
+        protected int cost;
 
         //properties
         public string Name
@@ -28,6 +29,11 @@ namespace Game1
             set { visible = value; }
         }
 
+        public int Cost
+        {
+            get { return cost; }
+            set { cost = value; }
+        }
 
         //constructor 
         public Item(string name, Rectangle position, Texture2D texture) : base(position, texture)

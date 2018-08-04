@@ -26,6 +26,7 @@ namespace Game1
         {
             speedBoost = 2;
             defense = 2;
+            cost = 25;
         }
 
         //methods

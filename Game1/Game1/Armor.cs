@@ -20,6 +20,7 @@ namespace Game1
         ArmorType armor;
         protected int defense;
 
+
         //properties
         public int Defense
         {
@@ -32,6 +33,7 @@ namespace Game1
         {
             this.armor = armor;
             defense = 1;
+            cost = 8;
         }
 
         //methods

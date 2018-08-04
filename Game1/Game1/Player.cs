@@ -211,7 +211,7 @@ namespace Game1
             }
             else if (item.Name == "smallCoin")
             {
-                currency += 5;
+                currency += 3;
             }
             item.Visible = false;
         }

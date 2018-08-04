@@ -19,6 +19,7 @@ namespace Game1
         public ThornArmor(ArmorType armor, string name, Rectangle position, Texture2D texture) : base(armor, name, position, texture)
         {
             defense = 1;
+            cost = 15;
         }
 
         //methods

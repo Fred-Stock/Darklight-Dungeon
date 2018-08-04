@@ -35,10 +35,10 @@ namespace Game1
             itemCosts = new Dictionary<string, int>();
         }
 
-        public void AddToShop(Item item, int cost)
+        public void AddToShop(Item item)
         {
             shopInv.Add(item);
-            itemCosts.Add(item.Name, cost);
+            itemCosts.Add(item.Name, item.Cost);
         }
 
 
