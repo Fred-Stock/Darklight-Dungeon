@@ -278,7 +278,7 @@ namespace Game1
             quit_hover = Content.Load<Texture2D>("Sprites//quit_hover");
             
             //initialize the player
-            playerWeapon = new FireWeapon(WeaponType.frost, "frost", new Rectangle(50, 250, 40, 40), rock_small); //all values in here are just for test
+            playerWeapon = new Weapon(WeaponType.basic, "frost", new Rectangle(50, 250, 40, 40), rock_small); //all values in here are just for test
             player = new Player(0, playerWeapon, playerArmor, player_walk_side, player_backward, player_forward, 100, 10, new Rectangle(100, 100, 45, 75), player_forward); //all values in here are just for test as well
             #endregion
             testCurrency = new Item("smallCoin", new Rectangle(200, 500, 20, 20), rock_large);
@@ -1002,7 +1002,7 @@ namespace Game1
         {
             if (!player.Inventory.ContainsKey("weapon"))
             {
-                store.AddToShop(new Item("weapon", new Rectangle(50, 50, 10, 10), base_weapon), 0);
+                store.AddToShop(new Weapon(WeaponType.basic, "weapon", new Rectangle(50, 50, 10, 10), base_weapon), 0);
             }
             else
             {
@@ -1012,19 +1012,19 @@ namespace Game1
                 //determining random weapon upgrade
                 if(weaponVersion == 0)
                 {
-                    store.AddToShop(new Item("+1" + player.Weapon.Name, new Rectangle(50, 50, 10, 10), base_weapon), 0);
+                    store.AddToShop(new Weapon(WeaponType.basic, "+1" + player.Weapon.Name, new Rectangle(50, 50, 10, 10), base_weapon), 0);
                 }
                 else if(weaponVersion == 1)
                 {
-                    store.AddToShop(new Item(player.Weapon.Name + " of shock", new Rectangle(50, 50, 10, 10), base_weapon), 0);
+                    store.AddToShop(new ShockWeapon(WeaponType.shock, "Weapon of shock", new Rectangle(50, 50, 10, 10), base_weapon), 0);
                 }
                 else if(weaponVersion == 2)
                 {
-                    store.AddToShop(new Item(player.Weapon.Name + " of fire", new Rectangle(50, 50, 10, 10), base_weapon), 0);
+                    store.AddToShop(new FireWeapon(WeaponType.fire, "weapon of fire", new Rectangle(50, 50, 10, 10), base_weapon), 0);
                 }
                 else if(weaponVersion == 3)
                 {
-                    store.AddToShop(new Item(player.Weapon.Name + " of frost", new Rectangle(50, 50, 10, 10), base_weapon), 0);
+                    store.AddToShop(new FrostWeapon(WeaponType.frost, "weapon of frost", new Rectangle(50, 50, 10, 10), base_weapon), 0);
                 }
 
             }
@@ -1045,7 +1045,6 @@ namespace Game1
                 else if(armorVersion == 1)
                 {
                     store.AddToShop(new Item(player.Armor.Name + "of thorns", new Rectangle(50, 50, 10, 10), base_armor), 0);
-
                 }
                 else if(armorVersion == 2)
                 {

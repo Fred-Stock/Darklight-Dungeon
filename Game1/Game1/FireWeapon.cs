@@ -13,7 +13,6 @@ namespace Game1
     {
         //fields
         int timer;
-        private bool stopped;
 
         //properties
 

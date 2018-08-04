@@ -23,10 +23,10 @@ namespace Game1
         public virtual void Collision(Characters character, Rectangle prevPos, Game1 game)
         {
 
-            Rectangle leftX = new Rectangle(character.Position.X - 1, character.Position.Y, 1, character.Position.Height);
-            Rectangle rightX = new Rectangle(character.Position.X + character.Position.Width + 1, character.Position.Y, 1, character.Position.Height);
-            Rectangle topY = new Rectangle(character.Position.X + 2, character.Position.Y - 1, character.Position.Width - 2, 1);
-            Rectangle bottomY = new Rectangle(character.Position.X + 2, character.Position.Y + character.Position.Height + 1, character.Position.Width - 2, 1);
+            Rectangle leftX = new Rectangle(character.Position.X - 3, character.Position.Y, 3, character.Position.Height);
+            Rectangle rightX = new Rectangle(character.Position.X + character.Position.Width + 1, character.Position.Y, 3, character.Position.Height);
+            Rectangle topY = new Rectangle(character.Position.X, character.Position.Y - 3, character.Position.Width, 3);
+            Rectangle bottomY = new Rectangle(character.Position.X, character.Position.Y + character.Position.Height + 1, character.Position.Width, 3);
             
 
             // X Check
