@@ -19,7 +19,8 @@ namespace Game1
         //constructor
         public Fly(Random rng, int health, int damage, Rectangle position, Texture2D texture) :
             base(rng, health, damage, position, texture)
-        {
+        {   
+            affected = false;
             moveSpeed = 3;
         }
 
@@ -37,7 +38,7 @@ namespace Game1
             int xDist = player.Position.X - Position.X;
             int yDist = player.Position.Y - Position.Y;
             Double tDist = DistanceTo(player.Position.X, player.Position.Y, Position.X, Position.Y);
-
+            
             double ratio = moveSpeed / tDist;
 
             int xMov = (int)(ratio * xDist);

@@ -278,7 +278,7 @@ namespace Game1
             quit_hover = Content.Load<Texture2D>("Sprites//quit_hover");
             
             //initialize the player
-            playerWeapon = new Weapon(WeaponType.basic, "frost", new Rectangle(50, 250, 40, 40), rock_small); //all values in here are just for test
+            playerWeapon = new ShockWeapon(WeaponType.frost, "weapon", new Rectangle(50, 250, 40, 40), rock_small); //all values in here are just for test
             player = new Player(0, playerWeapon, playerArmor, player_walk_side, player_backward, player_forward, 100, 10, new Rectangle(100, 100, 45, 75), player_forward); //all values in here are just for test as well
             #endregion
             testCurrency = new Item("smallCoin", new Rectangle(200, 500, 20, 20), rock_large);

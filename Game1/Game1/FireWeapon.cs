@@ -36,7 +36,7 @@ namespace Game1
                  }
              }
             
-             else if(timer > affectDuration)
+             else if(timer > affectDuration && attacked.Affected)
              {
                  timer = 0;
                  attacked.Affected = false;

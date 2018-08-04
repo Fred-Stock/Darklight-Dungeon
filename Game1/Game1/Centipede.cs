@@ -24,6 +24,7 @@ namespace Game1
         //constructor
         public Centipede(Player player, Random rng, int health, int damage, Rectangle position, Texture2D texture) : base(rng, health, damage, position, texture)
         {
+            affected = false;
             moveSpeed = 2;
             timer = 0;
             SelectDirection(player);

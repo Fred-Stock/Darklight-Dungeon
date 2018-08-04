@@ -105,6 +105,10 @@ namespace Game1
             this.armor = armor;
             inventory = new Dictionary<string, Item>();
             invList = new List<string>();
+            //inventory.Add(armor.Name, armor);
+            //invList.Add(armor.Name);
+            inventory.Add(weapon.Name, weapon);
+            invList.Add(weapon.Name);
             atkTimer = 0;
             attacking = false;
             moveSpeed = 3;

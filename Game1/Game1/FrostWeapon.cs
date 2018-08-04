@@ -22,17 +22,18 @@ namespace Game1
         public FrostWeapon(WeaponType weapon, string name, Rectangle position, Texture2D texture) : base(weapon, name, position, texture)
         {
             timer = 0;
-            affectDuration = 60;
+            affectDuration = 120;
         }
 
         int prevMoveSpeed = 0;
         //method
         public override void WeaponAction(Enemies attacked)
         {
-            if (timer == 0)
+            if (timer == 0 && attacked.Affected)
             {
                 prevMoveSpeed = attacked.MoveSpeed;
                 attacked.MoveSpeed = (int)Math.Ceiling((double)attacked.MoveSpeed / 2);
+
             }
 
             if(timer < affectDuration && attacked.Affected)
@@ -40,7 +41,7 @@ namespace Game1
                 
                 timer++;
             }
-            else
+            else if(attacked.Affected)
             {
                 timer = 0;
                 attacked.Affected = false;

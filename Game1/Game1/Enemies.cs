@@ -36,6 +36,7 @@ namespace Game1
         public Enemies(Random rng, int health, int damage, Rectangle position, Texture2D texture) : base(health, damage, position, texture)
         {
             hit = false;
+            affected = false;
             this.rng = rng;
             initialX = Position.X;
             initialY = Position.Y;

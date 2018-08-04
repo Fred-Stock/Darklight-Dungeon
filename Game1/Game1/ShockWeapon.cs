@@ -30,7 +30,7 @@ namespace Game1
         //methods
         public override void WeaponAction(Enemies attacked)
         {
-            if (timer == 0)
+            if (timer == 0 && attacked.Affected)
             {
                 prevMoveSpeed = attacked.MoveSpeed;
                 attacked.MoveSpeed = 0;
@@ -40,7 +40,7 @@ namespace Game1
             {
                 timer++;
             }
-            else
+            else if(attacked.Affected)
             {
                 timer = 0;
                 attacked.Affected = false;
