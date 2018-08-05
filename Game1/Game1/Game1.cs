@@ -301,7 +301,8 @@ namespace Game1
             //button loading
             play_hover = Content.Load<Texture2D>("Sprites//Play_hover");
             quit_hover = Content.Load<Texture2D>("Sprites//quit_hover");
-            
+            shop_hover = Content.Load<Texture2D>("Sprites//shop_hover");
+
             //initialize the player
             playerWeapon = new Weapon(WeaponType.basic, "weapon", new Rectangle(50, 250, 40, 40), base_weapon); //all values in here are just for test
             playerArmor = new Armor(ArmorType.test, "armor", new Rectangle(50, 50, 10, 10), base_armor); //all values in here are just for test too
@@ -736,22 +737,11 @@ namespace Game1
             {
                 //if player trys to buy something that doesn't exist it will crash.
                 //currently thinking that the player will only be able to buy one item at a shop and therefore no need to fix this
-                if (!usedShop)
+                for (int i = 0; i < shop.ShopInv.Count; i++)
                 {
-                    if (SingleButtonPress(Keys.D1))
+                    if (ButtonClicked(555 + i * 170, 320 + (320 * i % 5), 700 + i * 170, 465 + (320 * i % 5)))
                     {
-                        shopMessage = shop.BuyItem(player, shop.ShopInv[0]);
-                        usedShop = true;
-                    }
-                    if (SingleButtonPress(Keys.D2))
-                    {
-                        shopMessage = shop.BuyItem(player, shop.ShopInv[1]);
-                        usedShop = true;
-                    }
-                    if (SingleButtonPress(Keys.D3))
-                    {
-                        shopMessage = shop.BuyItem(player, shop.ShopInv[2]);
-                        usedShop = true;
+                        shopMessage = shop.BuyItem(player, shop.ShopInv[i]);
                     }
                 }
                 if (kbState.IsKeyDown(Keys.Enter))
@@ -976,14 +966,18 @@ namespace Game1
                 spriteBatch.Draw(shopScreen, new Vector2(0, 0), Color.White);
                 for(int i = 0; i < shop.ShopInv.Count; i++)
                 {
-                    
+                    if (new Rectangle(555 + i * 170, 320 + (320 * i%5), 145, 145).Contains(mouseState.Position))
+                    {
+                        spriteBatch.Draw(shop_hover, new Vector2(504 + i * 167, 289 + (320 * i%5)), Color.White);
+                    }
+
                     spriteBatch.Draw(shop.ShopInv[i].Texture, new Rectangle(570 + i * 170, 335 + 320 * i%5 , 100, 100), Color.White);
                     spriteBatch.DrawString(Arial12, shop.ShopInv[i].Name, new Vector2(560 + i * 170, 490 + 320 * i%5), Color.White);
                     spriteBatch.DrawString(Arial12, shop.ItemCosts[shop.ShopInv[i].Name].ToString(), new Vector2(570 + i * 170, 535 + 320 * i%5), Color.White);
                     spriteBatch.DrawString(Arial12, player.Currency.ToString(), new Vector2(340, 280), Color.White);
-
-
                 }
+
+                
             }
             #endregion
             #region End Game
