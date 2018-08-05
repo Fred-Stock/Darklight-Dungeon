@@ -977,9 +977,10 @@ namespace Game1
                 for(int i = 0; i < shop.ShopInv.Count; i++)
                 {
                     
-                    spriteBatch.Draw(shop.ShopInv[i].Texture, new Rectangle(GraphicsDevice.Viewport.Width / 3 + (200 * i), GraphicsDevice.Viewport.Height / 2 - 50, 100, 100), Color.White);
-                    spriteBatch.DrawString(Arial12, shop.ShopInv[i].Name, new Vector2(25 + GraphicsDevice.Viewport.Width / 3 + (200 * i), 110 + GraphicsDevice.Viewport.Height / 2 - 50), Color.White);
-                    spriteBatch.DrawString(Arial12, "Currency: " + player.Currency, new Vector2(25, 25), Color.White);
+                    spriteBatch.Draw(shop.ShopInv[i].Texture, new Rectangle(570 + i * 170, 335 + 320 * i%5 , 100, 100), Color.White);
+                    spriteBatch.DrawString(Arial12, shop.ShopInv[i].Name, new Vector2(560 + i * 170, 490 + 320 * i%5), Color.White);
+                    spriteBatch.DrawString(Arial12, shop.ItemCosts[shop.ShopInv[i].Name].ToString(), new Vector2(570 + i * 170, 535 + 320 * i%5), Color.White);
+                    spriteBatch.DrawString(Arial12, player.Currency.ToString(), new Vector2(340, 280), Color.White);
 
 
                 }
