@@ -93,6 +93,7 @@ namespace Game1
         Texture2D thorn_armor;
         Texture2D silver_coin;
         Texture2D gold_coin;
+        Texture2D store;
 
         //sprites
         Texture2D player_forward;
@@ -102,6 +103,7 @@ namespace Game1
         Texture2D rock_small;
         Texture2D enemy_1;
         Texture2D enemy_2;
+        Texture2D enemy_2_90;
 
         //attack sprites
         //attack 1
@@ -230,6 +232,7 @@ namespace Game1
             thorn_armor = Content.Load<Texture2D>("Sprites//thorn_armor");
             silver_coin = Content.Load<Texture2D>("Sprites//silver_coin");
             gold_coin = Content.Load<Texture2D>("Sprites//gold_coin");
+            store = Content.Load<Texture2D>("Sprites//store_stand");
 
             //sprite loading
             player_forward = Content.Load<Texture2D>("Sprites//player_forward");
@@ -237,6 +240,7 @@ namespace Game1
             player_walk_side = Content.Load<Texture2D>("Sprites//player_walk_side");
             enemy_1 = Content.Load<Texture2D>("Sprites//enemy_1");
             enemy_2 = Content.Load<Texture2D>("Sprites//enemy_2_animated");
+            enemy_2_90 = Content.Load<Texture2D>("Sprites//enemy_2_animated_90");
             //attack sprite loading
             //attack 1
             attack_1_1 = Content.Load<Texture2D>("Sprites//AttackSprites//attack_1a");
