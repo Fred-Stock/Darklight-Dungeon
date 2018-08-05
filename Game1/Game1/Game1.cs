@@ -178,7 +178,7 @@ namespace Game1
 
             //Initialize fields
             usedShop = false;
-
+              
 
 
             manager = new Manager(player);
