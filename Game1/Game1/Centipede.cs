@@ -144,8 +144,6 @@ namespace Game1
                 
                 if (!prevRight && !prevLeft)//if the rectangle is vertical
                 {
-                 
-                    //temp.X = Position.X - 70;
 
                     temp.Width = 200;
                     temp.Height = 60;
@@ -154,10 +152,20 @@ namespace Game1
                 if((Position.X - player.Position.X) < 0)
                 {
                     moveRight = true;
+                    if (prevDown)
+                    {
+                        temp.X = Position.X - 200;
+                        temp.Y = Position.Y + Position.Height;
+                    }
                 }
                 else
                 {
                     moveLeft = true;
+                    if (prevDown)
+                    {
+                        temp.X = Position.X + Position.Width;
+                        temp.Y = Position.Y + Position.Height;
+                    }
                 }
             }
             else
@@ -166,7 +174,7 @@ namespace Game1
                 {
                     //temp.X = Position.X + 70;
                     //temp.Y = Position.Y - 70;
-                    temp.Width = 60;
+                    temp.Width = 53;
                     temp.Height = 200;
                 }
 

@@ -443,7 +443,7 @@ namespace Game1
                             }
                             else if(levelData[i] == 'C')
                             {
-                                manager.EnemyList.Add(new Centipede(player, rng, 30, 8, new Rectangle(temp.X, temp.Y, 200, 60), enemy_2, enemy_2));
+                                manager.EnemyList.Add(new Centipede(player, rng, 30, 8, new Rectangle(temp.X, temp.Y, 200, 60), enemy_2, enemy_2_90));
                             }
                             else
                             {
@@ -911,19 +911,19 @@ namespace Game1
                         {
                             if (temp.MoveUp)
                             {
-                                spriteBatch.Draw(manager.EnemyList[i].Texture, manager.EnemyList[i].Position, new Rectangle((temp.AniTimer) / 5 * 200, 0, 200, 60), Color.White, 1.6f, Vector2.Zero, SpriteEffects.None, 0f);
+                                spriteBatch.Draw(temp.RotTexture, manager.EnemyList[i].Position, new Rectangle((temp.AniTimer) / 5 * 54, 0, 54, 200), Color.White, 0, Vector2.Zero, SpriteEffects.None, 0f);
                             }
                             if (temp.MoveDown)
                             {
-                                spriteBatch.Draw(manager.EnemyList[i].Texture, manager.EnemyList[i].Position, new Rectangle((temp.AniTimer) / 5 * 200, 0, 200, 60), Color.White, 1.6f, Vector2.Zero, SpriteEffects.FlipHorizontally, 0f);
+                                spriteBatch.Draw(temp.RotTexture, manager.EnemyList[i].Position, new Rectangle((temp.AniTimer) / 5 * 54, 0, 54, 200), Color.White, 0, Vector2.Zero, SpriteEffects.FlipHorizontally, 0f);
                             }
                             if (temp.MoveRight)
                             {
-                                spriteBatch.Draw(manager.EnemyList[i].Texture, manager.EnemyList[i].Position, new Rectangle((temp.AniTimer)/5 * 200, 0, 200, 60), Color.White, 0, Vector2.Zero, SpriteEffects.FlipHorizontally, 0f);
+                                spriteBatch.Draw(manager.EnemyList[i].Texture, manager.EnemyList[i].Position, new Rectangle((temp.AniTimer)/5 * 200, 0, 200, 54), Color.White, 0, Vector2.Zero, SpriteEffects.FlipHorizontally, 0f);
                             }
                             if (temp.MoveLeft)
                             {
-                                spriteBatch.Draw(manager.EnemyList[i].Texture, manager.EnemyList[i].Position, new Rectangle((temp.AniTimer) / 5 * 200, 0, 200, 60), Color.White);
+                                spriteBatch.Draw(manager.EnemyList[i].Texture, manager.EnemyList[i].Position, new Rectangle((temp.AniTimer) / 5 * 200, 0, 200, 54), Color.White);
                             }
                         }
                         else
