@@ -93,6 +93,7 @@ namespace Game1
         Texture2D thorn_armor;
         Texture2D silver_coin;
         Texture2D gold_coin;
+        Texture2D store;
 
         //sprites
         Texture2D player_forward;
@@ -230,6 +231,7 @@ namespace Game1
             thorn_armor = Content.Load<Texture2D>("Sprites//thorn_armor");
             silver_coin = Content.Load<Texture2D>("Sprites//silver_coin");
             gold_coin = Content.Load<Texture2D>("Sprites//gold_coin");
+            store = Content.Load<Texture2D>("Sprites//store_stand");
 
             //sprite loading
             player_forward = Content.Load<Texture2D>("Sprites//player_forward");
