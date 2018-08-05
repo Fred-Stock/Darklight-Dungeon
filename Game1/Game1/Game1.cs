@@ -500,7 +500,7 @@ namespace Game1
                             shop.ItemCosts.Clear();
                             usedShop = false;
                             FillShop(player, shop);
-                            manager.ItemList.Add(new Item("store", new Rectangle(temp.X, temp.Y, 60, 60), rock_large));
+                            manager.ItemList.Add(new Item("store", new Rectangle(temp.X, temp.Y, store.Width, store.Height), store));
                         }
                     }
                     //spawn obstacles
