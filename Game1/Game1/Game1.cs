@@ -76,6 +76,7 @@ namespace Game1
         Texture2D pause;
         Texture2D gameOver;
         Texture2D inventoryScreen;
+        Texture2D shopScreen;
 
         //objects
         Texture2D door_locked;
@@ -84,6 +85,14 @@ namespace Game1
         Texture2D wall;
         Texture2D base_weapon;
         Texture2D base_armor;
+        Texture2D fire_weapon;
+        Texture2D frost_weapon;
+        Texture2D shock_weapon;
+        Texture2D shield_armor;
+        Texture2D speed_armor;
+        Texture2D thorn_armor;
+        Texture2D silver_coin;
+        Texture2D gold_coin;
 
         //sprites
         Texture2D player_forward;
@@ -92,6 +101,7 @@ namespace Game1
         Texture2D rock_large;
         Texture2D rock_small;
         Texture2D enemy_1;
+        Texture2D enemy_2;
 
         //attack sprites
         //attack 1
@@ -127,6 +137,7 @@ namespace Game1
         //buttons
         Texture2D play_hover;
         Texture2D quit_hover;
+        Texture2D shop_hover;
 
         //spritefont
         SpriteFont Arial12;
@@ -201,6 +212,7 @@ namespace Game1
             pause = Content.Load<Texture2D>("Screens//Pause");
             gameOver = Content.Load<Texture2D>("Screens//Game_over");
             inventoryScreen = Content.Load<Texture2D>("Screens//Inventory");
+            shopScreen = Content.Load<Texture2D>("Screens//Shop_Screen");
 
             //object loading
             door_locked = Content.Load<Texture2D>("Sprites//door_locked");
@@ -210,12 +222,21 @@ namespace Game1
             rock_small = Content.Load<Texture2D>("Sprites//rock_small");
             base_weapon = Content.Load<Texture2D>("Sprites//base_weapon");
             base_armor = Content.Load<Texture2D>("Sprites//base_armor");
+            fire_weapon = Content.Load<Texture2D>("Sprites//fire_weapon");
+            shield_armor = Content.Load<Texture2D>("Sprites//shield_armor");
+            frost_weapon = Content.Load<Texture2D>("Sprites//frost_weapon");
+            speed_armor = Content.Load<Texture2D>("Sprites//speed_armor");
+            shock_weapon = Content.Load<Texture2D>("Sprites//shock_weapon");
+            thorn_armor = Content.Load<Texture2D>("Sprites//thorn_armor");
+            silver_coin = Content.Load<Texture2D>("Sprites//silver_coin");
+            gold_coin = Content.Load<Texture2D>("Sprites//gold_coin");
 
             //sprite loading
             player_forward = Content.Load<Texture2D>("Sprites//player_forward");
             player_backward = Content.Load<Texture2D>("Sprites//player_backward");
             player_walk_side = Content.Load<Texture2D>("Sprites//player_walk_side");
             enemy_1 = Content.Load<Texture2D>("Sprites//enemy_1");
+            enemy_2 = Content.Load<Texture2D>("Sprites//enemy_2_animated");
             //attack sprite loading
             //attack 1
             attack_1_1 = Content.Load<Texture2D>("Sprites//AttackSprites//attack_1a");
@@ -282,7 +303,7 @@ namespace Game1
             playerArmor = new Armor(ArmorType.test, "armor", new Rectangle(50, 50, 10, 10), base_armor); //all values in here are just for test too
             player = new Player(0, playerWeapon, playerArmor, player_walk_side, player_backward, player_forward, 10, 5, new Rectangle(100, 100, 45, 75), player_forward); //all values in here are just for test as well
             #endregion
-            testCurrency = new Item("smallCoin", new Rectangle(200, 500, 20, 20), rock_large);
+            testCurrency = new Item("smallCoin", new Rectangle(200, 500, 20, 20), silver_coin);
             playerArmor2 = new Armor(ArmorType.test, "testA2", new Rectangle(50, 50, 10, 10), door_locked);//test value
             List<Item> testShopInv = new List<Item>();
             shop = new ShopManager();
@@ -925,7 +946,7 @@ namespace Game1
             #region Shop
             if (gameState == GameState.Shop)
             {
-                spriteBatch.Draw(levelScreen, new Vector2(0, 0), Color.White);
+                spriteBatch.Draw(shopScreen, new Vector2(0, 0), Color.White);
                 for(int i = 0; i < shop.ShopInv.Count; i++)
                 {
                     
@@ -1063,15 +1084,15 @@ namespace Game1
                 //determining random weapon upgrade
                 if(weaponVersion == 0)
                 {
-                    store.AddToShop(new ShockWeapon(WeaponType.shock, "Weapon of shock", new Rectangle(50, 50, 10, 10), base_weapon));
+                    store.AddToShop(new ShockWeapon(WeaponType.shock, "Weapon of shock", new Rectangle(50, 50, 10, 10), shock_weapon));
                 }
                 else if(weaponVersion == 1)
                 {
-                    store.AddToShop(new FireWeapon(WeaponType.fire, "weapon of fire", new Rectangle(50, 50, 10, 10), base_weapon));
+                    store.AddToShop(new FireWeapon(WeaponType.fire, "weapon of fire", new Rectangle(50, 50, 10, 10), fire_weapon));
                 }
                 else if(weaponVersion == 2)
                 {
-                    store.AddToShop(new FrostWeapon(WeaponType.frost, "weapon of frost", new Rectangle(50, 50, 10, 10), base_weapon));
+                    store.AddToShop(new FrostWeapon(WeaponType.frost, "weapon of frost", new Rectangle(50, 50, 10, 10), frost_weapon));
                 }
 
             }
@@ -1086,15 +1107,15 @@ namespace Game1
 
                 if(armorVersion == 0)
                 {
-                    store.AddToShop(new ThornArmor(ArmorType.test, "Armor of thorns", new Rectangle(50, 50, 10, 10), base_armor));
+                    store.AddToShop(new ThornArmor(ArmorType.test, "Armor of thorns", new Rectangle(50, 50, 10, 10), thorn_armor));
                 }
                 else if(armorVersion == 1)
                 {
-                    store.AddToShop(new ShieldArmor(ArmorType.test, "Armor of shielding", new Rectangle(50, 50, 10, 10), base_armor));
+                    store.AddToShop(new ShieldArmor(ArmorType.test, "Armor of shielding", new Rectangle(50, 50, 10, 10), shield_armor));
                 }
                 else if(armorVersion == 2)
                 {
-                    store.AddToShop(new SpeedArmor(ArmorType.test, "Armor of speed", new Rectangle(50, 50, 10, 10), base_armor));
+                    store.AddToShop(new SpeedArmor(ArmorType.test, "Armor of speed", new Rectangle(50, 50, 10, 10), speed_armor));
                 }
             }
         }
