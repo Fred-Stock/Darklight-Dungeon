@@ -439,7 +439,7 @@ namespace Game1
                             }
                             else if(levelData[i] == 'C')
                             {
-                                manager.EnemyList.Add(new Centipede(player, rng, 30, 8, new Rectangle(temp.X, temp.Y, 75, 75), enemy_1));
+                                manager.EnemyList.Add(new Centipede(player, rng, 30, 8, new Rectangle(temp.X, temp.Y, 200, 60), enemy_2, enemy_2));
                             }
                             else
                             {
@@ -640,12 +640,12 @@ namespace Game1
                             if (rng.Next(4) == 1)
                             {
                                 manager.ItemList.Add(new Item("largeCoin", new Rectangle(manager.EnemyList[i].Position.X, manager.EnemyList[i].Position.Y,
-                                    50, 50), rock_large));
+                                    50, 50), gold_coin));
                             }
                             else
                             {
                                 manager.ItemList.Add(new Item("smallCoin", new Rectangle(manager.EnemyList[i].Position.X, manager.EnemyList[i].Position.Y,
-                                    50, 50), rock_small));
+                                    50, 50), silver_coin));
                             }
                             manager.EnemyList.RemoveAt(i);
                             manager.EnemyList.Insert(i, null);
@@ -903,7 +903,30 @@ namespace Game1
                 {
                     if(manager.EnemyList[i] != null)
                     {
-                        spriteBatch.Draw(manager.EnemyList[i].Texture, manager.EnemyList[i].Position, Color.White);
+                        if(manager.EnemyList[i] is Centipede temp)
+                        {
+                            if (temp.MoveUp)
+                            {
+                                spriteBatch.Draw(manager.EnemyList[i].Texture, manager.EnemyList[i].Position, new Rectangle((temp.AniTimer) / 5 * 200, 0, 200, 60), Color.White, 1.6f, Vector2.Zero, SpriteEffects.None, 0f);
+                            }
+                            if (temp.MoveDown)
+                            {
+                                spriteBatch.Draw(manager.EnemyList[i].Texture, manager.EnemyList[i].Position, new Rectangle((temp.AniTimer) / 5 * 200, 0, 200, 60), Color.White, 1.6f, Vector2.Zero, SpriteEffects.FlipHorizontally, 0f);
+                            }
+                            if (temp.MoveRight)
+                            {
+                                spriteBatch.Draw(manager.EnemyList[i].Texture, manager.EnemyList[i].Position, new Rectangle((temp.AniTimer)/5 * 200, 0, 200, 60), Color.White, 0, Vector2.Zero, SpriteEffects.FlipHorizontally, 0f);
+                            }
+                            if (temp.MoveLeft)
+                            {
+                                spriteBatch.Draw(manager.EnemyList[i].Texture, manager.EnemyList[i].Position, new Rectangle((temp.AniTimer) / 5 * 200, 0, 200, 60), Color.White);
+                            }
+                        }
+                        else
+                        {
+                         spriteBatch.Draw(manager.EnemyList[i].Texture, manager.EnemyList[i].Position, Color.White);
+
+                        }
                     }
                 }
 
