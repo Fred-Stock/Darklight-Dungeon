@@ -30,7 +30,10 @@ namespace Game1
         private Texture2D sidewaysWalk;
         private Texture2D walkUp;
         private Texture2D walkDown;
-        
+        KeyboardState previous;
+        bool leftAttack; //field for keeping track of what direction the player is attacking
+        bool rightAttack; //field for keeping track of what direction the player is attacking
+
 
         //properties
         public int Score
@@ -92,9 +95,17 @@ namespace Game1
         {
             get { return walkLeft; }
         }
+        public bool LeftAttack
+        {
+            get { return leftAttack; }
+            set { leftAttack = value; }
+        }
+        public bool RightAttack
+        {
+            get { return rightAttack; }
+            set { rightAttack = value; }
+        }
         
-
-
         //constructor
         public Player(int score, Weapon weapon, Armor armor, Texture2D sidewaysWalk, Texture2D walkUp, Texture2D walkDown, int health, int damage, Rectangle position, Texture2D texture ) : base(health, damage, position, texture)
         {
@@ -239,6 +250,8 @@ namespace Game1
                 }
                 if (atkTimer > 13)
                 {
+                    leftAttack = false;
+                    rightAttack = false;
                     attacking = false;
                     atkTimer = 0;
                 }
@@ -306,6 +319,7 @@ namespace Game1
                 currentSprite = walkDown;
             }
             Position = temp;
+            previous = kbstate;
         }
 
         /// <summary>

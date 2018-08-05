@@ -556,6 +556,14 @@ namespace Game1
                 if (SingleButtonPress(Keys.J))
                 {
                     player.Attacking = true;
+                    if (kbState.IsKeyDown(Keys.A))
+                    {
+                        player.LeftAttack = true;
+                    }
+                    if (kbState.IsKeyDown(Keys.D))
+                    {
+                        player.RightAttack = true;
+                    }
                     for(int i = 0; i < manager.EnemyList.Count; i++)
                     {
                         if(manager.EnemyList[i] != null)
@@ -583,7 +591,7 @@ namespace Game1
 
                 //deal damage to enemies, do knockback, and determine attack animation
                 //if moving left use left attack
-                if (kbState.IsKeyDown(Keys.A))
+                if (player.LeftAttack)
                 {
                     for(int i = 0; i < hitEnemies.Count; i++)
                     {
@@ -817,13 +825,30 @@ namespace Game1
                 }
 
                 //draw player
+
+                //if the player is walking left or right draw the corresponding animation
+                //if the player is attacking do not swap the animation
                 if (player.WalkRight)
                 {
-                    spriteBatch.Draw(player.CurrentSprite, player.Position, new Rectangle((player.WalkTimer / 3) * 60, 0, 60, 127), Color.White);
+                    if (player.LeftAttack)
+                    {
+                        spriteBatch.Draw(player.CurrentSprite, player.Position, new Rectangle((player.WalkTimer / 3) * 60, 0, 60, 127), Color.White, 0, Vector2.Zero, SpriteEffects.FlipHorizontally, 0f);
+                    }
+                    else
+                    {
+                        spriteBatch.Draw(player.CurrentSprite, player.Position, new Rectangle((player.WalkTimer / 3) * 60, 0, 60, 127), Color.White);
+                    }
                 }
                 if (player.WalkLeft)
                 {
-                    spriteBatch.Draw(player.CurrentSprite, player.Position, new Rectangle((player.WalkTimer / 3) * 60, 0, 60, 127), Color.White, 0, Vector2.Zero, SpriteEffects.FlipHorizontally, 0f);
+                    if (player.RightAttack)
+                    {
+                        spriteBatch.Draw(player.CurrentSprite, player.Position, new Rectangle((player.WalkTimer / 3) * 60, 0, 60, 127), Color.White);
+                    }
+                    else
+                    {
+                        spriteBatch.Draw(player.CurrentSprite, player.Position, new Rectangle((player.WalkTimer / 3) * 60, 0, 60, 127), Color.White, 0, Vector2.Zero, SpriteEffects.FlipHorizontally, 0f);
+                    }
                 }
                 else if(!player.WalkLeft && !player.WalkRight)
                 {
@@ -863,11 +888,7 @@ namespace Game1
 
                 //draw attacking sprites
                 Color atkColor = Color.White;
-                if (player.Inventory.ContainsKey("+1weapon"))
-                {
-                    atkColor = Color.Red;
-                }
-                if (player.Attacking && kbState.IsKeyDown(Keys.A))
+                if (player.Attacking && player.LeftAttack)
                 { 
                     spriteBatch.Draw(player.CurrentAtkSprite,
                         new Rectangle(player.Position.X - 100, player.Position.Y - 10, 100, 100), atkColor);
