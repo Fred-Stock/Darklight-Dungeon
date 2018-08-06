@@ -961,7 +961,19 @@ namespace Game1
                         new Rectangle(player.Position.X + player.Position.Width, player.Position.Y - 10, 100, 100), atkColor);
                 }
 
-                spriteBatch.DrawString(Arial12, "Health: " + player.Health, new Vector2(240, 240), Color.White);
+                spriteBatch.DrawString(Arial12, "HP", new Vector2(26, 55), Color.White);
+                spriteBatch.Draw(healthbar, new Vector2(50, 50), Color.White);
+                for(int i = 0; i < player.Health; i++)
+                {
+                    if((i % 2) == 0)
+                    {
+                        spriteBatch.Draw(healthbar_chunk, new Rectangle(55 + (i * 13), 55, 23, 50), null, Color.White, 0, Vector2.Zero, SpriteEffects.FlipVertically, 0f);
+                    }
+                    else
+                    {
+                        spriteBatch.Draw(healthbar_chunk, new Rectangle(55 + (i * 13), 55, 23, 50), Color.White);
+                    }
+                }
 
             }
             #endregion
