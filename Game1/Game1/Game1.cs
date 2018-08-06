@@ -583,11 +583,11 @@ namespace Game1
                 if (SingleButtonPress(Keys.J))
                 {
                     player.Attacking = true;
-                    if (kbState.IsKeyDown(Keys.A))
+                    if (kbState.IsKeyDown(Keys.A) && !player.RightAttack)
                     {
                         player.LeftAttack = true;
                     }
-                    if (kbState.IsKeyDown(Keys.D))
+                    if (kbState.IsKeyDown(Keys.D) && !player.LeftAttack)
                     {
                         player.RightAttack = true;
                     }
@@ -595,7 +595,7 @@ namespace Game1
                     {
                         if(manager.EnemyList[i] != null)
                         {
-                            if(kbState.IsKeyDown(Keys.D) && new Rectangle(player.Position.X + player.Position.Width, player.Position.Y, 100, 100).Intersects(manager.EnemyList[i].Position))
+                            if(player.RightAttack && new Rectangle(player.Position.X + player.Position.Width, player.Position.Y, 100, 100).Intersects(manager.EnemyList[i].Position))
                             {
                                 hitEnemies.Add(manager.EnemyList[i]);
                                 if(player.Weapon != null)
@@ -603,7 +603,7 @@ namespace Game1
                                     manager.EnemyList[i].Affected = true;
                                 }
                             }
-                            else if (kbState.IsKeyDown(Keys.A) && new Rectangle(player.Position.X - 100, player.Position.Y, 100, 100).Intersects(manager.EnemyList[i].Position))
+                            else if (player.LeftAttack && new Rectangle(player.Position.X - 100, player.Position.Y, 100, 100).Intersects(manager.EnemyList[i].Position))
                             {
                                 hitEnemies.Add(manager.EnemyList[i]);
                                 if (player.Weapon != null)
@@ -628,7 +628,7 @@ namespace Game1
                     player.Attack(player, hitEnemies, attack2);               
                 }
                 //else use right attack
-                else
+                else if(player.RightAttack)
                 {
                     for(int i = 0; i < hitEnemies.Count; i++)
                     {
