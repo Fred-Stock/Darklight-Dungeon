@@ -97,6 +97,13 @@ namespace Game1
         Texture2D gold_coin;
         Texture2D store;
 
+        //indicators
+        Texture2D fire_indicator;
+        Texture2D frost_indicator;
+        Texture2D shock_indicator;
+        Texture2D healthbar;
+        Texture2D healthbar_chunk;
+
         //sprites
         Texture2D player_forward;
         Texture2D player_backward;
@@ -236,6 +243,13 @@ namespace Game1
             gold_coin = Content.Load<Texture2D>("Sprites//gold_coin");
             store = Content.Load<Texture2D>("Sprites//store_stand");
 
+            //indicator loading
+            fire_indicator = Content.Load<Texture2D>("Sprites//fire_indicator");
+            frost_indicator = Content.Load<Texture2D>("Sprites//frost_indicator");
+            shock_indicator = Content.Load<Texture2D>("Sprites//shock_indicator");
+            healthbar = Content.Load<Texture2D>("Sprites//healthbar");
+            healthbar_chunk = Content.Load<Texture2D>("Sprites//healthbar_chunk");
+
             //sprite loading
             player_forward = Content.Load<Texture2D>("Sprites//player_forward");
             player_backward = Content.Load<Texture2D>("Sprites//player_backward");
@@ -243,6 +257,7 @@ namespace Game1
             enemy_1 = Content.Load<Texture2D>("Sprites//enemy_1");
             enemy_2 = Content.Load<Texture2D>("Sprites//enemy_2_animated");
             enemy_2_90 = Content.Load<Texture2D>("Sprites//enemy_2_animated_90");
+
             //attack sprite loading
             //attack 1
             attack_1_1 = Content.Load<Texture2D>("Sprites//AttackSprites//attack_1a");
