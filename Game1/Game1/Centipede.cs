@@ -110,6 +110,21 @@ namespace Game1
             }
 
             Position = temp;
+            if (prevPos2.X == Position.X && (moveLeft || moveRight))
+            {
+
+                temp.Y += moveSpeed;
+
+                Position = temp;
+            }
+            if (prevPos2.Y == Position.Y && (moveUp || moveDown))
+            {
+
+                temp.X -= moveSpeed;
+
+                Position = temp;
+            }
+            prevPos2 = Position;
         }
 
         /// <summary>
@@ -188,6 +203,8 @@ namespace Game1
                 }
             }
             Position = temp;
+
+            
         }
     }
 }

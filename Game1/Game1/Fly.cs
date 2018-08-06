@@ -14,6 +14,7 @@ namespace Game1
         //fields
         private int timer;
 
+
         //properties
 
         //constructor
@@ -43,17 +44,31 @@ namespace Game1
 
             int xMov = (int)(ratio * xDist);
             int yMov = (int)(ratio * yDist);
-
             if (xMov != 0)
             {
                 yMov += (int)(3 * Math.Sin((timer * Math.PI) / 32));
             }
-            timer++;
 
             Rectangle temp = Position;
             temp.X += xMov;
             temp.Y += yMov;
             Position = temp;
+            if(prevPos2.X == Position.X && xMov != 0)
+            {
+                
+                temp.Y += moveSpeed;
+                
+                Position = temp;
+            }
+            if(prevPos2.Y == Position.Y && (yMov != 0))
+            {
+                
+                temp.X -= moveSpeed;
+
+                Position = temp;
+            }
+            prevPos2 = Position;
+            timer++;
         }
     }
 }

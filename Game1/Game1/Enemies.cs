@@ -18,7 +18,8 @@ namespace Game1
         private int direction;
         private bool hit;
         protected bool affected;
-        
+        protected Rectangle prevPos2;
+
         //properties
         public bool Hit
         {
@@ -61,6 +62,22 @@ namespace Game1
             temp.X += xMov;
             temp.Y += yMov;
             Position = temp;
+
+            if (prevPos2.X == Position.X && xMov != 0)
+            {
+
+                temp.Y += moveSpeed;
+
+                Position = temp;
+            }
+            if (prevPos2.Y == Position.Y && (yMov != 0))
+            {
+
+                temp.X -= moveSpeed;
+
+                Position = temp;
+            }
+            prevPos2 = Position;
 
         }
 

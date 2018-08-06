@@ -598,11 +598,19 @@ namespace Game1
                 if (SingleButtonPress(Keys.J))
                 {
                     player.Attacking = true;
+                    if(kbState.IsKeyDown(Keys.A) && kbState.IsKeyDown(Keys.D))
+                    {
+                        player.LeftAttack = true;
+                    }
                     if (kbState.IsKeyDown(Keys.A) && !player.RightAttack)
                     {
                         player.LeftAttack = true;
                     }
-                    if (kbState.IsKeyDown(Keys.D) && !player.LeftAttack)
+                    else if (kbState.IsKeyDown(Keys.D) && !player.LeftAttack)
+                    {
+                        player.RightAttack = true;
+                    }
+                    else
                     {
                         player.RightAttack = true;
                     }
@@ -899,7 +907,7 @@ namespace Game1
                 {
                     if (manager.DoorList[i].Activated)
                     {
-                        spriteBatch.Draw(manager.DoorList[i].CurrentTexture, manager.DoorList[i].Position, new Rectangle((manager.DoorList[i].Timer/20) * 128, 0, 128, 120), Color.White);
+                        spriteBatch.Draw(manager.DoorList[i].CurrentTexture, manager.DoorList[i].Position, new Rectangle((manager.DoorList[i].Timer/5) * 128, 0, 128, 120), Color.White);
                     }
                     else
                     {
@@ -929,7 +937,7 @@ namespace Game1
                             }
                             if (temp.MoveDown)
                             {
-                                spriteBatch.Draw(temp.RotTexture, manager.EnemyList[i].Position, new Rectangle((temp.AniTimer) / 5 * 54, 0, 54, 200), Color.White, 0, Vector2.Zero, SpriteEffects.FlipHorizontally, 0f);
+                                spriteBatch.Draw(temp.RotTexture, manager.EnemyList[i].Position, new Rectangle((temp.AniTimer) / 5 * 54, 0, 54, 200), Color.White, 0, Vector2.Zero, SpriteEffects.FlipVertically, 0f);
                             }
                             if (temp.MoveRight)
                             {
@@ -962,16 +970,16 @@ namespace Game1
                 }
 
                 spriteBatch.DrawString(Arial12, "HP", new Vector2(26, 55), Color.White);
-                spriteBatch.Draw(healthbar, new Vector2(50, 50), Color.White);
+                //spriteBatch.Draw(healthbar, new Vector2(50, 50), Color.White);
                 for(int i = 0; i < player.Health; i++)
                 {
                     if((i % 2) == 0)
                     {
-                        spriteBatch.Draw(healthbar_chunk, new Rectangle(55 + (i * 13), 55, 23, 50), null, Color.White, 0, Vector2.Zero, SpriteEffects.FlipVertically, 0f);
+                        spriteBatch.Draw(healthbar_chunk, new Rectangle(55 + (i * 13), 55, 23, 50), null, Color.Blue, 0, Vector2.Zero, SpriteEffects.FlipVertically, 0f);
                     }
                     else
                     {
-                        spriteBatch.Draw(healthbar_chunk, new Rectangle(55 + (i * 13), 55, 23, 50), Color.White);
+                        spriteBatch.Draw(healthbar_chunk, new Rectangle(55 + (i * 13), 55, 23, 50), Color.Black);
                     }
                 }
 
@@ -1231,7 +1239,5 @@ namespace Game1
                 shop.AddToShop(new SpeedArmor(ArmorType.test, "Armor of speed", new Rectangle(50, 50, 10, 10), speed_armor));
             }
         }
-
-
     }
 }

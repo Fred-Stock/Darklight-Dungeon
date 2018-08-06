@@ -112,7 +112,7 @@ namespace Game1
             }
 
             Activated = true;
-            if(timer >= 160)
+            if(timer >= 40)
             {
                 player.MoveSpeed = prevSpeed;
                 if(player.Armor is SpeedArmor tempAr)
