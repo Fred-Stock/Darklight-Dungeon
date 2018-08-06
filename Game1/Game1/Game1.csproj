@@ -52,6 +52,7 @@
     <Compile Include="Game1.cs" />
     <Compile Include="GameKey.cs" />
     <Compile Include="GameObject.cs" />
+    <Compile Include="HealthPotion.cs" />
     <Compile Include="Item.cs" />
     <Compile Include="Level.cs" />
     <Compile Include="Manager.cs" />

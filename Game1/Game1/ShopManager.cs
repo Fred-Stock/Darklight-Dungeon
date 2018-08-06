@@ -13,7 +13,6 @@ namespace Game1
     {
         //fields
         List<Item> shopInv;
-        Dictionary<string, int> itemCosts;
 
         //properties
         public List<Item> ShopInv
@@ -22,31 +21,24 @@ namespace Game1
             set { shopInv = value; }
         }
 
-        public Dictionary<string, int> ItemCosts
-        {
-            get { return itemCosts; }
-            set { itemCosts = value; }
-        }
 
         //constructor
         public ShopManager()
         {
             shopInv = new List<Item>();
-            itemCosts = new Dictionary<string, int>();
         }
 
         public void AddToShop(Item item)
         {
             shopInv.Add(item);
-            itemCosts.Add(item.Name, item.Cost);
         }
 
 
         public string BuyItem(Player player, Item item)
         {
-            if(player.Currency >= itemCosts[item.Name])
+            if(player.Currency >= item.Cost)
             {
-                player.Currency -= itemCosts[item.Name];
+                player.Currency -= item.Cost;
                 player.BuyItem(item);
                 shopInv.Remove(item);
 

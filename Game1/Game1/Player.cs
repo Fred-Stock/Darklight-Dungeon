@@ -113,14 +113,26 @@ namespace Game1
             this.score = score;
             this.weapon = weapon;
             this.armor = armor;
-            damage = weapon.Damage;
 
+            if(weapon == null)
+            {
+                this.damage = damage;
+            }
+            else
+            {
+                this.damage = weapon.Damage;
+                inventory.Add(weapon.Name, weapon);
+                invList.Add(weapon.Name);
+            }
+
+            if(armor != null)
+            {
+                
+                inventory.Add(armor.Name, armor);
+                invList.Add(armor.Name);
+            }
             inventory = new Dictionary<string, Item>();
             invList = new List<string>();
-            inventory.Add(weapon.Name, weapon);
-            invList.Add(weapon.Name);
-            inventory.Add(armor.Name, armor);
-            invList.Add(armor.Name);
 
             atkTimer = 0;
             attacking = false;
@@ -218,11 +230,11 @@ namespace Game1
         {
             if(item.Name == "largeCoin")
             {
-                currency += 10;
+                currency += 5;
             }
             else if (item.Name == "smallCoin")
             {
-                currency += 3;
+                currency += 1;
             }
             item.Visible = false;
         }
@@ -286,11 +298,22 @@ namespace Game1
             }
             if (kbstate.IsKeyDown(Keys.A))
             {
-                walkRight = false;
-                walkTimer++;
-                temp.X -= moveSpeed + moveIncrease;
-                currentSprite = sidewaysWalk;
+                if (!kbstate.IsKeyDown(Keys.D))
+                {
+                    walkRight = false;
+                    walkTimer++;
+                    currentSprite = sidewaysWalk;
+                }
+                else if (kbstate.IsKeyDown(Keys.S))
+                {
+                    currentSprite = walkDown;
+                }
+                else
+                {
+                    currentSprite = walkUp;
+                }
 
+                temp.X -= moveSpeed + moveIncrease;
                 walkLeft = true;
 
                 if(walkTimer >= 30)
@@ -301,10 +324,23 @@ namespace Game1
             }
             if (kbstate.IsKeyDown(Keys.D))
             {
-                walkLeft = false;
-                walkTimer++;
+
+                if (!kbstate.IsKeyDown(Keys.A))
+                {
+                    walkLeft = false;
+                    walkTimer++;
+                    currentSprite = sidewaysWalk;
+                }
+                else if(kbstate.IsKeyDown(Keys.S))
+                {
+                    currentSprite = walkDown;
+                }
+                else
+                {
+                    currentSprite = walkUp;
+                }
                 temp.X += moveSpeed + moveIncrease;
-                currentSprite = sidewaysWalk;
+
                 walkRight = true;
 
                 if (walkTimer >= 30)
@@ -370,6 +406,12 @@ namespace Game1
             }
         }
 
+        public void UseHealthPotion(HealthPotion hpPot)
+        {
+            health += hpPot.RestoreAmnt;
+            inventory.Remove(hpPot.Name);
+            invList.Remove(hpPot.Name);
+        }
         
     }
 }

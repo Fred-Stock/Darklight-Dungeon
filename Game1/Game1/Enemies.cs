@@ -72,7 +72,7 @@ namespace Game1
                 {
                     damaged.Armor.ArmorAction(this);
                 }
-                else
+                else if(damaged.Armor != null)
                 {
                     damaged.Armor.ArmorAction();
                 }
@@ -84,10 +84,14 @@ namespace Game1
                         damaged.Health -= damage - damaged.Armor.Defense;
                     }
                 }
-                else
+                else if(damaged.Armor != null)
                 {
                     damaged.Health -= damage - damaged.Armor.Defense;
 
+                }
+                else
+                {
+                    damaged.Health -= damage;
                 }
             }
         }

@@ -64,6 +64,8 @@ namespace Game1
         KeyboardState previous; //keyboardstate to help with tracking single keyboard inputs
         bool levelLoaded;
         string levelData;
+        MouseState mouseState;
+        MouseState prevMouseState;
         
 
 
@@ -304,16 +306,18 @@ namespace Game1
             shop_hover = Content.Load<Texture2D>("Sprites//shop_hover");
 
             //initialize the player
-            playerWeapon = new Weapon(WeaponType.basic, "weapon", new Rectangle(50, 250, 40, 40), base_weapon); //all values in here are just for test
-            playerArmor = new Armor(ArmorType.test, "armor", new Rectangle(50, 50, 10, 10), base_armor); //all values in here are just for test too
-            player = new Player(0, playerWeapon, playerArmor, player_walk_side, player_backward, player_forward, 10, 5, new Rectangle(100, 100, 45, 75), player_forward); //all values in here are just for test as well
+            playerWeapon = null; //= new Weapon(WeaponType.basic, "weapon", new Rectangle(50, 250, 40, 40), base_weapon); //all values in here are just for test
+            playerArmor = null; // new Armor(ArmorType.test, "armor", new Rectangle(50, 50, 10, 10), base_armor); //all values in here are just for test too
+            player = new Player(0, playerWeapon, playerArmor, player_walk_side, player_backward, player_forward, 10, 3, new Rectangle(100, 100, 45, 75), player_forward); //all values in here are just for test as well
             #endregion
             testCurrency = new Item("smallCoin", new Rectangle(200, 500, 20, 20), silver_coin);
             playerArmor2 = new Armor(ArmorType.test, "testA2", new Rectangle(50, 50, 10, 10), door_locked);//test value
             List<Item> testShopInv = new List<Item>();
             shop = new ShopManager();
             currentLevel = new Level(LevelIO("level1_1"), manager);
-            
+            MouseState mouseState = new MouseState();
+            MouseState prevMouseState = new MouseState();
+
         }
 
         /// <summary>
@@ -324,8 +328,6 @@ namespace Game1
         {
             // TODO: Unload any non ContentManager content here
         }
-
-         MouseState mouseState = new MouseState();
 
 
       
@@ -498,7 +500,6 @@ namespace Game1
                             }
                             temp.Y = int.Parse(coord) * 120;
                             shop.ShopInv.Clear();
-                            shop.ItemCosts.Clear();
                             usedShop = false;
                             FillShop(player, shop);
                             manager.ItemList.Add(new Item("store", new Rectangle(temp.X, temp.Y, store.Width, store.Height), store));
@@ -597,7 +598,7 @@ namespace Game1
                             if(kbState.IsKeyDown(Keys.D) && new Rectangle(player.Position.X + player.Position.Width, player.Position.Y, 100, 100).Intersects(manager.EnemyList[i].Position))
                             {
                                 hitEnemies.Add(manager.EnemyList[i]);
-                                if(player.Weapon.Type != WeaponType.basic)
+                                if(player.Weapon != null)
                                 {
                                     manager.EnemyList[i].Affected = true;
                                 }
@@ -605,7 +606,7 @@ namespace Game1
                             else if (kbState.IsKeyDown(Keys.A) && new Rectangle(player.Position.X - 100, player.Position.Y, 100, 100).Intersects(manager.EnemyList[i].Position))
                             {
                                 hitEnemies.Add(manager.EnemyList[i]);
-                                if (player.Weapon.Type != WeaponType.basic)
+                                if (player.Weapon != null)
                                 {
                                     manager.EnemyList[i].Affected = true;
                                 }
@@ -705,25 +706,32 @@ namespace Game1
             #region Inventory
             if (gameState == GameState.Inventory)
             {
-                foreach (string item in player.InvList)
+
+                for(int i = 0; i < player.InvList.Count; i++)
                 {
                     if (currentLevel.WinCheck())
                     {
-                        if(ButtonClicked(555 + (player.InvList.IndexOf(item) / 3 * 170), 330 + player.InvList.IndexOf(item) % 3 * 205,
-                            690 + (player.InvList.IndexOf(item) / 3 * 170), 465 + player.InvList.IndexOf(item) % 3 * 205))
+                        if(ButtonClicked(555 + (i / 3 * 170), 330 + i % 3 * 205,
+                            690 + (i / 3 * 170), 465 + i % 3 * 205))
                         {
-                            if(player.Inventory[item] is Weapon)
+                            if(player.Inventory[player.InvList[i]] is Weapon)
                             {
-                                player.WeaponSwap((Weapon)player.Inventory[item]);
+                                player.WeaponSwap((Weapon)player.Inventory[player.InvList[i]]);
                             }
-                            else if(player.Inventory[item] is Armor)
+                            else if(player.Inventory[player.InvList[i]] is Armor)
                             {
-                                player.ArmorSwap((Armor)player.Inventory[item]);
+                                player.ArmorSwap((Armor)player.Inventory[player.InvList[i]]);
                             }
                         }
-
                     }
-
+                    if (ButtonClicked(555 + (i / 3 * 170), 330 + i % 3 * 205,
+                            690 + (i / 3 * 170), 465 + i % 3 * 205))
+                    {
+                        if (player.Inventory[player.InvList[i]] is HealthPotion)
+                        {
+                            player.UseHealthPotion((HealthPotion)player.Inventory[player.InvList[i]]);
+                        }
+                    }
                 }
 
                 if (SingleButtonPress(Keys.Enter))
@@ -739,8 +747,9 @@ namespace Game1
                 //currently thinking that the player will only be able to buy one item at a shop and therefore no need to fix this
                 for (int i = 0; i < shop.ShopInv.Count; i++)
                 {
-                    if (ButtonClicked(555 + i * 170, 320 + (320 * i % 5), 700 + i * 170, 465 + (320 * i % 5)))
+                    if (ButtonClicked(555 + (i % 5) * 170, 320 + (320 * (i / 5)), 700 + (i % 5) * 170, 465 + (320 * (i / 5))))
                     {
+
                         shopMessage = shop.BuyItem(player, shop.ShopInv[i]);
                     }
                 }
@@ -843,7 +852,7 @@ namespace Game1
 
                 //if the player is walking left or right draw the corresponding animation
                 //if the player is attacking do not swap the animation
-                if (player.WalkRight)
+                if (player.WalkRight && !player.WalkLeft)
                 {
                     if (player.LeftAttack)
                     {
@@ -854,7 +863,7 @@ namespace Game1
                         spriteBatch.Draw(player.CurrentSprite, player.Position, new Rectangle((player.WalkTimer / 3) * 60, 0, 60, 127), Color.White);
                     }
                 }
-                if (player.WalkLeft)
+                if (player.WalkLeft && !player.WalkRight)
                 {
                     if (player.RightAttack)
                     {
@@ -865,7 +874,7 @@ namespace Game1
                         spriteBatch.Draw(player.CurrentSprite, player.Position, new Rectangle((player.WalkTimer / 3) * 60, 0, 60, 127), Color.White, 0, Vector2.Zero, SpriteEffects.FlipHorizontally, 0f);
                     }
                 }
-                else if(!player.WalkLeft && !player.WalkRight)
+                else if((!player.WalkLeft && !player.WalkRight) || (player.WalkLeft && player.WalkRight))
                 {
                     spriteBatch.Draw(player.CurrentSprite, player.Position, Color.White);
                 }
@@ -936,6 +945,9 @@ namespace Game1
                     spriteBatch.Draw(player.CurrentAtkSprite,
                         new Rectangle(player.Position.X + player.Position.Width, player.Position.Y - 10, 100, 100), atkColor);
                 }
+
+                spriteBatch.DrawString(Arial12, "Health: " + player.Health, new Vector2(240, 240), Color.White);
+
             }
             #endregion
             #region Pause
@@ -966,14 +978,14 @@ namespace Game1
                 spriteBatch.Draw(shopScreen, new Vector2(0, 0), Color.White);
                 for(int i = 0; i < shop.ShopInv.Count; i++)
                 {
-                    if (new Rectangle(555 + i * 170, 320 + (320 * i%5), 145, 145).Contains(mouseState.Position))
+                    if (new Rectangle(555 + (i % 5) * 170, 320 + (320 * (i / 5)), 145, 145).Contains(mouseState.Position))
                     {
-                        spriteBatch.Draw(shop_hover, new Vector2(504 + i * 167, 289 + (320 * i%5)), Color.White);
+                        spriteBatch.Draw(shop_hover, new Vector2(504 + (i % 5) * 167, 289 + (320 * (i / 5))), Color.White);
                     }
 
-                    spriteBatch.Draw(shop.ShopInv[i].Texture, new Rectangle(570 + i * 170, 335 + 320 * i%5 , 100, 100), Color.White);
-                    spriteBatch.DrawString(Arial12, shop.ShopInv[i].Name, new Vector2(560 + i * 170, 490 + 320 * i%5), Color.White);
-                    spriteBatch.DrawString(Arial12, shop.ItemCosts[shop.ShopInv[i].Name].ToString(), new Vector2(570 + i * 170, 535 + 320 * i%5), Color.White);
+                    spriteBatch.Draw(shop.ShopInv[i].Texture, new Rectangle(570 + (i % 5) * 170, 345 + 320 * (i / 5), 100, 100), Color.White);
+                    spriteBatch.DrawString(Arial12, shop.ShopInv[i].Name, new Vector2(560 + (i % 5) * 170, 490 + 320 * (i / 5)), Color.White);
+                    spriteBatch.DrawString(Arial12, shop.ShopInv[i].Cost.ToString(), new Vector2(570 + (i % 5) * 170, 535 + 320 * (i / 5)), Color.White);
                     spriteBatch.DrawString(Arial12, player.Currency.ToString(), new Vector2(340, 280), Color.White);
                 }
 
@@ -990,7 +1002,7 @@ namespace Game1
 
             spriteBatch.DrawString(Arial12, "X: " + mouseState.X + "\nY: " + mouseState.Y, new Vector2(100, 100), Color.White);
             spriteBatch.End();
-
+            prevMouseState = mouseState;
             base.Draw(gameTime);
         }
 
@@ -1082,7 +1094,7 @@ namespace Game1
         /// <returns></returns>
         public bool ButtonClicked(int tlx, int tly, int brx, int bry)
         {
-            if ((mouseState.X >= tlx && mouseState.Y >= tly) && (mouseState.X < brx && mouseState.Y < bry) && mouseState.LeftButton == ButtonState.Pressed)
+            if ((mouseState.X >= tlx && mouseState.Y >= tly) && (mouseState.X < brx && mouseState.Y < bry) && mouseState.LeftButton == ButtonState.Pressed && prevMouseState.LeftButton != ButtonState.Pressed)
             {
                 return true;
             }
@@ -1092,6 +1104,14 @@ namespace Game1
             }
         }
 
+        /// <summary>
+        /// randomly fills the shop
+        /// always spawns one piece of armor and one weapon
+        /// spawns one additional piece of armor or weapon
+        /// 
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="store"></param>
         private void FillShop(Player player, ShopManager store)
         {
             if (!player.Inventory.ContainsKey("weapon"))
@@ -1100,47 +1120,91 @@ namespace Game1
             }
             else
             {
-                //determining random weapon upgrade
-                int weaponVersion = rng.Next(3);
-
-                //determining random weapon upgrade
-                if(weaponVersion == 0)
-                {
-                    store.AddToShop(new ShockWeapon(WeaponType.shock, "Weapon of shock", new Rectangle(50, 50, 10, 10), shock_weapon));
-                }
-                else if(weaponVersion == 1)
-                {
-                    store.AddToShop(new FireWeapon(WeaponType.fire, "weapon of fire", new Rectangle(50, 50, 10, 10), fire_weapon));
-                }
-                else if(weaponVersion == 2)
-                {
-                    store.AddToShop(new FrostWeapon(WeaponType.frost, "weapon of frost", new Rectangle(50, 50, 10, 10), frost_weapon));
-                }
+                AddRandWeap();
 
             }
+
             if (!player.Inventory.ContainsKey("armor"))
             {
-                store.AddToShop(new Item("armor", new Rectangle(50, 50, 10, 10), base_armor));
+                store.AddToShop(new Armor(ArmorType.test, "armor", new Rectangle(50, 50, 10, 10), base_armor));
             }
             else
             {
-                //determining random armor upgrade
-                int armorVersion = rng.Next(3);
+                AddRandArmor();
+            }
 
-                if(armorVersion == 0)
+            if (!player.Inventory.ContainsKey("weapon") || !player.Inventory.ContainsKey("armor"))
+            {
+                if (player.Inventory.ContainsKey("weapon"))
                 {
-                    store.AddToShop(new ThornArmor(ArmorType.test, "Armor of thorns", new Rectangle(50, 50, 10, 10), thorn_armor));
+                    AddRandWeap();
                 }
-                else if(armorVersion == 1)
+                else if (player.Inventory.ContainsKey("armor"))
                 {
-                    store.AddToShop(new ShieldArmor(ArmorType.test, "Armor of shielding", new Rectangle(50, 50, 10, 10), shield_armor));
+                    AddRandArmor();
                 }
-                else if(armorVersion == 2)
+                else
                 {
-                    store.AddToShop(new SpeedArmor(ArmorType.test, "Armor of speed", new Rectangle(50, 50, 10, 10), speed_armor));
+                    if(rng.Next(2) == 1)
+                    {
+                        AddRandWeap();
+                    }
+                    else
+                    {
+                        AddRandArmor();
+                    }
                 }
             }
+
+            int healthPckAmount = rng.Next(1, 5);
+
+            for(int i = 0; i < healthPckAmount; i++)
+            {
+                shop.AddToShop(new HealthPotion(5, "health potion", new Rectangle(50, 50, 10, 10), rock_large));
+            }
+
         }
+
+        //helper method for adding a random weapon to the store
+        public void AddRandWeap()
+        {
+            //determining random weapon upgrade
+            int weaponVersion = rng.Next(3);
+
+            //determining random weapon upgrade
+            if (weaponVersion == 0)
+            {
+                shop.AddToShop(new ShockWeapon(WeaponType.shock, "Weapon of shock", new Rectangle(50, 50, 10, 10), shock_weapon));
+            }
+            else if (weaponVersion == 1)
+            {
+                shop.AddToShop(new FireWeapon(WeaponType.fire, "weapon of fire", new Rectangle(50, 50, 10, 10), fire_weapon));
+            }
+            else if (weaponVersion == 2)
+            {
+                shop.AddToShop(new FrostWeapon(WeaponType.frost, "weapon of frost", new Rectangle(50, 50, 10, 10), frost_weapon));
+            }
+        }
+
+        public void AddRandArmor()
+        {
+            //determining random armor upgrade
+            int armorVersion = rng.Next(3);
+
+            if (armorVersion == 0)
+            {
+                shop.AddToShop(new ThornArmor(ArmorType.test, "Armor of thorns", new Rectangle(50, 50, 10, 10), thorn_armor));
+            }
+            else if (armorVersion == 1)
+            {
+                shop.AddToShop(new ShieldArmor(ArmorType.test, "Armor of shielding", new Rectangle(50, 50, 10, 10), shield_armor));
+            }
+            else if (armorVersion == 2)
+            {
+                shop.AddToShop(new SpeedArmor(ArmorType.test, "Armor of speed", new Rectangle(50, 50, 10, 10), speed_armor));
+            }
+        }
+
 
     }
 }

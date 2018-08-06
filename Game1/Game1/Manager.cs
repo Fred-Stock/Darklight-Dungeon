@@ -53,7 +53,11 @@ namespace Game1
             {
                 if(enemyList[i] != null)
                 {
-                    player.Weapon.WeaponAction(enemyList[i]);
+                    if(player.Weapon != null)
+                    {
+                        player.Weapon.WeaponAction(enemyList[i]);
+
+                    }
                 }
             }
         }
