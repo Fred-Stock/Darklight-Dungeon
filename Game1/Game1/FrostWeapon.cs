@@ -23,7 +23,7 @@ namespace Game1
         {
             timer = 0;
             affectDuration = 120;
-            damage = 10;
+            damage = 7;
             cost = 15;
         }
 

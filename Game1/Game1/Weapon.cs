@@ -42,7 +42,7 @@ namespace Game1
         public Weapon(WeaponType weapon, string name, Rectangle position, Texture2D texture) : base(name, position, texture)
         {
             type = weapon;
-            damage = 50;
+            damage = 6;
             cost = 8;
         }
 

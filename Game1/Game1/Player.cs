@@ -407,6 +407,10 @@ namespace Game1
         public void UseHealthPotion(HealthPotion hpPot)
         {
             health += hpPot.RestoreAmnt;
+            if (health > 15)
+            {
+                health = 15;
+            }
             inventory.Remove(hpPot.Name);
             invList.Remove(hpPot.Name);
         }

@@ -321,7 +321,7 @@ namespace Game1
             shop_hover = Content.Load<Texture2D>("Sprites//shop_hover");
 
             //initialize the player
-            playerWeapon =  new FireWeapon(WeaponType.basic, "weapon", new Rectangle(50, 250, 40, 40), base_weapon); //all values in here are just for test
+            playerWeapon = null; //new FireWeapon(WeaponType.basic, "weapon", new Rectangle(50, 250, 40, 40), base_weapon); //all values in here are just for test
             playerArmor = null; // new Armor(ArmorType.test, "armor", new Rectangle(50, 50, 10, 10), base_armor); //all values in here are just for test too
             player = new Player(0, playerWeapon, playerArmor, player_walk_side, player_backward, player_forward, 10, 3, new Rectangle(100, 100, 45, 75), player_forward); //all values in here are just for test as well
             #endregion
@@ -800,7 +800,9 @@ namespace Game1
                 manager.DoorList.Clear();
                 player.Inventory.Clear();
                 player.InvList.Clear();
-                player.Health = 100;
+                player.Weapon = null;
+                player.Armor = null;
+                player.Health = 10;
                 
                 //button logic
                 if(ButtonClicked(700, 560, 1205, 660))//resart
@@ -1214,7 +1216,7 @@ namespace Game1
 
             for(int i = 0; i < healthPckAmount; i++)
             {
-                shop.AddToShop(new HealthPotion(5, "health potion", new Rectangle(50, 50, 10, 10), rock_large));
+                shop.AddToShop(new HealthPotion(3, "health potion", new Rectangle(50, 50, 10, 10), rock_large));
             }
 
         }

@@ -55,16 +55,29 @@ namespace Game1
             Position = temp;
             if(prevPos2.X == Position.X && xMov != 0)
             {
-                
-                temp.Y += moveSpeed;
-                
+
+                if (yDist < 0)
+                {
+                    temp.Y -= moveSpeed;
+
+                }
+                else
+                {
+                    temp.Y += moveSpeed;
+                }
                 Position = temp;
             }
             if(prevPos2.Y == Position.Y && (yMov != 0))
             {
-                
-                temp.X -= moveSpeed;
+                if (xDist < 0)
+                {
+                    temp.X -= moveSpeed;
 
+                }
+                else
+                {
+                    temp.X += moveSpeed;
+                }
                 Position = temp;
             }
             prevPos2 = Position;
