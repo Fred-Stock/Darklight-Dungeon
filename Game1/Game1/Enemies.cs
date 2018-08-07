@@ -20,6 +20,8 @@ namespace Game1
         protected bool affected;
         protected Rectangle prevPos2;
 
+        protected int hitDuration;
+
         //properties
         public bool Hit
         {
@@ -30,6 +32,11 @@ namespace Game1
         {
             get { return affected; }
             set { affected = value; }
+        }
+        public int HitDuration
+        {
+            get { return hitDuration; }
+            set { hitDuration = value; }
         }
 
 
@@ -43,6 +50,7 @@ namespace Game1
             initialY = Position.Y;
             moveSpeed = 3;
             direction = rng.Next(0, 4);
+            hitDuration = 0;
         }
 
         public override void Move(Characters player)

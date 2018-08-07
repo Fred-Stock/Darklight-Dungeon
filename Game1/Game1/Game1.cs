@@ -321,7 +321,7 @@ namespace Game1
             shop_hover = Content.Load<Texture2D>("Sprites//shop_hover");
 
             //initialize the player
-            playerWeapon = null; //= new Weapon(WeaponType.basic, "weapon", new Rectangle(50, 250, 40, 40), base_weapon); //all values in here are just for test
+            playerWeapon =  new FireWeapon(WeaponType.basic, "weapon", new Rectangle(50, 250, 40, 40), base_weapon); //all values in here are just for test
             playerArmor = null; // new Armor(ArmorType.test, "armor", new Rectangle(50, 50, 10, 10), base_armor); //all values in here are just for test too
             player = new Player(0, playerWeapon, playerArmor, player_walk_side, player_backward, player_forward, 10, 3, new Rectangle(100, 100, 45, 75), player_forward); //all values in here are just for test as well
             #endregion
@@ -621,18 +621,22 @@ namespace Game1
                             if(player.RightAttack && new Rectangle(player.Position.X + player.Position.Width, player.Position.Y, 100, 100).Intersects(manager.EnemyList[i].Position))
                             {
                                 hitEnemies.Add(manager.EnemyList[i]);
-                                if(player.Weapon != null)
-                                {
-                                    manager.EnemyList[i].Affected = true;
-                                }
+                                //if(player.Weapon != null)
+                                //{
+                                //    manager.EnemyList[i].Affected = true;
+                                //}
                             }
                             else if (player.LeftAttack && new Rectangle(player.Position.X - 100, player.Position.Y, 100, 100).Intersects(manager.EnemyList[i].Position))
                             {
                                 hitEnemies.Add(manager.EnemyList[i]);
-                                if (player.Weapon != null)
-                                {
-                                    manager.EnemyList[i].Affected = true;
-                                }
+                                //if (player.Weapon != null)
+                                //{
+                                //    manager.EnemyList[i].Affected = true;
+                                //}
+                            }
+                            for(int k = 0; k < hitEnemies.Count; k++)
+                            {
+                                hitEnemies[k].Affected = true;
                             }
                         }
                     }
@@ -952,6 +956,21 @@ namespace Game1
                         {
                          spriteBatch.Draw(manager.EnemyList[i].Texture, manager.EnemyList[i].Position, Color.White);
 
+                        }
+                        if(player.Weapon is FireWeapon && manager.EnemyList[i].Affected)
+                        {
+                            spriteBatch.Draw(fire_indicator, new Rectangle(manager.EnemyList[i].Position.X + (manager.EnemyList[i].Position.Width / 2 - 17),
+                                manager.EnemyList[i].Position.Y - 40, 35, 35), Color.White);
+                        }
+                        if(player.Weapon is ShockWeapon && manager.EnemyList[i].Affected)
+                        {
+                            spriteBatch.Draw(shock_indicator, new Rectangle(manager.EnemyList[i].Position.X + (manager.EnemyList[i].Position.Width / 2 - 17),
+                                manager.EnemyList[i].Position.Y - 40, 35, 35), Color.White);
+                        }
+                        if(player.Weapon is FrostWeapon && manager.EnemyList[i].Affected)
+                        {
+                            spriteBatch.Draw(frost_indicator, new Rectangle(manager.EnemyList[i].Position.X + (manager.EnemyList[i].Position.Width / 2 - 17),
+                                manager.EnemyList[i].Position.Y - 40, 35, 35), Color.White);
                         }
                     }
                 }

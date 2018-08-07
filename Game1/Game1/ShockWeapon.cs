@@ -32,19 +32,26 @@ namespace Game1
         //methods
         public override void WeaponAction(Enemies attacked)
         {
-            if (timer == 0 && attacked.Affected)
+            if (attacked.HitDuration < affectDuration && attacked.Affected)
             {
-                prevMoveSpeed = attacked.MoveSpeed;
-                attacked.MoveSpeed = 0;
+                if(attacked.HitDuration == 0)
+                {
+                    prevMoveSpeed = attacked.MoveSpeed;
+                }
+                if(attacked.HitDuration > 1)
+                {
+                    attacked.MoveSpeed = 0;
+
+                }
             }
 
-            if (timer < affectDuration && attacked.Affected)
+            if (attacked.Affected)
             {
-                timer++;
+                attacked.HitDuration++;
             }
-            else if(attacked.Affected)
+            if(attacked.HitDuration > affectDuration)
             {
-                timer = 0;
+                attacked.HitDuration = 0;
                 attacked.Affected = false;
                 attacked.MoveSpeed = prevMoveSpeed;
             }

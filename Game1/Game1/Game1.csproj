@@ -82,6 +82,7 @@
     <Content Include="level1_2.txt" />
     <Content Include="level2_1.txt" />
     <Content Include="level2_2.txt" />
+    <Content Include="level2_3.txt" />
     <Content Include="level3_1.txt" />
     <Content Include="store2.txt" />
     <Content Include="testlevel.txt" />

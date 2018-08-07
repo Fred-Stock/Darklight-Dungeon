@@ -21,7 +21,7 @@ namespace Game1
         public FireWeapon(WeaponType weapon, string name, Rectangle position, Texture2D texture) : base(weapon, name, position, texture)
         {
             timer = 0;
-            affectDuration = 120;
+            affectDuration = 60;
             damage = 5;
             cost = 25;
         }
@@ -29,21 +29,26 @@ namespace Game1
         //methods
         public override void WeaponAction(Enemies attacked)
         {
-             if (attacked.Affected)
-             {
-                 timer++;
-                 if(timer % 12 == 0)
+            if (attacked.HitDuration < affectDuration && attacked.Affected)
+            {
+                 if(attacked.HitDuration % 6 == 0)
                  {
                     attacked.Health -= 1;
                  }
              }
-            
-             else if(timer > affectDuration && attacked.Affected)
-             {
-                 timer = 0;
-                 attacked.Affected = false;
-             
-             }
+
+
+            if (attacked.Affected)
+            {
+                attacked.HitDuration++;
+            }
+
+            if (attacked.HitDuration > affectDuration)
+            {
+                attacked.HitDuration = 0;
+                attacked.Affected = false;
+
+            }
         }
     }
 }

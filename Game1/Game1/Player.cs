@@ -113,6 +113,7 @@ namespace Game1
             this.score = score;
             this.weapon = weapon;
             this.armor = armor;
+            invList = new List<string>();
 
             if(weapon == null)
             {
@@ -121,14 +122,11 @@ namespace Game1
             else
             {
                 this.damage = weapon.Damage;
-                inventory.Add(weapon.Name, weapon);
                 invList.Add(weapon.Name);
             }
 
             if(armor != null)
             {
-                
-                inventory.Add(armor.Name, armor);
                 invList.Add(armor.Name);
             }
             inventory = new Dictionary<string, Item>();
