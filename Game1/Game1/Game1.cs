@@ -1040,8 +1040,8 @@ namespace Game1
                     }
 
                     spriteBatch.Draw(shop.ShopInv[i].Texture, new Rectangle(570 + (i % 5) * 170, 345 + 320 * (i / 5), 100, 100), Color.White);
-                    spriteBatch.DrawString(Arial12, shop.ShopInv[i].Name, new Vector2(560 + (i % 5) * 170, 490 + 320 * (i / 5)), Color.White);
-                    spriteBatch.DrawString(Arial12, shop.ShopInv[i].Cost.ToString(), new Vector2(570 + (i % 5) * 170, 535 + 320 * (i / 5)), Color.White);
+                    spriteBatch.DrawString(Arial12, shop.ShopInv[i].Name, new Vector2(560 + (i % 5) * 170, 490 + 315 * (i / 5)), Color.Black);
+                    spriteBatch.DrawString(Arial12, shop.ShopInv[i].Cost.ToString(), new Vector2(570 + (i % 5) * 170, 535 + 315 * (i / 5)), Color.Black);
                     spriteBatch.DrawString(Arial12, player.Currency.ToString(), new Vector2(340, 280), Color.White);
                 }
 

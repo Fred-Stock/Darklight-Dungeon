@@ -24,7 +24,7 @@ namespace Game1
         //constructor
         public HealthPotion(int restoreAmnt, string name, Rectangle position, Texture2D texture) : base (name, position, texture)
         {
-            cost = 4;
+            cost = 3;
             this.restoreAmnt = restoreAmnt;
         }
 
