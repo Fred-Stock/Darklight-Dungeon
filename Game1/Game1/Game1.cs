@@ -803,6 +803,7 @@ namespace Game1
                 player.Weapon = null;
                 player.Armor = null;
                 player.Health = 10;
+                player.Currency = 0;
                 
                 //button logic
                 if(ButtonClicked(700, 560, 1205, 660))//resart
