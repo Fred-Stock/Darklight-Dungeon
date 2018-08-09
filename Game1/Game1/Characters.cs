@@ -125,22 +125,28 @@ namespace Game1
         {
             PrevPos = Position;
             Rectangle temp = Position;
-            
-            if(attacker.Position.X < Position.X) //attack from the left
+
+            int xDist = attacker.Position.X - Position.X;
+            int yDist = attacker.Position.Y - Position.Y;
+            Double tDist = DistanceTo(attacker.Position.X, attacker.Position.Y, Position.X, Position.Y);
+
+            double ratio = 50 / tDist;
+
+            if (attacker.Position.X < Position.X) //attack from the left
             {
-                temp.X += 50;
+                temp.X += (int)(50 * ratio);
             }
             if(attacker.Position.X > Position.X) //attack from the right
             {
-                temp.X -= 50;
+                temp.X -= (int)(50 * ratio);
             }
             if(attacker.Position.Y < Position.Y) //attack from above
             {
-                temp.Y += 50;
+                temp.Y += (int)(50 * ratio);
             }
             if(attacker.Position.Y > Position.Y) //attack from below
             {
-                temp.Y -= 50;
+                temp.Y -= (int)(50 * ratio);
             }
             Position = temp;
             timer++;
