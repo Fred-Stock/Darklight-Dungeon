@@ -700,6 +700,19 @@ namespace Game1
                     }
                 }
 
+                //Hotkey for health potions
+                if (SingleButtonPress(Keys.H))
+                {
+                    for(int i = 0; i < player.InvList.Count; i++)
+                    {
+                        if(player.Inventory[player.InvList[i]] is HealthPotion)
+                        {
+                            player.UseHealthPotion((HealthPotion)player.Inventory[player.InvList[i]]);
+                            break;
+                        }
+                    }
+                }
+
 
                 //transition to inventory screen
                 if (SingleButtonPress(Keys.I))
