@@ -130,23 +130,26 @@ namespace Game1
             int yDist = attacker.Position.Y - Position.Y;
             Double tDist = DistanceTo(attacker.Position.X, attacker.Position.Y, Position.X, Position.Y);
 
-            double ratio = 50 / tDist;
+            double xRatio = xDist / tDist;
+            double yRatio = yDist / tDist;
+
+         
 
             if (attacker.Position.X < Position.X) //attack from the left
             {
-                temp.X += (int)(50 * ratio);
+                temp.X -= (int)(50 * xRatio);
             }
             if(attacker.Position.X > Position.X) //attack from the right
             {
-                temp.X -= (int)(50 * ratio);
+                temp.X -= (int)(50 * xRatio);
             }
             if(attacker.Position.Y < Position.Y) //attack from above
             {
-                temp.Y += (int)(50 * ratio);
+                temp.Y -= (int)(50 * yRatio);
             }
             if(attacker.Position.Y > Position.Y) //attack from below
             {
-                temp.Y -= (int)(50 * ratio);
+                temp.Y -= (int)(50 * yRatio);
             }
             Position = temp;
             timer++;

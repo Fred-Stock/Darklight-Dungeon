@@ -60,10 +60,11 @@ namespace Game1
             int yDist = player.Position.Y - Position.Y;
             Double tDist = DistanceTo(player.Position.X, player.Position.Y, Position.X, Position.Y);
 
-            double ratio = moveSpeed / tDist;
+            double xRatio = xDist / tDist;
+            double yRatio = yDist / tDist;
 
-            int xMov = (int)(ratio * xDist);
-            int yMov = (int)(ratio * yDist);
+            int xMov = (int)(moveSpeed * xRatio);
+            int yMov = (int)(moveSpeed * yRatio);
 
             
             Rectangle temp = Position;
