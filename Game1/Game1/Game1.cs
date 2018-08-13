@@ -537,7 +537,7 @@ namespace Game1
                     }
                 }
                 
-                player.Move();
+                player.Move(gameTime);
 
                 //check door activations
                 for(int i = 0; i < manager.DoorList.Count; i++)
@@ -595,7 +595,7 @@ namespace Game1
 
                 //check if enemies are hit by player
                 List<Enemies> hitEnemies = new List<Enemies>();
-                if (SingleButtonPress(Keys.J))
+                if (SingleButtonPress(Keys.J) && !player.Attacking)
                 {
                     player.Attacking = true;
                     if(kbState.IsKeyDown(Keys.A) && kbState.IsKeyDown(Keys.D))
@@ -652,7 +652,7 @@ namespace Game1
                         hitEnemies[i].Knockback(player);
                     }
 
-                    player.Attack(player, hitEnemies, attack2);               
+                    player.Attack(player, hitEnemies, attack2, gameTime);               
                 }
                 //else use right attack
                 else if(player.RightAttack)
@@ -662,7 +662,7 @@ namespace Game1
                         hitEnemies[i].Knockback(player);
                     }
 
-                    player.Attack(player, hitEnemies, attack1);
+                    player.Attack(player, hitEnemies, attack1, gameTime);
                 }
                 for(int i = 0; i < manager.EnemyList.Count; i++)
                 {
@@ -899,22 +899,22 @@ namespace Game1
                 {
                     if (player.LeftAttack)
                     {
-                        spriteBatch.Draw(player.CurrentSprite, player.Position, new Rectangle((player.WalkTimer / 3) * 60, 0, 60, 127), Color.White, 0, Vector2.Zero, SpriteEffects.FlipHorizontally, 0f);
+                        spriteBatch.Draw(player.CurrentSprite, player.Position, new Rectangle(player.WalkFrame * 60, 0, 60, 127), Color.White, 0, Vector2.Zero, SpriteEffects.FlipHorizontally, 0f);
                     }
                     else
                     {
-                        spriteBatch.Draw(player.CurrentSprite, player.Position, new Rectangle((player.WalkTimer / 3) * 60, 0, 60, 127), Color.White);
+                        spriteBatch.Draw(player.CurrentSprite, player.Position, new Rectangle(player.WalkFrame * 60, 0, 60, 127), Color.White);
                     }
                 }
                 if (player.WalkLeft && !player.WalkRight)
                 {
                     if (player.RightAttack)
                     {
-                        spriteBatch.Draw(player.CurrentSprite, player.Position, new Rectangle((player.WalkTimer / 3) * 60, 0, 60, 127), Color.White);
+                        spriteBatch.Draw(player.CurrentSprite, player.Position, new Rectangle(player.WalkFrame * 60, 0, 60, 127), Color.White);
                     }
                     else
                     {
-                        spriteBatch.Draw(player.CurrentSprite, player.Position, new Rectangle((player.WalkTimer / 3) * 60, 0, 60, 127), Color.White, 0, Vector2.Zero, SpriteEffects.FlipHorizontally, 0f);
+                        spriteBatch.Draw(player.CurrentSprite, player.Position, new Rectangle(player.WalkFrame * 60, 0, 60, 127), Color.White, 0, Vector2.Zero, SpriteEffects.FlipHorizontally, 0f);
                     }
                 }
                 else if((!player.WalkLeft && !player.WalkRight) || (player.WalkLeft && player.WalkRight))

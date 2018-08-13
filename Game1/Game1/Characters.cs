@@ -116,6 +116,10 @@ namespace Game1
             }
             Position = temp;
         }
+        public virtual void Move(GameTime gameTime)
+        {
+
+        }
 
         /// <summary>
         /// method for determining knockback

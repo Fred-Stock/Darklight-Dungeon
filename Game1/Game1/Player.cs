@@ -20,10 +20,14 @@ namespace Game1
         private int currency;
         private Texture2D currentSprite; //texture2D for holding current player sprite
         private Texture2D currentAtkSprite; //texture2D for holding current frame of attack animation
-        private int atkTimer;
-        private int walkTimer;
+        private int atkFrame;
+        private int walkFrame;
+        private double atkTimePerFrame;
+        private double walkTimePerFrame;
+        private double atkTimer;
+        private double fps;
+        private double walkTimer;
         private bool attacking;
-        private bool attacking2;
         private bool walkRight;
         private bool walkLeft;
         private bool hit;
@@ -33,7 +37,7 @@ namespace Game1
         KeyboardState previous;
         bool leftAttack; //field for keeping track of what direction the player is attacking
         bool rightAttack; //field for keeping track of what direction the player is attacking
-
+        private GameTime gameTime;
 
         //properties
         public int Score
@@ -78,12 +82,7 @@ namespace Game1
             get { return attacking; }
             set { attacking = value; }
         }
-        public bool Attacking2
-        {
-            get { return attacking2; }
-            set { attacking2 = value; }
-        }
-        public int WalkTimer
+        public double WalkTimer
         {
             get { return walkTimer; }
         }
@@ -105,6 +104,11 @@ namespace Game1
             get { return rightAttack; }
             set { rightAttack = value; }
         }
+        public int WalkFrame
+        {
+            get { return walkFrame; }
+        }
+
         
         //constructor
         public Player(int score, Weapon weapon, Armor armor, Texture2D sidewaysWalk, Texture2D walkUp, Texture2D walkDown, int health, int damage, Rectangle position, Texture2D texture ) : base(health, damage, position, texture)
@@ -113,6 +117,10 @@ namespace Game1
             this.score = score;
             this.weapon = weapon;
             this.armor = armor;
+            fps = 30.0;
+            atkTimePerFrame = 1.0/ fps;
+            atkTimer = 0;
+            walkTimePerFrame = 1.0/ 10.0;
             invList = new List<string>();
 
             if(weapon == null)
@@ -140,6 +148,8 @@ namespace Game1
             this.sidewaysWalk = sidewaysWalk;
             this.walkDown = walkDown;
             this.walkUp = walkUp;
+
+
         }
 
         //these next two methods are almost identical but are needed otherwise errors occur if an item with the same name
@@ -237,12 +247,12 @@ namespace Game1
             item.Visible = false;
         }
 
-        public void Attack(Player player, List<Enemies> enemys, List<Texture2D> animation)
+        public void Attack(Player player, List<Enemies> enemys, List<Texture2D> animation, GameTime gameTime)
         {
             Enemies tempEnemy;
             if (attacking)
             {
-                atkTimer++;
+                atkTimer += gameTime.ElapsedGameTime.TotalSeconds;
                 if(enemys != null)
                 {
                     for(int i = 0; i < enemys.Count; i++)
@@ -254,26 +264,35 @@ namespace Game1
                         i--;
                     }
                 }
-                if(atkTimer < 13)
+                if(atkFrame == 0)
                 {
-                    currentAtkSprite = animation[atkTimer];
+                    currentAtkSprite = animation[0];
                 }
-                if (atkTimer > 13)
+                if(atkTimer > atkTimePerFrame)
+                {
+                    atkFrame++;
+                    currentAtkSprite = animation[atkFrame];
+                    atkTimer -= atkTimePerFrame;
+                }
+                if (atkFrame == 12)
                 {
                     leftAttack = false;
                     rightAttack = false;
                     attacking = false;
-                    atkTimer = 0;
+                    atkFrame = 0;
+                    
                 }
             }
         }
 
-        public override void Move()
+        public override void Move(GameTime gameTime)
         {
             prevPos = Position;
             Rectangle temp = Position;
             kbstate = Keyboard.GetState();
             int moveIncrease = 0;
+            
+            
 
             if (armor is SpeedArmor tempArmor)
             {
@@ -296,11 +315,24 @@ namespace Game1
             }
             if (kbstate.IsKeyDown(Keys.A))
             {
+                if (!previous.IsKeyDown(Keys.A))
+                {
+                    walkTimer = 0;
+                }
+                walkTimer += gameTime.ElapsedGameTime.TotalSeconds;
                 if (!kbstate.IsKeyDown(Keys.D))
                 {
                     walkRight = false;
-                    walkTimer++;
                     currentSprite = sidewaysWalk;
+                    if (walkFrame > 9)
+                    {
+                        walkFrame = 0;
+                    }
+                    if (walkTimer > walkTimePerFrame)
+                    {
+                        walkFrame++;
+                        walkTimer -= walkTimePerFrame;
+                    }
                 }
                 else if (kbstate.IsKeyDown(Keys.S))
                 {
@@ -314,20 +346,28 @@ namespace Game1
                 temp.X -= moveSpeed + moveIncrease;
                 walkLeft = true;
 
-                if(walkTimer >= 30)
-                {
-                    walkTimer = 0;   
-                }
 
             }
             if (kbstate.IsKeyDown(Keys.D))
             {
-
+                if (!previous.IsKeyDown(Keys.D))
+                {
+                    walkTimer = 0;
+                }
+                walkTimer += gameTime.ElapsedGameTime.TotalSeconds;
                 if (!kbstate.IsKeyDown(Keys.A))
                 {
                     walkLeft = false;
-                    walkTimer++;
                     currentSprite = sidewaysWalk;
+                    if (walkFrame >= 9)
+                    {
+                        walkFrame = 0;
+                    }
+                    if(walkTimer > walkTimePerFrame)
+                    {
+                        walkTimer -= walkTimePerFrame;
+                        walkFrame++;
+                    }
                 }
                 else if(kbstate.IsKeyDown(Keys.S))
                 {
@@ -341,10 +381,7 @@ namespace Game1
 
                 walkRight = true;
 
-                if (walkTimer >= 30)
-                {
-                    walkTimer = 0;
-                }
+
             }
             else if(!kbstate.IsKeyDown(Keys.D) && !kbstate.IsKeyDown(Keys.S) && !kbstate.IsKeyDown(Keys.A) && !kbstate.IsKeyDown(Keys.W))
             {
