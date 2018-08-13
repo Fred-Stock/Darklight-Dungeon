@@ -96,6 +96,7 @@ namespace Game1
         Texture2D silver_coin;
         Texture2D gold_coin;
         Texture2D store;
+        Texture2D health_potion;
 
         //indicators
         Texture2D fire_indicator;
@@ -103,6 +104,7 @@ namespace Game1
         Texture2D shock_indicator;
         Texture2D healthbar;
         Texture2D healthbar_chunk;
+        Texture2D health_indicator;
 
         //sprites
         Texture2D player_forward;
@@ -242,6 +244,7 @@ namespace Game1
             silver_coin = Content.Load<Texture2D>("Sprites//silver_coin");
             gold_coin = Content.Load<Texture2D>("Sprites//gold_coin");
             store = Content.Load<Texture2D>("Sprites//store_stand");
+            health_potion = Content.Load<Texture2D>("Sprites//health_potion");
 
             //indicator loading
             fire_indicator = Content.Load<Texture2D>("Sprites//fire_indicator");
@@ -249,6 +252,7 @@ namespace Game1
             shock_indicator = Content.Load<Texture2D>("Sprites//shock_indicator");
             healthbar = Content.Load<Texture2D>("Sprites//healthbar");
             healthbar_chunk = Content.Load<Texture2D>("Sprites//healthbar_chunk");
+            health_indicator = Content.Load<Texture2D>("Sprites//health_indicator");
 
             //sprite loading
             player_forward = Content.Load<Texture2D>("Sprites//player_forward");
@@ -1230,7 +1234,7 @@ namespace Game1
 
             for(int i = 0; i < healthPckAmount; i++)
             {
-                shop.AddToShop(new HealthPotion(3, "health potion", new Rectangle(50, 50, 10, 10), rock_large));
+                shop.AddToShop(new HealthPotion(3, "health potion", new Rectangle(50, 50, 10, 10), health_potion));
             }
 
         }
