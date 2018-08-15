@@ -127,6 +127,11 @@ namespace Game1
 
         }
 
+        public virtual void Move(Characters character, GameTime gameTime)
+        {
+
+        }
+
         /// <summary>
         /// method for determining knockback
         /// </summary>
@@ -135,7 +140,15 @@ namespace Game1
         {
             if (!hit)
             {
-                hit = true;
+                if(attacker is Player)
+                {
+
+                }
+                else
+                {
+                    hit = true;
+
+                }
                 PrevPos = Position;
                 Rectangle temp = Position;
             

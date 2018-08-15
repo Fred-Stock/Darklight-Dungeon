@@ -40,11 +40,17 @@ namespace Game1
             int yDist = player.Position.Y - Position.Y;
             Double tDist = DistanceTo(player.Position.X, player.Position.Y, Position.X, Position.Y);
 
-            double xRatio = xDist / tDist;
-            double yRatio = yDist / tDist;
+            int xMov = 0;
+            int yMov = 0;
 
-            int xMov = (int)(moveSpeed * xRatio);
-            int yMov = (int)(moveSpeed * yRatio);
+            if(tDist != 0)
+            {
+                double xRatio = xDist / tDist;
+                double yRatio = yDist / tDist;
+
+                xMov = (int)(moveSpeed * xRatio);
+                yMov = (int)(moveSpeed * yRatio);
+            }
 
             if (xMov != 0)
             {

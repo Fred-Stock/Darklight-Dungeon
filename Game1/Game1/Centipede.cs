@@ -17,8 +17,12 @@ namespace Game1
         private bool moveDown;
         private bool moveLeft;
         private bool moveRight;
-        private int timer;
-        private int aniTimer;
+        private double walkTimer;
+        private double aniTimer;
+        private double fps;
+        private double frameDuration;
+        private double walkDuration;
+        private int frame;
         private bool prevUp;
         private bool prevDown;
         private bool prevLeft;
@@ -42,9 +46,9 @@ namespace Game1
         {
             get { return moveRight; }
         }
-        public int AniTimer
+        public int Frame
         {
-            get { return aniTimer; }
+            get { return frame; }
         }
         public Texture2D RotTexture
         {
@@ -57,37 +61,32 @@ namespace Game1
         {
             affected = false;
             moveSpeed = 2;
-            timer = 0;
+            walkTimer = 0;
             aniTimer = 0;
+            fps = 30.0;
+            frameDuration = 3.0/fps;
+            walkDuration = 3;
             SelectDirection(player);
             prevLeft = true;
             this.rotTexture = rotTexture;
         }
 
         //methods
-        public override void Move(Characters player)
+        public override void Move(Characters player, GameTime gameTime)
         {
             Rectangle temp = Position;
             prevPos = Position;
-            timer++;
-            aniTimer++;
+
+            walkTimer += gameTime.ElapsedGameTime.TotalSeconds;
+            aniTimer += gameTime.ElapsedGameTime.TotalSeconds;
+
+
             if (moveUp)
-            {
-                //if (timer == 0)
-                //{
-                //    temp.X += temp.Width / 2;
-                //    temp.Y += temp.Height / 2;
-                //}
+            { 
                 temp.Y -= moveSpeed;
             }
             if (moveDown)
             {
-                //if (timer == 0)
-                //{
-                //    temp.X += temp.Width / 2;
-                //    temp.Y += temp.Height / 2;
-                //
-                //}
                 temp.Y += moveSpeed;
             }
             if (moveLeft)
@@ -98,14 +97,19 @@ namespace Game1
             {
                 temp.X += moveSpeed;
             }
-            if(timer >= 100)
+            if(walkTimer >= walkDuration)
             {
                 SelectDirection(player);
                 temp = Position;
-                timer = 0;
+                walkTimer = 0;
             }
-            if(aniTimer >= 20)
+            if(aniTimer >= frameDuration)
             {
+                frame++;
+                if(frame > 3)
+                {
+                    frame = 0;
+                }
                 aniTimer = 0;
             }
 
