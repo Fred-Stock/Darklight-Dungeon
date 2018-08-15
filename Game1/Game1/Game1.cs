@@ -325,7 +325,7 @@ namespace Game1
             shop_hover = Content.Load<Texture2D>("Sprites//shop_hover");
 
             //initialize the player
-            playerWeapon = null; //new FireWeapon(WeaponType.basic, "weapon", new Rectangle(50, 250, 40, 40), base_weapon); //all values in here are just for test
+            playerWeapon = new Weapon(WeaponType.basic, "weapon", new Rectangle(50, 250, 40, 40), base_weapon); //all values in here are just for test
             playerArmor = null; // new Armor(ArmorType.test, "armor", new Rectangle(50, 50, 10, 10), base_armor); //all values in here are just for test too
             player = new Player(0, playerWeapon, playerArmor, player_walk_side, player_backward, player_forward, 10, 3, new Rectangle(100, 100, 45, 75), player_forward); //all values in here are just for test as well
             #endregion
@@ -548,7 +548,7 @@ namespace Game1
                 {
                     if (player.Position.Intersects(manager.DoorList[i].Position) && currentLevel.WinCheck())
                     {
-                        manager.DoorList[i].DoorActivation();
+                        manager.DoorList[i].DoorActivation(gameTime);
                         if (manager.DoorList[i].DoorTransistion(player))
                         {
                             currentLevel = new Level(LevelIO(manager.DoorList[i].NextLevel), manager);
@@ -593,7 +593,7 @@ namespace Game1
                                 gameState = GameState.EndGame;
                             }
                         }                      
-                            manager.EnemyList[i].Move(player);
+                        manager.EnemyList[i].Move(player);
                     }
                 }
 
@@ -638,14 +638,14 @@ namespace Game1
                                 //    manager.EnemyList[i].Affected = true;
                                 //}
                             }
-                            for(int k = 0; k < hitEnemies.Count; k++)
-                            {
-                                hitEnemies[k].Affected = true;
-                            }
+                        }
+                        for(int k = 0; k < hitEnemies.Count; k++)
+                        {
+                            hitEnemies[k].Affected = true;
                         }
                     }
                 }
-                manager.WeaponAffects(player);
+                manager.WeaponAffects(player, gameTime);
 
                 //deal damage to enemies, do knockback, and determine attack animation
                 //if moving left use left attack
@@ -716,7 +716,16 @@ namespace Game1
                         }
                     }
                 }
+                if (player.Healed)
+                {
+                    player.HealIndiDuration += gameTime.ElapsedGameTime.TotalSeconds;
 
+                    if (player.HealIndiDuration > player.HealIndiTimer)
+                    {
+                        player.Healed = false;
+                        player.HealIndiDuration = 0;
+                    }
+                }
 
                 //transition to inventory screen
                 if (SingleButtonPress(Keys.I))
@@ -821,6 +830,7 @@ namespace Game1
                 player.Armor = null;
                 player.Health = 10;
                 player.Currency = 0;
+                player.Hit = false;
                 
                 //button logic
                 if(ButtonClicked(700, 560, 1205, 660))//resart
@@ -895,43 +905,13 @@ namespace Game1
                    spriteBatch.Draw(currentLevel.WallList[i].Texture, currentLevel.WallList[i].Position, Color.White);
                 }
 
-                //draw player
-
-                //if the player is walking left or right draw the corresponding animation
-                //if the player is attacking do not swap the animation
-                if (player.WalkRight && !player.WalkLeft)
-                {
-                    if (player.LeftAttack)
-                    {
-                        spriteBatch.Draw(player.CurrentSprite, player.Position, new Rectangle(player.WalkFrame * 60, 0, 60, 127), Color.White, 0, Vector2.Zero, SpriteEffects.FlipHorizontally, 0f);
-                    }
-                    else
-                    {
-                        spriteBatch.Draw(player.CurrentSprite, player.Position, new Rectangle(player.WalkFrame * 60, 0, 60, 127), Color.White);
-                    }
-                }
-                if (player.WalkLeft && !player.WalkRight)
-                {
-                    if (player.RightAttack)
-                    {
-                        spriteBatch.Draw(player.CurrentSprite, player.Position, new Rectangle(player.WalkFrame * 60, 0, 60, 127), Color.White);
-                    }
-                    else
-                    {
-                        spriteBatch.Draw(player.CurrentSprite, player.Position, new Rectangle(player.WalkFrame * 60, 0, 60, 127), Color.White, 0, Vector2.Zero, SpriteEffects.FlipHorizontally, 0f);
-                    }
-                }
-                else if((!player.WalkLeft && !player.WalkRight) || (player.WalkLeft && player.WalkRight))
-                {
-                    spriteBatch.Draw(player.CurrentSprite, player.Position, Color.White);
-                }
 
                 //draw all doors on level
                 for(int i = 0; i < manager.DoorList.Count; i++)
                 {
                     if (manager.DoorList[i].Activated)
                     {
-                        spriteBatch.Draw(manager.DoorList[i].CurrentTexture, manager.DoorList[i].Position, new Rectangle((manager.DoorList[i].Timer/5) * 128, 0, 128, 120), Color.White);
+                        spriteBatch.Draw(manager.DoorList[i].CurrentTexture, manager.DoorList[i].Position, new Rectangle(manager.DoorList[i].Frame * 128, 0, 128, 120), Color.White);
                     }
                     else
                     {
@@ -1008,11 +988,49 @@ namespace Game1
                         new Rectangle(player.Position.X + player.Position.Width, player.Position.Y - 10, 100, 100), atkColor);
                 }
 
-                spriteBatch.DrawString(Arial12, "HP", new Vector2(26, 55), Color.White);
-                //spriteBatch.Draw(healthbar, new Vector2(50, 50), Color.White);
-                for(int i = 0; i < player.Health; i++)
+                //draw player
+
+                //if the player is walking left or right draw the corresponding animation
+                //if the player is attacking do not swap the animation
+                if (!player.HitEffect(gameTime))
                 {
-                    if((i % 2) == 0)
+                    if (player.WalkRight && !player.WalkLeft)
+                    {
+                        if (player.LeftAttack)
+                        {
+                            spriteBatch.Draw(player.CurrentSprite, player.Position, new Rectangle(player.WalkFrame * 60, 0, 60, 127), Color.White, 0, Vector2.Zero, SpriteEffects.FlipHorizontally, 0f);
+                        }
+                        else
+                        {
+                            spriteBatch.Draw(player.CurrentSprite, player.Position, new Rectangle(player.WalkFrame * 60, 0, 60, 127), Color.White);
+                        }
+                    }
+                    if (player.WalkLeft && !player.WalkRight)
+                    {
+                        if (player.RightAttack)
+                        {
+                            spriteBatch.Draw(player.CurrentSprite, player.Position, new Rectangle(player.WalkFrame * 60, 0, 60, 127), Color.White);
+                        }
+                        else
+                        {
+                            spriteBatch.Draw(player.CurrentSprite, player.Position, new Rectangle(player.WalkFrame * 60, 0, 60, 127), Color.White, 0, Vector2.Zero, SpriteEffects.FlipHorizontally, 0f);
+                        }
+                    }
+                    else if((!player.WalkLeft && !player.WalkRight) || (player.WalkLeft && player.WalkRight))
+                    {
+                        spriteBatch.Draw(player.CurrentSprite, player.Position, Color.White);
+                    }
+
+                    if (player.Healed)
+                    {
+                        spriteBatch.Draw(health_indicator, new Rectangle(player.Position.X + (player.Position.Width / 2) - (health_indicator.Width/2),
+                            player.Position.Y - 20, health_indicator.Width, health_indicator.Height), Color.White);
+                    }
+                }
+                spriteBatch.DrawString(Arial12, "HP", new Vector2(26, 55), Color.White);
+                for (int i = 0; i < player.Health; i++)
+                {
+                    if ((i % 2) == 0)
                     {
                         spriteBatch.Draw(healthbar_chunk, new Rectangle(55 + (i * 13), 55, 23, 50), null, Color.Blue, 0, Vector2.Zero, SpriteEffects.FlipVertically, 0f);
                     }
@@ -1021,7 +1039,6 @@ namespace Game1
                         spriteBatch.Draw(healthbar_chunk, new Rectangle(55 + (i * 13), 55, 23, 50), Color.Black);
                     }
                 }
-
             }
             #endregion
             #region Pause

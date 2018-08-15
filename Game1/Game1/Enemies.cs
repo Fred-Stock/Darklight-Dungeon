@@ -20,7 +20,7 @@ namespace Game1
         protected bool affected;
         protected Rectangle prevPos2;
 
-        protected int hitDuration;
+        protected double hitDuration;
 
         //properties
         public bool Hit
@@ -33,7 +33,7 @@ namespace Game1
             get { return affected; }
             set { affected = value; }
         }
-        public int HitDuration
+        public double HitDuration
         {
             get { return hitDuration; }
             set { hitDuration = value; }
@@ -60,11 +60,17 @@ namespace Game1
             int yDist = player.Position.Y - Position.Y;
             Double tDist = DistanceTo(player.Position.X, player.Position.Y, Position.X, Position.Y);
 
-            double xRatio = xDist / tDist;
-            double yRatio = yDist / tDist;
+            int xMov = 0;
+            int yMov = 0;
 
-            int xMov = (int)(moveSpeed * xRatio);
-            int yMov = (int)(moveSpeed * yRatio);
+            if (tDist != 0)
+            {
+                double xRatio = xDist / tDist;
+                double yRatio = yDist / tDist;
+
+                xMov = (int)(moveSpeed * xRatio);
+                yMov = (int)(moveSpeed * yRatio);
+            }
 
             
             Rectangle temp = Position;
@@ -77,7 +83,6 @@ namespace Game1
                 if(yDist < 0)
                 {
                     temp.Y -= moveSpeed;
-
                 }
                 else
                 {
@@ -106,7 +111,7 @@ namespace Game1
 
         public override void TakeDamage(Player damaged, Characters damager)
         {
-            if (damager.Position.Intersects(damaged.Position))
+            if (damager.Position.Intersects(damaged.Position) && !damaged.Hit)
             {
                 if(damaged.Armor is ThornArmor)
                 {
@@ -127,7 +132,7 @@ namespace Game1
                 else if(damaged.Armor != null)
                 {
                     damaged.Health -= damage - damaged.Armor.Defense;
-
+            
                 }
                 else
                 {

@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,7 +16,10 @@ namespace Game1
         private Texture2D middleSprite;
         private Texture2D finalSprite;
         private Texture2D currentTexture;
-        private int timer;
+        private double timePerFrame;
+        private double activeTimer;
+        private double fps;
+        private int frame;
         private bool activated;
         private string nextLevel;
 
@@ -44,14 +46,15 @@ namespace Game1
             get { return activated; }
             set { activated = value; }
         }
-        public int Timer
+        public int Frame
         {
-            get { return timer; }
+            get { return frame; }
         }
         public string NextLevel
         {
             get { return nextLevel; }
         }
+        
 
         //constructor
         public Door(Rectangle position, Texture2D initialTexture, Texture2D middleSprite, Texture2D finalSprite, string nextLevel) : base(position, initialTexture)
@@ -60,7 +63,12 @@ namespace Game1
             this.finalSprite = finalSprite;
             currentTexture = initialTexture;
             activated = false;
-            timer = 0;
+            activeTimer = 0;
+            frame = 0;
+            fps = 30;
+            timePerFrame = 1.0 / fps;
+            prevSpeed = 0;
+            prevArmorSpeed = 0;
             this.nextLevel = nextLevel;
         }
 
@@ -69,20 +77,25 @@ namespace Game1
         /// this method checks if the door has been activiated and if so animates the sprite accordingly
         /// </summary>
         /// <returns></returns>
-        public Texture2D DoorActivation()
+        public Texture2D DoorActivation(GameTime gameTime)
         {
 
             if (activated)
             {
-                timer++;
-                if(timer < 160)
+                activeTimer += gameTime.ElapsedGameTime.TotalSeconds;
+                if(activeTimer >= timePerFrame)
+                {
+                    activeTimer -= timePerFrame;
+                    frame++;
+                }
+                if(frame < 8)
                 {
                     currentTexture = middleSprite;
                 }
-                if (timer == 160)
+                else
                 {
                     currentTexture = finalSprite;
-                    
+                    frame = 0;
                     activated = false;
                 }
             }
@@ -98,11 +111,15 @@ namespace Game1
         int prevArmorSpeed = 0;
         public bool DoorTransistion(Player player)
         {
-            if (timer == 0)
+            if (frame == 0)
             {
-                prevSpeed = player.MoveSpeed;
+                if(prevSpeed == 0)
+                {
+                    prevSpeed = player.MoveSpeed;
+
+                }
                 player.MoveSpeed = 0;
-                if(player.Armor is SpeedArmor tempAr)
+                if(player.Armor is SpeedArmor tempAr && prevArmorSpeed != 0)
                 {
                     tempAr = (SpeedArmor)player.Armor;
                     prevArmorSpeed = tempAr.SpeedBoost;
@@ -112,13 +129,13 @@ namespace Game1
             }
 
             Activated = true;
-            if(timer >= 40)
+            if(frame == 7)
             {
                 player.MoveSpeed = prevSpeed;
                 if(player.Armor is SpeedArmor tempAr)
                 {
                     tempAr = (SpeedArmor)player.Armor;
-                    tempAr.SpeedBoost = prevArmorSpeed;
+                    tempAr.SpeedBoost = prevArmorSpeed;                   
                     player.Armor = tempAr;
                 }
                 return true;

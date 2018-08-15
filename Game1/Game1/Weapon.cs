@@ -26,6 +26,7 @@ namespace Game1
         private WeaponType type;
         protected int affectDuration;
         protected int damage;
+        protected double affectTimer;
 
         //properties
         public WeaponType Type
@@ -48,6 +49,11 @@ namespace Game1
 
         //methods
         public virtual void WeaponAction(Enemies attacked)
+        {
+
+        }
+
+        public virtual void WeaponAction(Enemies attacked, GameTime gameTime)
         {
 
         }

@@ -12,42 +12,41 @@ namespace Game1
     class FireWeapon : Weapon
     {
         //fields
-        int timer;
+        private double dotInterval; //interval for each tick of fire damage
+        private int numTicks; //int for number of ticks of damage
 
         //properties
-
 
         //constructor
         public FireWeapon(WeaponType weapon, string name, Rectangle position, Texture2D texture) : base(weapon, name, position, texture)
         {
-            timer = 0;
-            affectDuration = 60;
+            affectDuration = 10;
+            dotInterval = 1;
             damage = 5;
             cost = 25;
+            numTicks = 0;
         }
 
         //methods
-        public override void WeaponAction(Enemies attacked)
+        public override void WeaponAction(Enemies attacked, GameTime gameTime)
         {
-            if (attacked.HitDuration < affectDuration && attacked.Affected)
-            {
-                 if(attacked.HitDuration % 6 == 0)
-                 {
-                    attacked.Health -= 1;
-                 }
-             }
-
-
             if (attacked.Affected)
             {
-                attacked.HitDuration++;
-            }
+                attacked.HitDuration += gameTime.ElapsedGameTime.TotalSeconds;
+                if (attacked.HitDuration > dotInterval)
+                {
+                    attacked.Health -= 3;
+                    attacked.HitDuration -= dotInterval;
+                    numTicks++;
+                }
 
-            if (attacked.HitDuration > affectDuration)
-            {
-                attacked.HitDuration = 0;
-                attacked.Affected = false;
+                if (numTicks >= 5)
+                {
+                    attacked.HitDuration = 0;
+                    attacked.Affected = false;
+                    numTicks = 0;
 
+                }
             }
         }
     }

@@ -12,8 +12,7 @@ namespace Game1
     class FrostWeapon : Weapon
     {
         //fields
-        int timer;
-        private bool stopped;
+
 
         //properties
 
@@ -21,36 +20,34 @@ namespace Game1
         //constructor
         public FrostWeapon(WeaponType weapon, string name, Rectangle position, Texture2D texture) : base(weapon, name, position, texture)
         {
-            timer = 0;
-            affectDuration = 120;
+            affectDuration = 3;
             damage = 7;
             cost = 15;
         }
 
         int prevMoveSpeed = 0;
         //method
-        public override void WeaponAction(Enemies attacked)
+        public override void WeaponAction(Enemies attacked, GameTime gameTime)
         {
-            if (attacked.HitDuration < affectDuration && attacked.Affected)
+            if (attacked.Affected)
             {
-                if(attacked.HitDuration == 1)
+                attacked.HitDuration += gameTime.ElapsedGameTime.TotalSeconds;
+                if (attacked.HitDuration < affectDuration)
                 {
-                    prevMoveSpeed = attacked.MoveSpeed;
-                    attacked.MoveSpeed = (int)Math.Ceiling((double)attacked.MoveSpeed / 2);
+                    if(attacked.HitDuration == gameTime.ElapsedGameTime.TotalSeconds)
+                    {
+                        prevMoveSpeed = attacked.MoveSpeed;
+                        attacked.MoveSpeed = (int)Math.Ceiling((double)attacked.MoveSpeed / 2);
+                    }
 
                 }
 
-            }
-
-            if (attacked.Affected)
-            {
-                attacked.HitDuration++;
-            }
-            if (attacked.HitDuration > affectDuration)
-            {
-                attacked.HitDuration = 0;
-                attacked.Affected = false;
-                attacked.MoveSpeed = prevMoveSpeed;
+                if (attacked.HitDuration > affectDuration)
+                {
+                    attacked.HitDuration = 0;
+                    attacked.Affected = false;
+                    attacked.MoveSpeed = prevMoveSpeed;
+                }
             }
         }
     }

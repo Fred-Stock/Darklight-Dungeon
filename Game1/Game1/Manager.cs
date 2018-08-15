@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 namespace Game1
 {
@@ -47,7 +50,7 @@ namespace Game1
         }
 
         //methods
-        public void WeaponAffects(Player player)
+        public void WeaponAffects(Player player, GameTime gameTime)
         {
             for(int i = 0; i < enemyList.Count; i++)
             {
@@ -55,8 +58,7 @@ namespace Game1
                 {
                     if(player.Weapon != null)
                     {
-                        player.Weapon.WeaponAction(enemyList[i]);
-
+                        player.Weapon.WeaponAction(enemyList[i], gameTime);
                     }
                 }
             }

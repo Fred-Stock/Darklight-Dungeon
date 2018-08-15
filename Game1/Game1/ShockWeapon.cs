@@ -12,8 +12,7 @@ namespace Game1
     class ShockWeapon : Weapon
     {
         //fields
-        int timer;
-        private bool stopped;
+
 
         //properties
 
@@ -21,8 +20,7 @@ namespace Game1
         //constructor
         public ShockWeapon(WeaponType weapon, string name, Rectangle position, Texture2D texture) : base(weapon, name, position, texture)
         {
-            timer = 0;
-            affectDuration = 45;
+            affectDuration = 1;
             damage = 7;
             cost = 20;
         }
@@ -30,30 +28,32 @@ namespace Game1
         int prevMoveSpeed = 0;
 
         //methods
-        public override void WeaponAction(Enemies attacked)
+        public override void WeaponAction(Enemies attacked, GameTime gameTime)
         {
-            if (attacked.HitDuration < affectDuration && attacked.Affected)
-            {
-                if(attacked.HitDuration == 0)
-                {
-                    prevMoveSpeed = attacked.MoveSpeed;
-                }
-                if(attacked.HitDuration > 1)
-                {
-                    attacked.MoveSpeed = 0;
-
-                }
-            }
-
             if (attacked.Affected)
             {
-                attacked.HitDuration++;
-            }
-            if(attacked.HitDuration > affectDuration)
-            {
-                attacked.HitDuration = 0;
-                attacked.Affected = false;
-                attacked.MoveSpeed = prevMoveSpeed;
+                attacked.HitDuration += gameTime.ElapsedGameTime.TotalSeconds;
+                if (attacked.HitDuration < affectDuration)
+                {
+                    if (attacked.MoveSpeed != 0)
+                    {
+                        prevMoveSpeed = attacked.MoveSpeed;
+                        attacked.MoveSpeed = 0; 
+                    }
+                    else
+                    {
+                        attacked.MoveSpeed = 0;
+
+                    }
+                }
+
+
+                if(attacked.HitDuration > affectDuration)
+                {
+                    attacked.HitDuration = 0;
+                    attacked.Affected = false;
+                    attacked.MoveSpeed = prevMoveSpeed;
+                }
             }
         }
     }

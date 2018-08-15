@@ -30,16 +30,35 @@ namespace Game1
         private bool attacking;
         private bool walkRight;
         private bool walkLeft;
-        private bool hit;
+        private bool healed;
+        private double healIndiDuration;
+        private double healIndiTimer;
         private Texture2D sidewaysWalk;
         private Texture2D walkUp;
         private Texture2D walkDown;
-        KeyboardState previous;
-        bool leftAttack; //field for keeping track of what direction the player is attacking
-        bool rightAttack; //field for keeping track of what direction the player is attacking
-        private GameTime gameTime;
+        private KeyboardState previous;
+        private bool leftAttack; //field for keeping track of what direction the player is attacking
+        private bool rightAttack; //field for keeping track of what direction the player is attacking
+        private double hitDuration;
+        private double hitTimer;
 
         //properties
+        public double HealIndiDuration
+        {
+            get { return healIndiDuration; }
+            set { healIndiDuration = value; }
+        }
+        public double HealIndiTimer
+        {
+            get { return healIndiTimer; }
+            set { healIndiTimer = value; }
+        }
+        public bool Healed
+        {
+            get { return healed; }
+            set { healed = value; }
+        }
+
         public int Score
         {
             get { return score; }
@@ -108,7 +127,6 @@ namespace Game1
         {
             get { return walkFrame; }
         }
-
         
         //constructor
         public Player(int score, Weapon weapon, Armor armor, Texture2D sidewaysWalk, Texture2D walkUp, Texture2D walkDown, int health, int damage, Rectangle position, Texture2D texture ) : base(health, damage, position, texture)
@@ -117,10 +135,12 @@ namespace Game1
             this.score = score;
             this.weapon = weapon;
             this.armor = armor;
-            fps = 30.0;
+            fps = 40.0;
             atkTimePerFrame = 1.0/ fps;
             atkTimer = 0;
             walkTimePerFrame = 1.0/ 10.0;
+            healIndiTimer = 2;
+            hitDuration = 0.4;
             invList = new List<string>();
 
             if(weapon == null)
@@ -149,7 +169,7 @@ namespace Game1
             this.walkDown = walkDown;
             this.walkUp = walkUp;
 
-
+            hit = false;
         }
 
         //these next two methods are almost identical but are needed otherwise errors occur if an item with the same name
@@ -324,7 +344,7 @@ namespace Game1
                 {
                     walkRight = false;
                     currentSprite = sidewaysWalk;
-                    if (walkFrame > 9)
+                    if (walkFrame >= 9)
                     {
                         walkFrame = 0;
                     }
@@ -443,18 +463,56 @@ namespace Game1
 
         public void UseHealthPotion(HealthPotion hpPot)
         {
+            
             if (health < 15)
             {
                 health += hpPot.RestoreAmnt;
                 inventory.Remove(hpPot.Name);
                 invList.Remove(hpPot.Name);
-
+                healed = true;
             }
             if(health > 15)
             {
                 health = 15;
             }
         }
-        
+
+        int alternate = 0;
+        public bool HitEffect(GameTime gameTime)
+        {
+            if (hit)
+            {
+                hitTimer += gameTime.ElapsedGameTime.TotalSeconds;
+                if(hitTimer >= hitDuration && alternate < 10)
+                {
+                    alternate++;
+                    hitTimer -= hitDuration;
+                }
+                
+                if(alternate >= 10)
+                {
+                    alternate = 0;
+                    hit = false;
+                }
+                if(alternate % 2 == 0)
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+                
+                
+
+            }
+            else
+            {
+                return false;
+            }
+            
+
+        }
+
     }
 }

@@ -20,11 +20,12 @@ namespace Game1
 
         protected bool invulnerable;
 
-        private int timer;
 
         protected Rectangle prevPos;
 
         protected int moveSpeed;
+
+        protected bool hit;
 
         public int Health
         {
@@ -55,6 +56,11 @@ namespace Game1
             set { moveSpeed = value; }
         }
 
+        public bool Hit
+        {
+            get { return hit; }
+            set { hit = value; }
+        }
 
 
         //constructor
@@ -127,36 +133,41 @@ namespace Game1
         /// <param name="attacker">character that damaged the character getting knocked backwards</param>
         public virtual void Knockback(Characters attacker)
         {
-            PrevPos = Position;
-            Rectangle temp = Position;
-
-            int xDist = attacker.Position.X - Position.X;
-            int yDist = attacker.Position.Y - Position.Y;
-            Double tDist = DistanceTo(attacker.Position.X, attacker.Position.Y, Position.X, Position.Y);
-
-            double xRatio = xDist / tDist;
-            double yRatio = yDist / tDist;
-
-         
-
-            if (attacker.Position.X < Position.X) //attack from the left
+            if (!hit)
             {
-                temp.X -= (int)(50 * xRatio);
+                hit = true;
+                PrevPos = Position;
+                Rectangle temp = Position;
+            
+                int xDist = attacker.Position.X - Position.X;
+                int yDist = attacker.Position.Y - Position.Y;
+                Double tDist = DistanceTo(attacker.Position.X, attacker.Position.Y, Position.X, Position.Y);
+            
+                double xRatio = xDist / tDist;
+                double yRatio = yDist / tDist;
+            
+            
+            
+                if (attacker.Position.X < Position.X) //attack from the left
+                {
+                    temp.X -= (int)(50 * xRatio);
+                }
+                if(attacker.Position.X > Position.X) //attack from the right
+                {
+                    temp.X -= (int)(50 * xRatio);
+                }
+                if(attacker.Position.Y < Position.Y) //attack from above
+                {
+                    temp.Y -= (int)(50 * yRatio);
+                }
+                if(attacker.Position.Y > Position.Y) //attack from below
+                {
+                    temp.Y -= (int)(50 * yRatio);
+                }
+                Position = temp;
+            
+            
             }
-            if(attacker.Position.X > Position.X) //attack from the right
-            {
-                temp.X -= (int)(50 * xRatio);
-            }
-            if(attacker.Position.Y < Position.Y) //attack from above
-            {
-                temp.Y -= (int)(50 * yRatio);
-            }
-            if(attacker.Position.Y > Position.Y) //attack from below
-            {
-                temp.Y -= (int)(50 * yRatio);
-            }
-            Position = temp;
-            timer++;
         }
     }
 
