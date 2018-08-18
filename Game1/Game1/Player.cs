@@ -277,6 +277,10 @@ namespace Game1
                 {
                     for(int i = 0; i < enemys.Count; i++)
                     {
+                        if(enemys[i] is Boss temp)
+                        {
+                            temp.Stunned = true;
+                        }
                         tempEnemy = enemys[i];
                         tempEnemy.Health -= player.damage;
                         enemys[i] = tempEnemy;

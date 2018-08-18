@@ -140,15 +140,12 @@ namespace Game1
         {
             if (!hit)
             {
-                if(attacker is Player)
-                {
-
-                }
-                else
+                if(!(attacker is Player))
                 {
                     hit = true;
 
                 }
+
                 PrevPos = Position;
                 Rectangle temp = Position;
             

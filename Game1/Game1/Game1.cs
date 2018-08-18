@@ -333,7 +333,7 @@ namespace Game1
             playerArmor2 = new Armor(ArmorType.test, "testA2", new Rectangle(50, 50, 10, 10), door_locked);//test value
             List<Item> testShopInv = new List<Item>();
             shop = new ShopManager();
-            currentLevel = new Level(LevelIO("level1_1"), manager);
+            currentLevel = new Level(LevelIO("BossLevel"), manager);
             MouseState mouseState = new MouseState();
             MouseState prevMouseState = new MouseState();
 
@@ -439,7 +439,7 @@ namespace Game1
                         }
 
                         //spawn enemies
-                        if (levelData[i].Equals('E') || levelData[i].Equals('F') || levelData[i].Equals('C'))
+                        if (levelData[i].Equals('E') || levelData[i].Equals('F') || levelData[i].Equals('C') || levelData[i].Equals('B'))
                         {
                             
                             k = i + 1;
@@ -466,6 +466,10 @@ namespace Game1
                             else if(levelData[i] == 'C')
                             {
                                 manager.EnemyList.Add(new Centipede(player, rng, 30, 8, new Rectangle(temp.X, temp.Y, 200, 60), enemy_2, enemy_2_90));
+                            }
+                            else if(levelData[i] == 'B')
+                            {
+                                manager.EnemyList.Add(new Boss(rock_small, rng, 10, 7, new Rectangle(temp.X, temp.Y, 50, 50), enemy_1));
                             }
                             else
                             {
@@ -582,27 +586,32 @@ namespace Game1
                 {
                     if(manager.EnemyList[i] != null)
                     {
-                        if (manager.EnemyList[i].Position.Intersects(player.Position))
+                        if (manager.EnemyList[i].Position.Intersects(player.Position) && !(manager.EnemyList[i] is Boss))
                         {
 
                             manager.EnemyList[i].TakeDamage(player, manager.EnemyList[i]);
                             player.Knockback(manager.EnemyList[i]);
                             
-                            if(player.Health <= 0)
-                            {
-                                gameState = GameState.EndGame;
-                            }
+                            
                         }                      
-                        if(manager.EnemyList[i] is Centipede)
+                        if(manager.EnemyList[i] is Centipede || manager.EnemyList[i] is Boss)
                         {
                             manager.EnemyList[i].Move(player, gameTime);
                         }
                         else
                         {
                             manager.EnemyList[i].Move(player);
-
+                        }
+                        if(manager.EnemyList[i] is Boss temp)
+                        {
+                            temp.Attack(player, gameTime);
+                            manager.EnemyList[i] = temp;
                         }
                     }
+                }
+                if (player.Health <= 0)
+                {
+                    gameState = GameState.EndGame;
                 }
 
                 //check if enemies are hit by player
@@ -979,6 +988,14 @@ namespace Game1
                         {
                             spriteBatch.Draw(frost_indicator, new Rectangle(manager.EnemyList[i].Position.X + (manager.EnemyList[i].Position.Width / 2 - 17),
                                 manager.EnemyList[i].Position.Y - 40, 35, 35), Color.White);
+                        }
+
+                        if(manager.EnemyList[i] is Boss tempEn)
+                        {
+                            for(int k = 0; k < tempEn.ProjList.Count; k++)
+                            {
+                                spriteBatch.Draw(tempEn.ProjList[k].Texture, tempEn.ProjList[k].Position, Color.White);
+                            }
                         }
                     }
                 }
