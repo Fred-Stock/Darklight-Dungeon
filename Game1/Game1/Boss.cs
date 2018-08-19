@@ -49,7 +49,7 @@ namespace Game1
         //constructor
         public Boss(Texture2D projTexture, Random rng, int health, int damage, Rectangle position, Texture2D texture) : base(rng, health, damage, position, texture)
         {
-            moveSpeed = 7;
+            moveSpeed = 10;
             this.rng = rng;
             attacking = false;
             attackBreak = 5.0;

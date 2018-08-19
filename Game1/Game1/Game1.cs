@@ -469,7 +469,7 @@ namespace Game1
                             }
                             else if(levelData[i] == 'B')
                             {
-                                manager.EnemyList.Add(new Boss(rock_small, rng, 10, 7, new Rectangle(temp.X, temp.Y, 50, 50), enemy_1));
+                                manager.EnemyList.Add(new Boss(rock_small, rng, 20, 7, new Rectangle(temp.X, temp.Y, 50, 50), enemy_1));
                             }
                             else
                             {

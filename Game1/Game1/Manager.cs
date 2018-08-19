@@ -56,7 +56,7 @@ namespace Game1
             {
                 if(enemyList[i] != null)
                 {
-                    if(player.Weapon != null)
+                    if(player.Weapon != null && !(enemyList[i] is Boss))
                     {
                         player.Weapon.WeaponAction(enemyList[i], gameTime);
                     }

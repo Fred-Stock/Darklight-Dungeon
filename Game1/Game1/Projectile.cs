@@ -61,19 +61,19 @@ namespace Game1
             Rectangle temp = Position;
             if(direction == Direction.left)
             {
-                temp.X -= 5;
+                temp.X -= 6;
             }
             if(direction == Direction.right)
             {
-                temp.X += 5;
+                temp.X += 6;
             }
             if(direction == Direction.up)
             {
-                temp.Y -= 5;
+                temp.Y -= 6;
             }
             if(direction == Direction.down)
             {
-                temp.Y += 5;
+                temp.Y += 6;
             }
             Position = temp;
         }
