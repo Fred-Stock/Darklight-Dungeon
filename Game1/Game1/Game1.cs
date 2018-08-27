@@ -18,7 +18,8 @@ namespace Game1
         Pause,
         Inventory,
         Shop,
-        EndGame
+        EndGame,
+        Won
     }
 
     
@@ -38,9 +39,7 @@ namespace Game1
         //create objects
         Player player;
         Weapon playerWeapon;
-        Weapon playerWeapon2;
         Armor playerArmor;
-        Armor playerArmor2;
         Manager manager;
         Item testCurrency;
         ShopManager shop;
@@ -49,14 +48,10 @@ namespace Game1
 
         //create stream reader and writer
         StreamReader reader;
-        StreamWriter writer;
-
         //lists sprites for animations
         List<Texture2D> attack1;
         List<Texture2D> attack2;
 
-        //temp fields (will be replaced when other parts of the game are developed
-        bool usedShop; //level loading should handle this in someway
         string shopMessage; //not sure if this will get replaced but would probably be cleaner if there is a way to skip this
 
 
@@ -79,6 +74,7 @@ namespace Game1
         Texture2D gameOver;
         Texture2D inventoryScreen;
         Texture2D shopScreen;
+        Texture2D winScreen;
 
         //objects
         Texture2D door_locked;
@@ -188,10 +184,6 @@ namespace Game1
             rng = new Random();
 
             //Initialize fields
-            usedShop = false;
-              
-
-
             manager = new Manager(player);
 
             Arial12 = Content.Load<SpriteFont>("arial12");
@@ -226,6 +218,7 @@ namespace Game1
             gameOver = Content.Load<Texture2D>("Screens//Game_over");
             inventoryScreen = Content.Load<Texture2D>("Screens//Inventory");
             shopScreen = Content.Load<Texture2D>("Screens//Shop_Screen");
+            winScreen = Content.Load<Texture2D>("Screens//Win_Screen");
 
             //object loading
             door_locked = Content.Load<Texture2D>("Sprites//door_locked");
@@ -330,10 +323,9 @@ namespace Game1
             player = new Player(0, playerWeapon, playerArmor, player_walk_side, player_backward, player_forward, 10, 3, new Rectangle(100, 100, 45, 75), player_forward); //all values in here are just for test as well
             #endregion
             testCurrency = new Item("smallCoin", new Rectangle(200, 500, 20, 20), silver_coin);
-            playerArmor2 = new Armor(ArmorType.test, "testA2", new Rectangle(50, 50, 10, 10), door_locked);//test value
             List<Item> testShopInv = new List<Item>();
             shop = new ShopManager();
-            currentLevel = new Level(LevelIO("BossLevel"), manager);
+            currentLevel = new Level(LevelIO("level1_1"), manager);
             MouseState mouseState = new MouseState();
             MouseState prevMouseState = new MouseState();
 
@@ -523,7 +515,6 @@ namespace Game1
                             }
                             temp.Y = int.Parse(coord) * 120;
                             shop.ShopInv.Clear();
-                            usedShop = false;
                             FillShop(player, shop);
                             manager.ItemList.Add(new Item("store", new Rectangle(temp.X, temp.Y, store.Width, store.Height), store));
                         }
@@ -862,6 +853,12 @@ namespace Game1
                 }
             }
             #endregion
+            #region Won
+            if(gameState == GameState.Won)
+            {
+
+            }
+            #endregion
 
             previous = kbState;
 
@@ -1115,6 +1112,13 @@ namespace Game1
                 spriteBatch.Draw(gameOver, new Vector2(0, 0), Color.White);
             }
             #endregion
+            #region Won
+            if(gameState == GameState.Won)
+            {
+                spriteBatch.Draw(winScreen, new Vector2(0, 0), Color.White);
+            }
+
+            #endregion
 
             spriteBatch.DrawString(Arial12, "X: " + mouseState.X + "\nY: " + mouseState.Y, new Vector2(100, 100), Color.White);
             spriteBatch.End();
@@ -1138,34 +1142,46 @@ namespace Game1
         //level input methods
         public char[,] LevelIO(string levelName)
         {
-            //clear lists before next level is loaded otherwise things may carry over through levels
-            manager.DoorList.Clear();
-            manager.ItemList.Clear();
-            manager.EnemyList.Clear();
-            char[,] levelArray = new char[16, 10];
-            try
+            //check if the player has won the game
+            if(levelName == "won")
             {
-                reader = new StreamReader("../../../../" + levelName + ".txt");
-                string line = reader.ReadLine();
-                while (line != null)
-                {
-                    for (int i = 0; i < 10; i++)
-                    {
-                        for (int j = 0; j < line.Length; j++)
-                        {
-                            levelArray[j, i] = line[j];
-                        }
-                        line = reader.ReadLine();
-                    }
-                } 
+                gameState = GameState.Won;
+                return null;
 
-                reader.Close();
             }
-            catch(Exception e)
+
+            else
             {
-                Console.WriteLine(e.Message);
+                //clear lists before next level is loaded otherwise things may carry over through levels
+                manager.DoorList.Clear();
+                manager.ItemList.Clear();
+                manager.EnemyList.Clear();
+                char[,] levelArray = new char[16, 10];
+                try
+                {
+                    reader = new StreamReader("../../../../" + levelName + ".txt");
+                    string line = reader.ReadLine();
+                    while (line != null)
+                    {
+                        for (int i = 0; i < 10; i++)
+                        {
+                            for (int j = 0; j < line.Length; j++)
+                            {
+                                levelArray[j, i] = line[j];
+                            }
+                            line = reader.ReadLine();
+                        }
+                    } 
+
+                    reader.Close();
+                }
+                catch(Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                }
+                return levelArray;
+
             }
-            return levelArray;
         }
         
         public string LevelInfo(char[,] level)

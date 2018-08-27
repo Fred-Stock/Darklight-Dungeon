@@ -190,7 +190,7 @@ namespace Game1
             //temp solution but if there is a collision then add a 1 to the end of the name and keep doing that until no collision
             else
             {
-                item.Name = item.Name + "1";
+                item.Name = item.Name + " ";
                 PickUpItem(item);
             }
         }
@@ -248,7 +248,7 @@ namespace Game1
             //temp solution but if there is a collision then add a 1 to the end of the name and keep doing that until no collision
             else
             {
-                item.Name = item.Name + "1";
+                item.Name = item.Name + " ";
                 PickUpItem(item);
             }
         }
