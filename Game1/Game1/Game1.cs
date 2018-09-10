@@ -211,7 +211,7 @@ namespace Game1
             // TODO: use this.Content to load your game content here
             #region Loading
             //screen loading
-            mainMenu = Content.Load<Texture2D>("Screens//Main_menu");
+            mainMenu = Content.Load<Texture2D>("Screens//Main_menu2");
             levelScreen = Content.Load<Texture2D>("Screens//Level");
             wall = Content.Load<Texture2D>("Screens//Wall");
             pause = Content.Load<Texture2D>("Screens//Pause");
