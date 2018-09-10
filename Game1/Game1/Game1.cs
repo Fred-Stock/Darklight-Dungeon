@@ -93,6 +93,8 @@ namespace Game1
         Texture2D gold_coin;
         Texture2D store;
         Texture2D health_potion;
+        Texture2D light_Source;
+        Texture2D surronding_light;
 
         //indicators
         Texture2D fire_indicator;
@@ -238,6 +240,8 @@ namespace Game1
             gold_coin = Content.Load<Texture2D>("Sprites//gold_coin");
             store = Content.Load<Texture2D>("Sprites//store_stand");
             health_potion = Content.Load<Texture2D>("Sprites//health_potion");
+            light_Source = Content.Load<Texture2D>("Sprites//light_source");
+            surronding_light = Content.Load<Texture2D>("Sprites//light_surrounding");
 
             //indicator loading
             fire_indicator = Content.Load<Texture2D>("Sprites//fire_indicator");
