@@ -56,6 +56,7 @@
     <Compile Include="HealthPotion.cs" />
     <Compile Include="Item.cs" />
     <Compile Include="Level.cs" />
+    <Compile Include="LightSource.cs" />
     <Compile Include="Manager.cs" />
     <Compile Include="Obstacle.cs" />
     <Compile Include="Player.cs" />

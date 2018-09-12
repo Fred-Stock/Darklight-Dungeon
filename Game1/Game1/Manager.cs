@@ -16,6 +16,7 @@ namespace Game1
         private List<Enemies> enemyList = new List<Enemies>();
         private List<Enemies> affectedEnemies = new List<Enemies>();
         private List<Item> itemList = new List<Item>();
+        private List<LightSource> lightList = new List<LightSource>();
         
         private List<Door> doorList = new List<Door>();
         //properties
@@ -37,7 +38,11 @@ namespace Game1
             get { return affectedEnemies; }
             set { affectedEnemies = value; }
         }
-
+        public List<LightSource> LightList
+        {
+            get { return lightList; }
+            set { lightList = value; }
+        }
 
 
         //global entities

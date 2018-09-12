@@ -474,6 +474,30 @@ namespace Game1
 
                         }
 
+                        //spawn light sources
+                        if (levelData[i].Equals('L'))
+                        {
+
+                            k = i + 1;
+
+                            string coord = null;
+                            while (levelData[k] != ',')
+                            {
+                                coord += levelData[k];
+                                k++;
+                            }
+                            temp.X = int.Parse(coord) * 120;
+                            k++;
+                            coord = null;
+                            while (levelData[k] != ',')
+                            {
+                                coord += levelData[k];
+                                k++;
+                            }
+                            temp.Y = int.Parse(coord) * 120;
+                            manager.LightList.Add(new LightSource(surronding_light, new Rectangle(temp.X, temp.Y, 100, 100), light_Source));
+                        }
+
                         //spawn doors
                         if (levelData[i].Equals('D'))
                         {
@@ -999,6 +1023,13 @@ namespace Game1
                             }
                         }
                     }
+                }
+                
+                //draw all lightsources
+                for(int i = 0; i < manager.LightList.Count; i++)
+                {
+                    spriteBatch.Draw(manager.LightList[i].LightEffect, manager.LightList[i].LightEffectPos, Color.White * manager.LightList[i].Flicker(gameTime));
+                    spriteBatch.Draw(manager.LightList[i].Texture, manager.LightList[i].Position, Color.White);
                 }
 
                 //draw attacking sprites
