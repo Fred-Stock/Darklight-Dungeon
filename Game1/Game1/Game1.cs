@@ -1165,7 +1165,7 @@ namespace Game1
 
             #endregion
 
-            spriteBatch.DrawString(Arial12, "X: " + mouseState.X + "\nY: " + mouseState.Y, new Vector2(100, 100), Color.White);
+
             spriteBatch.End();
             prevMouseState = mouseState;
             base.Draw(gameTime);
