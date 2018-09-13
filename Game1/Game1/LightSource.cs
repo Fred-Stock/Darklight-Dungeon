@@ -33,20 +33,20 @@ namespace Game1
         {
             this.lightEffect = lightEffect;
             opacityTimer = 0;
-            opacityCycleTime = 10;
+            opacityCycleTime = 5;
 
             lightEffectPos = position;
-            lightEffectPos.Width = lightEffect.Width;
-            lightEffectPos.Height = lightEffect.Height;
-            lightEffectPos.X -= lightEffectPos.Width / 3;
-            lightEffectPos.Y -= lightEffectPos.Height / 3;
+            lightEffectPos.Width = lightEffect.Width * 2;
+            lightEffectPos.Height = lightEffect.Height * 2;
+            lightEffectPos.X -= (lightEffectPos.Width / 2) - 50;
+            lightEffectPos.Y -= (lightEffectPos.Height / 3) + 50;
         }
 
 
         //methods
         
         //this method outputs a double that will cycle through a range of values to create a flickering effect
-        public float Flicker(GameTime gameTime)
+        public Color Flicker(GameTime gameTime)
         {
 
             opacityTimer += gameTime.ElapsedGameTime.TotalSeconds;
@@ -55,7 +55,9 @@ namespace Game1
                 opacityTimer -= opacityCycleTime;
             }
 
-            return (float)Math.Abs(Math.Sin(opacityTimer * (Math.PI/5)));
+            float lightFading = (float)Math.Abs(.1*Math.Sin(opacityTimer * (Math.PI / 5)));
+
+            return Color.White * (float)(lightFading);
         }
     }
 }

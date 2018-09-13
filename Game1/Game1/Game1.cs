@@ -76,6 +76,9 @@ namespace Game1
         Texture2D shopScreen;
         Texture2D winScreen;
 
+        //layers
+        Texture2D darkLayer;
+
         //objects
         Texture2D door_locked;
         Texture2D door_open;
@@ -221,6 +224,9 @@ namespace Game1
             inventoryScreen = Content.Load<Texture2D>("Screens//Inventory");
             shopScreen = Content.Load<Texture2D>("Screens//Shop_Screen");
             winScreen = Content.Load<Texture2D>("Screens//Win_Screen");
+
+            //layer loading
+            darkLayer = Content.Load<Texture2D>("Sprites//blank_rectangle");
 
             //object loading
             door_locked = Content.Load<Texture2D>("Sprites//door_locked");
@@ -1025,12 +1031,7 @@ namespace Game1
                     }
                 }
                 
-                //draw all lightsources
-                for(int i = 0; i < manager.LightList.Count; i++)
-                {
-                    spriteBatch.Draw(manager.LightList[i].LightEffect, manager.LightList[i].LightEffectPos, Color.White * manager.LightList[i].Flicker(gameTime));
-                    spriteBatch.Draw(manager.LightList[i].Texture, manager.LightList[i].Position, Color.White);
-                }
+
 
                 //draw attacking sprites
                 Color atkColor = Color.White;
@@ -1095,6 +1096,15 @@ namespace Game1
                     {
                         spriteBatch.Draw(healthbar_chunk, new Rectangle(55 + (i * 13), 55, 23, 50), Color.Black);
                     }
+                }
+
+                //draw dark layer over
+                spriteBatch.Draw(darkLayer, new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.Black * .4f);
+                //draw all lightsources
+                for (int i = 0; i < manager.LightList.Count; i++)
+                {
+                    spriteBatch.Draw(manager.LightList[i].LightEffect, manager.LightList[i].LightEffectPos, manager.LightList[i].Flicker(gameTime));
+                    spriteBatch.Draw(manager.LightList[i].Texture, manager.LightList[i].Position, Color.White);
                 }
             }
             #endregion
@@ -1191,6 +1201,7 @@ namespace Game1
                 manager.DoorList.Clear();
                 manager.ItemList.Clear();
                 manager.EnemyList.Clear();
+                manager.LightList.Clear();
                 char[,] levelArray = new char[16, 10];
                 try
                 {
