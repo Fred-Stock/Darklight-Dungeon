@@ -42,6 +42,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Armor.cs" />
+    <Compile Include="AStar.cs" />
+    <Compile Include="BinarySearchTree.cs" />
     <Compile Include="Boss.cs" />
     <Compile Include="Centipede.cs" />
     <Compile Include="Characters.cs" />
@@ -53,13 +55,16 @@
     <Compile Include="Game1.cs" />
     <Compile Include="GameKey.cs" />
     <Compile Include="GameObject.cs" />
+    <Compile Include="Graph.cs" />
     <Compile Include="HealthPotion.cs" />
     <Compile Include="Item.cs" />
     <Compile Include="Level.cs" />
     <Compile Include="LightSource.cs" />
     <Compile Include="Manager.cs" />
+    <Compile Include="Node.cs" />
     <Compile Include="Obstacle.cs" />
     <Compile Include="Player.cs" />
+    <Compile Include="PriorityQueue.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Projectile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -69,6 +74,7 @@
     <Compile Include="ShopManager.cs" />
     <Compile Include="SpeedArmor.cs" />
     <Compile Include="ThornArmor.cs" />
+    <Compile Include="TreeNode.cs" />
     <Compile Include="Wall.cs" />
     <Compile Include="Weapon.cs" />
   </ItemGroup>

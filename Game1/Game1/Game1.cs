@@ -625,7 +625,7 @@ namespace Game1
                         }
                         else
                         {
-                            manager.EnemyList[i].Move(player);
+                            manager.EnemyList[i].Move(player, gameTime);
                         }
                         if(manager.EnemyList[i] is Boss temp)
                         {

@@ -16,9 +16,12 @@ namespace Game1
         private int initialX;
         private int initialY;
         private int direction;
+        private double moveTimer;
+        private double moveInterval;
         private bool hit;
         protected bool affected;
         protected Rectangle prevPos2;
+
 
         protected double hitDuration;
 
@@ -51,9 +54,11 @@ namespace Game1
             moveSpeed = 3;
             direction = rng.Next(0, 4);
             hitDuration = 0;
+            moveInterval = 2;
+            moveTimer = 0;
         }
 
-        public override void Move(Characters player)
+        public override void Move(Characters player, GameTime gameTime)
         {
             prevPos = Position;
             int xDist = player.Position.X - Position.X;
@@ -72,39 +77,75 @@ namespace Game1
                 yMov = (int)(moveSpeed * yRatio);
             }
 
-            
             Rectangle temp = Position;
-            temp.X += xMov;
-            temp.Y += yMov;
+            if(tDist < 500)
+            {
+                temp.X += xMov;
+                temp.Y += yMov;
+                Position = temp;
+
+                if (prevPos2.X == Position.X && xMov != 0)
+                {
+                    if(yDist < 0)
+                    {
+                        temp.Y -= moveSpeed;
+                    }
+                    else
+                    {
+                        temp.Y += moveSpeed;
+                    }
+
+                    Position = temp;
+                }
+                if (prevPos2.Y == Position.Y && (yMov != 0))
+                {
+                    if(xDist <= 0)
+                    {
+                        temp.X -= moveSpeed;
+
+                    }
+                    else
+                    {
+                        temp.X += moveSpeed;
+                    }
+
+                }
+
+            }
+            
+            if(tDist >= 500)
+            {
+
+                moveTimer += gameTime.ElapsedGameTime.TotalSeconds;
+                if (moveTimer < moveInterval)
+                {
+
+                    if (direction == 0)
+                    {
+                        temp.Y -= moveSpeed;
+                    }
+                    else if (direction == 1)
+                    {
+                        temp.X += moveSpeed;
+                    }
+                    else if (direction == 2)
+                    {
+                        temp.Y += moveSpeed;
+                    }
+                    else
+                    {
+                        temp.X -= moveSpeed;
+                    }
+                }
+                else
+                {
+                    moveTimer -= moveInterval;
+                    direction = rng.Next(0, 4);
+                }
+                
+            }
+            
             Position = temp;
-
-            if (prevPos2.X == Position.X && xMov != 0)
-            {
-                if(yDist < 0)
-                {
-                    temp.Y -= moveSpeed;
-                }
-                else
-                {
-                    temp.Y += moveSpeed;
-                }
-
-                Position = temp;
-            }
-            if (prevPos2.Y == Position.Y && (yMov != 0))
-            {
-                if(xDist <= 0)
-                {
-                    temp.X -= moveSpeed;
-
-                }
-                else
-                {
-                    temp.X += moveSpeed;
-                }
-
-                Position = temp;
-            }
             prevPos2 = Position;
 
         }
