@@ -1,10 +1,10 @@
 ﻿level1_2
 ----------------
--  D           -
--      L    E  -
--              -
--           E  -
--    R         -
--   PR    L    -
--              -
+-  D R         -
+-  R R LRRRRE  -
+-  R    R  RRR -
+-  R RRRR    R -
+-  R         R -
+-  RRRRRR L    -
+-    P         -
 ----------------

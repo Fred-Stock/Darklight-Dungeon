@@ -37,12 +37,12 @@ namespace Game1
             set { rightBranch = value; }
         }
 
-        public int Data //only data that really matters from the node is the DistF property
+        public int NodeData //only data that really matters from the node is the DistF property
         {
             get { return data.DistF; }
         }
 
-        public Node DataNode
+        public Node Data
         {
             get { return data; }
         }
@@ -51,7 +51,7 @@ namespace Game1
         //constructor
         public TreeNode(Node data)
         {
-            this.data = data;
+           this.data = data;
         }
 
         

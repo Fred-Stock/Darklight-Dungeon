@@ -25,6 +25,21 @@ namespace Game1
             get { return nodeQueue; }
         }
 
+        public bool Empty
+        {
+            get
+            {
+                if(nodeQueue.Count == 0)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
+
         //constructor
         public PriorityQueue()
         {
@@ -43,12 +58,31 @@ namespace Game1
             Node smallNode = nodeQueue[0];
             for(int i = 0; i < NodeQueue.Count; i++)
             {
-                if(smallNode.DistT > nodeQueue[i].DistT)
+                if(smallNode.DistT >= nodeQueue[i].DistT)
                 {
                     smallNode = nodeQueue[i];
                 }
             }
+
             return smallNode;
         }
+
+        public bool Contains(Node nodeToCheck)
+        {
+            for(int i = 0; i < NodeQueue.Count; i++)
+            {
+                if(nodeQueue[i] == nodeToCheck)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public void Remove(Node targetNode)
+        {
+            nodeQueue.Remove(targetNode);
+        }
+        
     }
 }

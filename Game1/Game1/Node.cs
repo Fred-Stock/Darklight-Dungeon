@@ -35,10 +35,17 @@ namespace Game1
         public int X
         {
             get { return x; }
+            set { x = value; }
         }
         public int Y
         {
             get { return y; }
+            set { y = value; }
+        }
+        public Node Parent
+        {
+            get { return parent; }
+            set { parent = value; }
         }
         //constructor
         public Node(int x, int y)

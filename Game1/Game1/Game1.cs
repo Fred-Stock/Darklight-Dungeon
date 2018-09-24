@@ -45,6 +45,7 @@ namespace Game1
         ShopManager shop;
         Level currentLevel;
         Rectangle temp;
+        
 
         //create stream reader and writer
         StreamReader reader;
@@ -463,19 +464,19 @@ namespace Game1
                             temp.Y = int.Parse(coord) * 120;
                             if(levelData[i] == 'F')
                             {
-                                manager.EnemyList.Add(new Fly(rng, 20, 4, new Rectangle(temp.X, temp.Y, 50, 50), enemy_1));
+                                manager.EnemyList.Add(new Fly(currentLevel, rng, 20, 4, new Rectangle(temp.X, temp.Y, 50, 50), enemy_1));
                             }
                             else if(levelData[i] == 'C')
                             {
-                                manager.EnemyList.Add(new Centipede(player, rng, 30, 8, new Rectangle(temp.X, temp.Y, 200, 60), enemy_2, enemy_2_90));
+                                manager.EnemyList.Add(new Centipede(currentLevel, player, rng, 30, 8, new Rectangle(temp.X, temp.Y, 200, 60), enemy_2, enemy_2_90));
                             }
                             else if(levelData[i] == 'B')
                             {
-                                manager.EnemyList.Add(new Boss(rock_small, rng, 20, 7, new Rectangle(temp.X, temp.Y, 50, 50), enemy_1));
+                                manager.EnemyList.Add(new Boss(currentLevel, rock_small, rng, 20, 7, new Rectangle(temp.X, temp.Y, 50, 50), enemy_1));
                             }
                             else
                             {
-                                manager.EnemyList.Add(new Enemies(rng, 40, 6, new Rectangle(temp.X, temp.Y, 100, 100), enemy_1));
+                                manager.EnemyList.Add(new Enemies(currentLevel, rng, 40, 6, new Rectangle(temp.X, temp.Y, 100, 100), enemy_1));
                             }
 
                         }

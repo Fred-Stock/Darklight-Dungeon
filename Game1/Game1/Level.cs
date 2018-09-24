@@ -13,6 +13,7 @@ namespace Game1
         private bool won;
         private List<Enemies> enemyList;
         private List<Obstacle> wallList;
+        private Graph nodeGraph;
 
         //properties
         public char[,] LevelArray
@@ -27,6 +28,11 @@ namespace Game1
         {
             get { return won; }
         }
+        public Graph NodeGraph
+        {
+            get { return nodeGraph; }
+        }
+
 
         //constructor
         public Level(char[,] levelArray, Manager manager)
@@ -35,6 +41,7 @@ namespace Game1
             enemyList = manager.EnemyList;
             this.levelArray = levelArray;
             won = false;
+            nodeGraph = new Graph(levelArray);
         }
         //methods
         public bool WinCheck()

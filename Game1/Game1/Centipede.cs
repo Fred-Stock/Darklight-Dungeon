@@ -57,7 +57,7 @@ namespace Game1
 
 
         //constructor
-        public Centipede(Player player, Random rng, int health, int damage, Rectangle position, Texture2D texture, Texture2D rotTexture) : base(rng, health, damage, position, texture)
+        public Centipede(Level level, Player player, Random rng, int health, int damage, Rectangle position, Texture2D texture, Texture2D rotTexture) : base(level, rng, health, damage, position, texture)
         {
             affected = false;
             moveSpeed = 2;

@@ -18,8 +18,8 @@ namespace Game1
         //properties
 
         //constructor
-        public Fly(Random rng, int health, int damage, Rectangle position, Texture2D texture) :
-            base(rng, health, damage, position, texture)
+        public Fly(Level level, Random rng, int health, int damage, Rectangle position, Texture2D texture) :
+            base(level, rng, health, damage, position, texture)
         {   
             affected = false;
             moveSpeed = 3;

@@ -12,7 +12,7 @@ namespace Game1
         private List<TreeNode> tree;
         private TreeNode parent;
         private TreeNode currentNode;
-
+        private bool contained;
         //properties
 
         //constructor
@@ -22,54 +22,115 @@ namespace Game1
         }
 
         //methods
-        public void Add(TreeNode node)
+        public void Add(Node node)
         {
-            if(tree.Count == 0)
+            Add(node, parent);
+           
+        }
+
+        private void Add(Node node, TreeNode current)
+        {
+            currentNode = current;
+            if (tree.Count == 0)
             {
-                parent = node;
+                TreeNode addedNode = new TreeNode(node);
+                parent = addedNode;
+                tree.Add(addedNode);
 
             }
             else
             {
-                currentNode = parent;
-                if(currentNode.Data < node.Data)
-                {
-                    if(currentNode.LeftBranch == null)
-                    {
-                        currentNode.LeftBranch = node;
-                    }
-                    else
-                    {
-                        currentNode = currentNode.LeftBranch;
-                        Add(node);
-                    }
-                }
-                else
+
+                if (currentNode.NodeData < node.DistF)
                 {
                     if (currentNode.RightBranch == null)
                     {
-                        currentNode.RightBranch = node;
+                        TreeNode addedNode = new TreeNode(node);
+                        currentNode.RightBranch = addedNode;
+                        tree.Add(addedNode);
+                        return;
                     }
                     else
                     {
                         currentNode = currentNode.RightBranch;
-                        Add(node);
+                        Add(node, currentNode);
+                    }
+                }
+                else
+                {
+                    if (currentNode.LeftBranch == null)
+                    {
+                        TreeNode addedNode = new TreeNode(node);
+                        currentNode.LeftBranch = addedNode;
+                        tree.Add(addedNode);
+                        return;
+                    }
+                    else
+                    {
+                        currentNode = currentNode.LeftBranch;
+                        Add(node, currentNode);
                     }
                 }
             }
         }
 
-        public LinkedList<Node> ShortestPath()
+        //public LinkedList<Node> ShortestPath()
+        //{
+        //    LinkedList<Node> path = new LinkedList<Node>();
+        //    currentNode = parent;
+        //    while(currentNode != null)
+        //    {
+        //        path.AddLast(currentNode.Data);
+        //        currentNode = currentNode.LeftBranch;
+        //    }
+        //    return path;
+        //}
+
+        //method to see if a node is contained with the tree
+        public bool Contains(Node nodeToCheck)
         {
-            LinkedList<Node> path = new LinkedList<Node>();
-            currentNode = parent;
-            while(currentNode != null)
-            {
-                path.AddLast(currentNode.DataNode);
-                currentNode = currentNode.LeftBranch;
-            }
-            return path;
+            contained = false;
+            return Contains(nodeToCheck, parent);
+            
+            
         }
 
+        private bool Contains(Node nodeToCheck, TreeNode current)
+        {
+            currentNode = current;
+            
+            if (currentNode.Data == nodeToCheck)
+            {
+                contained = true;
+
+            }
+            else if (nodeToCheck.DistF < currentNode.NodeData)
+            {
+                if (currentNode.LeftBranch != null)
+                {
+                    currentNode = currentNode.LeftBranch;
+                    Contains(nodeToCheck, currentNode);
+
+                }
+                else
+                {
+                    contained = false;
+                }
+            }
+            else
+            {
+                if (currentNode.RightBranch != null)
+                {
+                    currentNode = currentNode.RightBranch;
+                    Contains(nodeToCheck, currentNode);
+
+                }
+                else
+                {
+                    contained = false;
+                }
+            }
+            return contained;
+        }
     }
 }
