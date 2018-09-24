@@ -30,7 +30,7 @@ namespace Game1
         /// the fly enemy will fly towards the player
         /// </summary>
         /// <param name="player"></param>
-        public override void Move(Characters player)
+        public override void Move(Characters player, GameTime gameTime)
         {
             PrevPos = Position;
 

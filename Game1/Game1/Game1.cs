@@ -614,11 +614,8 @@ namespace Game1
                     {
                         if (manager.EnemyList[i].Position.Intersects(player.Position) && !(manager.EnemyList[i] is Boss))
                         {
-
                             manager.EnemyList[i].TakeDamage(player, manager.EnemyList[i]);
-                            player.Knockback(manager.EnemyList[i]);
-                            
-                            
+                            player.Knockback(manager.EnemyList[i]);                            
                         }                      
                         if(manager.EnemyList[i] is Centipede || manager.EnemyList[i] is Boss)
                         {

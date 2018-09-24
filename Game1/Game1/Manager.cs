@@ -51,7 +51,7 @@ namespace Game1
         //constructor
         public Manager(Player player)
         {
-            this.player = player; //send in the player to alter it
+            this.player = player;
         }
 
         //methods

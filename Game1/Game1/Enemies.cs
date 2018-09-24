@@ -27,6 +27,7 @@ namespace Game1
         private LinkedList<Node> path;
         private Node next;
         private int step;
+        private Graph levelGraph;
 
         protected double hitDuration;
 
@@ -51,10 +52,12 @@ namespace Game1
         //constructor
         public Enemies(Level level, Random rng, int health, int damage, Rectangle position, Texture2D texture) : base(health, damage, position, texture)
         {
+            
             this.level = level;
             currentNode = new Node((position.X / 120), (position.Y / 120) + 1);
-            level.NodeGraph.GenNodes();
-            astar = new AStar(currentNode, level.NodeGraph.PlayerNode, level.NodeGraph);
+            levelGraph = level.NodeGraph;
+            levelGraph.GenNodes();
+            astar = new AStar(currentNode, level.NodeGraph.PlayerNode, levelGraph);
             hit = false;
             affected = false;
             this.rng = rng;
@@ -66,6 +69,7 @@ namespace Game1
             moveInterval = 2;
             moveTimer = 0;
             step = 0;
+            //path = new LinkedList<Node>();
             path = astar.FindPath();
         }
 
@@ -77,10 +81,9 @@ namespace Game1
 
             //path = astar.FindPath();
 
-            if (step <= path.Count - 1)
+            if (step < path.Count)
             {
                 next = path.ElementAt(step);
-
             }
 
             if (((next.X)) > currentNode.X)
@@ -101,8 +104,8 @@ namespace Game1
                 {
                     step++;
                     currentNode.X = Position.X / 120;
-                    //path = astar.FindPath(player, this);
                     //path.Clear();
+                    //path = astar.FindPath(player, this);
                 }
             }
             if (((next.Y - 1)) > currentNode.Y)
@@ -116,7 +119,7 @@ namespace Game1
                     //path = astar.FindPath(player, this);
                 }
             }
-            else if (((next.Y - 1)) < currentNode.Y)
+            else if (((next.Y - 1)) <= currentNode.Y)
             {
                 temp.Y -= moveSpeed;
                 if (temp.Y <= ((next.Y - 1) * 120))

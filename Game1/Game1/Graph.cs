@@ -49,7 +49,9 @@ namespace Game1
         //methods
         public void GenNodes()
         {
-            for(int i = 0; i < levelMatrix.GetLength(1) - 1; i++)
+            nodeMatrix = new Node[16, 10];
+            LevelNodes.Clear();
+            for (int i = 0; i < levelMatrix.GetLength(1) - 1; i++)
             {
                 for(int j = 0; j < levelMatrix.GetLength(0); j++)
                 {
