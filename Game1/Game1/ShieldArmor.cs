@@ -23,7 +23,7 @@ namespace Game1
         
 
         //constructor
-        public ShieldArmor(ArmorType armor, string name, Rectangle position, Texture2D texture) : base(armor, name, position, texture)
+        public ShieldArmor(string name, Rectangle position, Texture2D texture) : base(name, position, texture)
         {
             popped = false;
             defense = 0;
@@ -31,6 +31,9 @@ namespace Game1
         }
 
         //methods
+        /// <summary>
+        /// the first three hits when the player is wearing this armor have completely negated damage
+        /// </summary>
         public override void ArmorAction()
         {
             if(hitNum < 3)

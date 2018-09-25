@@ -62,6 +62,11 @@ namespace Game1
         //methods
         public override void Move(Characters player, GameTime gameTime)
         {
+             /*
+              * this enemy will stay a constant distance from the player until a timer is up
+              * it then charges the player and once the player either hits or it hits the player
+              * when it hits the player or the player hits it it retreats to the same distance away from the player
+              */
             prevPos = Position;
             int xDist = player.Position.X - Position.X;
             int yDist = player.Position.Y - Position.Y;
@@ -74,10 +79,10 @@ namespace Game1
                 prevPlayerPos = player.Position;
             }
 
-            if (!attacking && !stunned)
+            if (!attacking && !stunned)//if not attacking and not stunned/retreating
             {
                 Rectangle temp = Position;
-                if(tDist < 500)
+                if(tDist < 500)//when its distance from the player gets to closed move away from the palyer
                 {
                     if(moveSpeed > 7)
                     {
@@ -108,7 +113,7 @@ namespace Game1
             {
                 timeStunned += gameTime.ElapsedGameTime.TotalSeconds;
 
-                if(timeStunned >= stunDuration)
+                if(timeStunned >= stunDuration)//reset stunned and attacking properties after a set amount of time
                 {
                     stunned = false;
                     attacking = false;
@@ -119,6 +124,7 @@ namespace Game1
             prevPos2 = Position;
             prevPlayerPos = player.Position;
         }
+
 
         public void Attack(Player player, GameTime gameTime)
         {
@@ -132,6 +138,7 @@ namespace Game1
             int xMov = (int)(moveSpeed * xRatio);
             int yMov = (int)(moveSpeed * yRatio);
 
+            //if not currently charging or stunned shoot projectiles towards the player
             if (!attacking && !stunned)
             {
                 attackTimer += gameTime.ElapsedGameTime.TotalSeconds;
@@ -174,7 +181,7 @@ namespace Game1
                 
             }
             
-
+            //if charging move fast towards the player
             else if(attacking && !stunned)
             {
                 Rectangle temp = Position;
@@ -194,7 +201,7 @@ namespace Game1
                 Position = temp;
             }
 
-
+            //projectile list management
             for(int i = 0; i < projList.Count; i++)
             {
                 projList[i].Move(gameTime);

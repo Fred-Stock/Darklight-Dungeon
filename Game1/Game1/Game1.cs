@@ -41,7 +41,6 @@ namespace Game1
         Weapon playerWeapon;
         Armor playerArmor;
         Manager manager;
-        Item testCurrency;
         ShopManager shop;
         Level currentLevel;
         Rectangle temp;
@@ -194,8 +193,11 @@ namespace Game1
 
             Arial12 = Content.Load<SpriteFont>("arial12");
 
+            //attack animation sprite list
             attack1 = new List<Texture2D>();
             attack2 = new List<Texture2D>();
+
+            //level isnt currently loaded
             levelLoaded = false;
             gameState = GameState.MainMenu;
 
@@ -332,13 +334,13 @@ namespace Game1
             playerWeapon = new Weapon(WeaponType.basic, "weapon", new Rectangle(50, 250, 40, 40), base_weapon); //all values in here are just for test
             playerArmor = null; // new Armor(ArmorType.test, "armor", new Rectangle(50, 50, 10, 10), base_armor); //all values in here are just for test too
             player = new Player(0, playerWeapon, playerArmor, player_walk_side, player_backward, player_forward, 10, 3, new Rectangle(100, 100, 45, 75), player_forward); //all values in here are just for test as well
-            #endregion
-            testCurrency = new Item("smallCoin", new Rectangle(200, 500, 20, 20), silver_coin);
-            List<Item> testShopInv = new List<Item>();
+
+            //initialize the shop and current level objects 
             shop = new ShopManager();
-            currentLevel = new Level(LevelIO("level1_1"), manager);
+            currentLevel = new Level(LevelIO("BossLevel"), manager);
             MouseState mouseState = new MouseState();
             MouseState prevMouseState = new MouseState();
+            #endregion
 
         }
 
@@ -654,6 +656,7 @@ namespace Game1
                     {
                         if(manager.EnemyList[i] != null)
                         {
+                            //if the player's attack connects with an enemy add them to a list of hit enemies
                             if(player.RightAttack && new Rectangle(player.Position.X + player.Position.Width, player.Position.Y, 100, 100).Intersects(manager.EnemyList[i].Position))
                             {
                                 hitEnemies.Add(manager.EnemyList[i]);
@@ -671,12 +674,14 @@ namespace Game1
                                 //}
                             }
                         }
+                        //flag hit enemies to be affected by the player's weapon if it has an effect
                         for(int k = 0; k < hitEnemies.Count; k++)
                         {
                             hitEnemies[k].Affected = true;
                         }
                     }
                 }
+                //apply weapon affects to enemies
                 manager.WeaponAffects(player, gameTime);
 
                 //deal damage to enemies, do knockback, and determine attack animation
@@ -700,12 +705,14 @@ namespace Game1
 
                     player.Attack(player, hitEnemies, attack1, gameTime);
                 }
+                //check if any enemies where killed
                 for(int i = 0; i < manager.EnemyList.Count; i++)
                 {
                     if (manager.EnemyList[i] != null)
                     {
                         if (manager.EnemyList[i].Health <= 0)
                         {
+                            //random currency drop
                             if (rng.Next(4) == 1)
                             {
                                 manager.ItemList.Add(new Item("largeCoin", new Rectangle(manager.EnemyList[i].Position.X, manager.EnemyList[i].Position.Y,
@@ -716,6 +723,7 @@ namespace Game1
                                 manager.ItemList.Add(new Item("smallCoin", new Rectangle(manager.EnemyList[i].Position.X, manager.EnemyList[i].Position.Y,
                                     50, 50), silver_coin));
                             }
+                            //remove from manager enemy list and insert a null placeholder
                             manager.EnemyList.RemoveAt(i);
                             manager.EnemyList.Insert(i, null);
                         }
@@ -748,6 +756,7 @@ namespace Game1
                         }
                     }
                 }
+                //if player used a health potion display an effect above their character
                 if (player.Healed)
                 {
                     player.HealIndiDuration += gameTime.ElapsedGameTime.TotalSeconds;
@@ -772,17 +781,18 @@ namespace Game1
             }
             #endregion
             #region Pause
+            //if the player pauses the game either continue, go to the main menu, or quit based on what they click
             if (gameState == GameState.Pause)
             {
-                if (ButtonClicked(735, 595, 1185, 685))
+                if (ButtonClicked(735, 595, 1185, 685))//resume
                 {
                     gameState = GameState.Game;
                 }
-                if (ButtonClicked(800, 720, 1120, 805))
+                if (ButtonClicked(800, 720, 1120, 805))//main menu
                 {
                     gameState = GameState.MainMenu;
                 }
-                if (ButtonClicked(830, 840, 1090, 925))
+                if (ButtonClicked(830, 840, 1090, 925))//quit
                 {
                     Exit();
                 }
@@ -794,8 +804,10 @@ namespace Game1
 
                 for(int i = 0; i < player.InvList.Count; i++)
                 {
+                    //if the player has defeated all enemies on the level they can swap which piece of armor and what weapon they have equiped
                     if (currentLevel.WinCheck())
                     {
+                        //swap whatever the current piece of armor or weapon the player has equipped if they click on another
                         if(ButtonClicked(555 + (i / 3 * 170), 330 + i % 3 * 205,
                             690 + (i / 3 * 170), 465 + i % 3 * 205))
                         {
@@ -809,6 +821,7 @@ namespace Game1
                             }
                         }
                     }
+                    //if the player clicks on a health potion use it
                     if (ButtonClicked(555 + (i / 3 * 170), 330 + i % 3 * 205,
                             690 + (i / 3 * 170), 465 + i % 3 * 205))
                     {
@@ -828,8 +841,7 @@ namespace Game1
             #region Shop
             if (gameState == GameState.Shop)
             {
-                //if player trys to buy something that doesn't exist it will crash.
-                //currently thinking that the player will only be able to buy one item at a shop and therefore no need to fix this
+                //buy what ever the player is hovering over if the player has enough currency
                 for (int i = 0; i < shop.ShopInv.Count; i++)
                 {
                     if (ButtonClicked(555 + (i % 5) * 170, 320 + (320 * (i / 5)), 700 + (i % 5) * 170, 465 + (320 * (i / 5))))
@@ -911,7 +923,6 @@ namespace Game1
                 if (new Rectangle(210, 530, 405, 140).Contains(mouseState.Position))
                 {
                     spriteBatch.Draw(play_hover, new Rectangle(240, 550, play_hover.Width, play_hover.Height), Color.White);
-
                 }
                 if (new Rectangle(210, 670, 380, 230).Contains(mouseState.Position))
                 {
@@ -1089,7 +1100,7 @@ namespace Game1
                 }
 
                 //draw dark layer over
-                spriteBatch.Draw(darkLayer, new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.Black * .4f);
+                spriteBatch.Draw(darkLayer, new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.Black * .3f);
                 //draw all lightsources
                 for (int i = 0; i < manager.LightList.Count; i++)
                 {
@@ -1109,6 +1120,7 @@ namespace Game1
             if (gameState == GameState.Inventory)
             {
                 spriteBatch.Draw(inventoryScreen, new Vector2(0, 0), Color.White);
+                //draw each sprite and its corresponding name in the correct box in the inventory screen
                 foreach (string item in player.InvList)
                 {
                     spriteBatch.Draw(player.Inventory[item].Texture, new Rectangle(555 + (player.InvList.IndexOf(item)/3 * 170), 
@@ -1126,11 +1138,12 @@ namespace Game1
                 spriteBatch.Draw(shopScreen, new Vector2(0, 0), Color.White);
                 for(int i = 0; i < shop.ShopInv.Count; i++)
                 {
+                    //highlight currently selected item in the shop 
                     if (new Rectangle(555 + (i % 5) * 170, 320 + (320 * (i / 5)), 145, 145).Contains(mouseState.Position))
                     {
                         spriteBatch.Draw(shop_hover, new Vector2(504 + (i % 5) * 167, 289 + (320 * (i / 5))), Color.White);
                     }
-
+                    //draw sprites and their corresponding text in the correct box in the shop
                     spriteBatch.Draw(shop.ShopInv[i].Texture, new Rectangle(570 + (i % 5) * 170, 345 + 320 * (i / 5), 100, 100), Color.White);
                     spriteBatch.DrawString(Arial12, shop.ShopInv[i].Name, new Vector2(560 + (i % 5) * 170, 490 + 315 * (i / 5)), Color.Black);
                     spriteBatch.DrawString(Arial12, shop.ShopInv[i].Cost.ToString(), new Vector2(570 + (i % 5) * 170, 535 + 315 * (i / 5)), Color.Black);
@@ -1162,6 +1175,11 @@ namespace Game1
         }
 
         //helper methods
+        /// <summary>
+        /// returns true only on the inital key is pressed
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
         public bool SingleButtonPress(Keys key)
         {
             if (kbState.IsKeyDown(key) && !previous.IsKeyDown(key))
@@ -1173,7 +1191,11 @@ namespace Game1
                 return false;
             }
         }
-
+        
+        /// <summary>
+        /// returns true only on the initial frame the left mousebutton is pressed
+        /// </summary>
+        /// <returns></returns>
         public bool SingleMouseClick()
         {
             if(mouseState.LeftButton == ButtonState.Pressed && prevMouseState.LeftButton == ButtonState.Released)
@@ -1185,8 +1207,145 @@ namespace Game1
                 return false;
             }
         }
-        
+
+        /// <summary>
+        /// method for checking if the mouse clicks in a certain region
+        /// used for menu buttons
+        /// </summary>
+        /// <param name="tlx">top left corner y coordinate</param>
+        /// <param name="tly">top left corner x coordinate</param>
+        /// <param name="brx">bottom right corner y coordinate</param>
+        /// <param name="bry">bottom right corner x coordinate</param>
+        /// <returns></returns>
+        public bool ButtonClicked(int tlx, int tly, int brx, int bry)
+        {
+            if ((mouseState.X >= tlx && mouseState.Y >= tly) && (mouseState.X < brx && mouseState.Y < bry) && SingleMouseClick())
+            {
+                prevMouseState = mouseState; //this line ensures that if the button click changes a gamestate that the preMouseState is updated 
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
+        }
+
+        /// <summary>
+        /// randomly fills the shop
+        /// always spawns one piece of armor and one weapon
+        /// if the player doesnt have the base armor or weapon it will spawn one of those
+        /// else it adds a random type of armor or weapon
+        /// spawns one additional piece of armor or weapon
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="store"></param>
+        private void FillShop(Player player, ShopManager store)
+        {
+            if (!player.Inventory.ContainsKey("weapon"))
+            {
+                store.AddToShop(new Weapon(WeaponType.basic, "weapon", new Rectangle(50, 50, 10, 10), base_weapon));
+            }
+            else
+            {
+                AddRandWeap();
+
+            }
+
+            if (!player.Inventory.ContainsKey("armor"))
+            {
+                store.AddToShop(new Armor("armor", new Rectangle(50, 50, 10, 10), base_armor));
+            }
+            else
+            {
+                AddRandArmor();
+            }
+
+            if (!player.Inventory.ContainsKey("weapon") || !player.Inventory.ContainsKey("armor"))
+            {
+                if (player.Inventory.ContainsKey("weapon"))
+                {
+                    AddRandWeap();
+                }
+                else if (player.Inventory.ContainsKey("armor"))
+                {
+                    AddRandArmor();
+                }
+                else
+                {
+                    if (rng.Next(2) == 1)
+                    {
+                        AddRandWeap();
+                    }
+                    else
+                    {
+                        AddRandArmor();
+                    }
+                }
+            }
+
+            int healthPckAmount = rng.Next(1, 5);
+
+            for (int i = 0; i < healthPckAmount; i++)
+            {
+                shop.AddToShop(new HealthPotion(3, "health potion", new Rectangle(50, 50, 10, 10), health_potion));
+            }
+
+        }
+
+        /// <summary>
+        /// determines a random type of weapon and adds it to the store
+        /// </summary>
+        public void AddRandWeap()
+        {
+            //determining random weapon upgrade
+            int weaponVersion = rng.Next(3);
+
+            //determining random weapon upgrade
+            if (weaponVersion == 0)
+            {
+                shop.AddToShop(new ShockWeapon(WeaponType.shock, "Weapon of shock", new Rectangle(50, 50, 10, 10), shock_weapon));
+            }
+            else if (weaponVersion == 1)
+            {
+                shop.AddToShop(new FireWeapon(WeaponType.fire, "weapon of fire", new Rectangle(50, 50, 10, 10), fire_weapon));
+            }
+            else if (weaponVersion == 2)
+            {
+                shop.AddToShop(new FrostWeapon(WeaponType.frost, "weapon of frost", new Rectangle(50, 50, 10, 10), frost_weapon));
+            }
+        }
+
+        /// <summary>
+        /// Determies a random type of armor and adds it to the shop
+        /// </summary>
+        public void AddRandArmor()
+        {
+            //detertermine which type of armor to add to the store
+            int armorVersion = rng.Next(3);
+
+            if (armorVersion == 0)
+            {
+                shop.AddToShop(new ThornArmor("Armor of thorns", new Rectangle(50, 50, 10, 10), thorn_armor));
+            }
+            else if (armorVersion == 1)
+            {
+                shop.AddToShop(new ShieldArmor("Armor of shielding", new Rectangle(50, 50, 10, 10), shield_armor));
+            }
+            else if (armorVersion == 2)
+            {
+                shop.AddToShop(new SpeedArmor("Armor of speed", new Rectangle(50, 50, 10, 10), speed_armor));
+            }
+        }
+
+
         //level input methods
+
+        /// <summary>
+        /// takes a 16x10 level file and converts it into a 16x10 2d char array
+        /// </summary>
+        /// <param name="levelName">name of the level being loaded</param>
+        /// <returns></returns>
         public char[,] LevelIO(string levelName)
         {
             //check if the player has won the game
@@ -1199,7 +1358,7 @@ namespace Game1
 
             else
             {
-                //clear lists before next level is loaded otherwise things may carry over through levels
+                //clear manager lists before level is swapped
                 manager.DoorList.Clear();
                 manager.ItemList.Clear();
                 manager.EnemyList.Clear();
@@ -1232,6 +1391,12 @@ namespace Game1
             }
         }
         
+        /// <summary>
+        /// takes a 2d character array that correlates to the level
+        /// transforms the array into a string of all characters with their x and y position
+        /// </summary>
+        /// <param name="level"></param>
+        /// <returns></returns>
         public string LevelInfo(char[,] level)
         {
             string levelInfo = null;
@@ -1264,127 +1429,6 @@ namespace Game1
             return levelInfo;
         }
 
-        /// <summary>
-        /// method for checking button presses
-        /// </summary>
-        /// <param name="tlx">top left corner y coordinate</param>
-        /// <param name="tly">top left corner x coordinate</param>
-        /// <param name="brx">bottom right corner y coordinate</param>
-        /// <param name="bry">bottom right corner x coordinate</param>
-        /// <returns></returns>
-        public bool ButtonClicked(int tlx, int tly, int brx, int bry)
-        {
-            if ((mouseState.X >= tlx && mouseState.Y >= tly) && (mouseState.X < brx && mouseState.Y < bry) && SingleMouseClick())
-            {
-                prevMouseState = mouseState;
-                return true;
-            }
-            else
-            {
-                return false;
-            }
 
-        }
-
-        /// <summary>
-        /// randomly fills the shop
-        /// always spawns one piece of armor and one weapon
-        /// spawns one additional piece of armor or weapon
-        /// 
-        /// </summary>
-        /// <param name="player"></param>
-        /// <param name="store"></param>
-        private void FillShop(Player player, ShopManager store)
-        {
-            if (!player.Inventory.ContainsKey("weapon"))
-            {
-                store.AddToShop(new Weapon(WeaponType.basic, "weapon", new Rectangle(50, 50, 10, 10), base_weapon));
-            }
-            else
-            {
-                AddRandWeap();
-
-            }
-
-            if (!player.Inventory.ContainsKey("armor"))
-            {
-                store.AddToShop(new Armor(ArmorType.test, "armor", new Rectangle(50, 50, 10, 10), base_armor));
-            }
-            else
-            {
-                AddRandArmor();
-            }
-
-            if (!player.Inventory.ContainsKey("weapon") || !player.Inventory.ContainsKey("armor"))
-            {
-                if (player.Inventory.ContainsKey("weapon"))
-                {
-                    AddRandWeap();
-                }
-                else if (player.Inventory.ContainsKey("armor"))
-                {
-                    AddRandArmor();
-                }
-                else
-                {
-                    if(rng.Next(2) == 1)
-                    {
-                        AddRandWeap();
-                    }
-                    else
-                    {
-                        AddRandArmor();
-                    }
-                }
-            }
-
-            int healthPckAmount = rng.Next(1, 5);
-
-            for(int i = 0; i < healthPckAmount; i++)
-            {
-                shop.AddToShop(new HealthPotion(3, "health potion", new Rectangle(50, 50, 10, 10), health_potion));
-            }
-
-        }
-
-        //helper method for adding a random weapon to the store
-        public void AddRandWeap()
-        {
-            //determining random weapon upgrade
-            int weaponVersion = rng.Next(3);
-
-            //determining random weapon upgrade
-            if (weaponVersion == 0)
-            {
-                shop.AddToShop(new ShockWeapon(WeaponType.shock, "Weapon of shock", new Rectangle(50, 50, 10, 10), shock_weapon));
-            }
-            else if (weaponVersion == 1)
-            {
-                shop.AddToShop(new FireWeapon(WeaponType.fire, "weapon of fire", new Rectangle(50, 50, 10, 10), fire_weapon));
-            }
-            else if (weaponVersion == 2)
-            {
-                shop.AddToShop(new FrostWeapon(WeaponType.frost, "weapon of frost", new Rectangle(50, 50, 10, 10), frost_weapon));
-            }
-        }
-
-        public void AddRandArmor()
-        {
-            //determining random armor upgrade
-            int armorVersion = rng.Next(3);
-
-            if (armorVersion == 0)
-            {
-                shop.AddToShop(new ThornArmor(ArmorType.test, "Armor of thorns", new Rectangle(50, 50, 10, 10), thorn_armor));
-            }
-            else if (armorVersion == 1)
-            {
-                shop.AddToShop(new ShieldArmor(ArmorType.test, "Armor of shielding", new Rectangle(50, 50, 10, 10), shield_armor));
-            }
-            else if (armorVersion == 2)
-            {
-                shop.AddToShop(new SpeedArmor(ArmorType.test, "Armor of speed", new Rectangle(50, 50, 10, 10), speed_armor));
-            }
-        }
     }
 }

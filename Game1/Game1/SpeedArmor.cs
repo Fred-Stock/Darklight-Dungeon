@@ -23,7 +23,7 @@ namespace Game1
 
 
         //constructor
-        public SpeedArmor(ArmorType armor, string name, Rectangle position, Texture2D texture) : base(armor, name, position, texture)
+        public SpeedArmor( string name, Rectangle position, Texture2D texture) : base( name, position, texture)
         {
             speedBoost = 2;
             defense = 2;

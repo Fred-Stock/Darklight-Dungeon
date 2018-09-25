@@ -22,12 +22,18 @@ namespace Game1
         }
 
         //methods
+        /// <summary>
+        /// method that adds a new node to the tree
+        /// </summary>
+        /// <param name="node">data to be added to the tree</param>
         public void Add(Node node)
         {
+            //this method is used so outside classes can easily add things to the tree without knowing the parent node
             Add(node, parent);
-           
         }
 
+        //adds a node to the tree
+        //this method is 
         private void Add(Node node, TreeNode current)
         {
             currentNode = current;
@@ -74,25 +80,16 @@ namespace Game1
             }
         }
 
-        //public LinkedList<Node> ShortestPath()
-        //{
-        //    LinkedList<Node> path = new LinkedList<Node>();
-        //    currentNode = parent;
-        //    while(currentNode != null)
-        //    {
-        //        path.AddLast(currentNode.Data);
-        //        currentNode = currentNode.LeftBranch;
-        //    }
-        //    return path;
-        //}
-
-        //method to see if a node is contained with the tree
+        /// <summary>
+        /// method to see if a node is contained within the tree
+        /// </summary>
+        /// <param name="nodeToCheck"></param>
+        /// <returns></returns>
         public bool Contains(Node nodeToCheck)
         {
+            //this method is used so that an outside class can easily use the contains method without knowing the parent node
             contained = false;
             return Contains(nodeToCheck, parent);
-            
-            
         }
 
         private bool Contains(Node nodeToCheck, TreeNode current)

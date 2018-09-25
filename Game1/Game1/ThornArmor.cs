@@ -16,13 +16,17 @@ namespace Game1
         //properties
 
         //constructor
-        public ThornArmor(ArmorType armor, string name, Rectangle position, Texture2D texture) : base(armor, name, position, texture)
+        public ThornArmor(string name, Rectangle position, Texture2D texture) : base(name, position, texture)
         {
             defense = 1;
             cost = 15;
         }
 
         //methods
+        /// <summary>
+        /// when the enemy runs into the player it takes damage
+        /// </summary>
+        /// <param name="enemy"></param>
         public override void ArmorAction(Enemies enemy)
         {
             enemy.Health -= 3;

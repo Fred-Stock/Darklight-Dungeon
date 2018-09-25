@@ -41,6 +41,7 @@ namespace Game1
         private bool rightAttack; //field for keeping track of what direction the player is attacking
         private double hitDuration;
         private double hitTimer;
+        private int alternate;
 
         //properties
         public double HealIndiDuration
@@ -101,10 +102,6 @@ namespace Game1
             get { return attacking; }
             set { attacking = value; }
         }
-        public double WalkTimer
-        {
-            get { return walkTimer; }
-        }
         public bool WalkRight
         {
             get { return walkRight; }
@@ -133,16 +130,20 @@ namespace Game1
         {
             moveSpeed = 3;
             this.score = score;
-            this.weapon = weapon;
-            this.armor = armor;
+
+
+            //timer fields
             fps = 40.0;
             atkTimePerFrame = 1.0/ fps;
             atkTimer = 0;
             walkTimePerFrame = 1.0/ 10.0;
             healIndiTimer = 2;
             hitDuration = 0.4;
-            invList = new List<string>();
+            atkTimer = 0;
+            alternate = 0;
 
+
+            //if the player is spawned with a weapon adjust damage accordingly
             if(weapon == null)
             {
                 this.damage = damage;
@@ -150,26 +151,25 @@ namespace Game1
             else
             {
                 this.damage = weapon.Damage;
-                invList.Add(weapon.Name);
             }
 
-            if(armor != null)
-            {
-                invList.Add(armor.Name);
-            }
-            inventory = new Dictionary<string, Item>();
-            invList = new List<string>();
 
-            atkTimer = 0;
             attacking = false;
             prevPos = position;
-            currentSprite = texture;
 
+            //player sprites
+            currentSprite = texture;
             this.sidewaysWalk = sidewaysWalk;
             this.walkDown = walkDown;
             this.walkUp = walkUp;
+            
+            //player items
+            this.weapon = weapon;
+            this.armor = armor;
 
             hit = false;
+            inventory = new Dictionary<string, Item>();
+            invList = new List<string>();
         }
 
         //these next two methods are almost identical but are needed otherwise errors occur if an item with the same name
@@ -187,7 +187,7 @@ namespace Game1
                 invList.Add(item.Name);
                 item.Visible = false;
             }
-            //temp solution but if there is a collision then add a 1 to the end of the name and keep doing that until no collision
+            //if the item added has the same name as an item already in the inventory then add a blank character to the end of its name to prevent collision 
             else
             {
                 item.Name = item.Name + " ";
@@ -203,6 +203,8 @@ namespace Game1
             //collision maanagement
             if (!inventory.ContainsKey(item.Name))
             {
+                //if the inventory does not contain an item with the same name then add it to the inventory
+                //in addition equip the item
                 inventory.Add(item.Name, item);
                 invList.Add(item.Name);
                 if(item is Weapon)
@@ -245,7 +247,7 @@ namespace Game1
                     }
                 }
             }
-            //temp solution but if there is a collision then add a 1 to the end of the name and keep doing that until no collision
+            //if there is already an item with that name within the player inventory add a blank character to the end of its name to prevent collision
             else
             {
                 item.Name = item.Name + " ";
@@ -253,7 +255,7 @@ namespace Game1
             }
         }
         
-
+        //increase the player's currency depending on the coin picked up
         public void PickUpCurrency(Item item)
         {
             if(item.Name == "largeCoin")
@@ -267,27 +269,36 @@ namespace Game1
             item.Visible = false;
         }
 
-        public void Attack(Player player, List<Enemies> enemys, List<Texture2D> animation, GameTime gameTime)
+        /// <summary>
+        /// attack method for the player
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="enemies">list of enemies being attacked</param>
+        /// <param name="animation"></param>
+        /// <param name="gameTime"></param>
+        public void Attack(Player player, List<Enemies> enemies, List<Texture2D> animation, GameTime gameTime)
         {
             Enemies tempEnemy;
             if (attacking)
             {
                 atkTimer += gameTime.ElapsedGameTime.TotalSeconds;
-                if(enemys != null)
+                if(enemies != null)
                 {
-                    for(int i = 0; i < enemys.Count; i++)
+                    //for each enemy deal damage and then remove it from the list of enemies to be damaged
+                    for(int i = 0; i < enemies.Count; i++)
                     {
-                        if(enemys[i] is Boss temp)
+                        if(enemies[i] is Boss temp)
                         {
                             temp.Stunned = true;
                         }
-                        tempEnemy = enemys[i];
+                        tempEnemy = enemies[i];
                         tempEnemy.Health -= player.damage;
-                        enemys[i] = tempEnemy;
-                        enemys.RemoveAt(i);
+                        enemies[i] = tempEnemy;
+                        enemies.RemoveAt(i);
                         i--;
                     }
                 }
+                //go through the attack animation
                 if(atkFrame == 0)
                 {
                     currentAtkSprite = animation[0];
@@ -309,6 +320,11 @@ namespace Game1
             }
         }
 
+        /// <summary>
+        /// move method for the player
+        /// movement is based on WASD
+        /// </summary>
+        /// <param name="gameTime"></param>
         public override void Move(GameTime gameTime)
         {
             prevPos = Position;
@@ -317,12 +333,13 @@ namespace Game1
             int moveIncrease = 0;
             
             
-
+            //if the player has SpeedArmor then their movement speed is increased
             if (armor is SpeedArmor tempArmor)
             {
                 tempArmor = (SpeedArmor)armor;
                 moveIncrease = tempArmor.SpeedBoost;
             }
+            //move up and down based on wether or not w or d is pressed
             if (kbstate.IsKeyDown(Keys.W))
             {
                 currentSprite = walkUp;
@@ -337,14 +354,16 @@ namespace Game1
                 walkLeft = false;
                 temp.Y += moveSpeed + moveIncrease;
             }
+
+            //in addition if moving left or right
             if (kbstate.IsKeyDown(Keys.A))
             {
-                if (!previous.IsKeyDown(Keys.A))
+                if (!previous.IsKeyDown(Keys.A))//if this is the first frame of moving left start at the begning of the walk animation
                 {
                     walkTimer = 0;
                 }
                 walkTimer += gameTime.ElapsedGameTime.TotalSeconds;
-                if (!kbstate.IsKeyDown(Keys.D))
+                if (!kbstate.IsKeyDown(Keys.D)) //loop through walk animation if not pressing D aswell
                 {
                     walkRight = false;
                     currentSprite = sidewaysWalk;
@@ -358,6 +377,7 @@ namespace Game1
                         walkTimer -= walkTimePerFrame;
                     }
                 }
+                //set correct walking sprite if moving vertically in additon
                 else if (kbstate.IsKeyDown(Keys.S))
                 {
                     currentSprite = walkDown;
@@ -374,12 +394,12 @@ namespace Game1
             }
             if (kbstate.IsKeyDown(Keys.D))
             {
-                if (!previous.IsKeyDown(Keys.D))
+                if (!previous.IsKeyDown(Keys.D)) //if this is the first frame of them moving right then start the animation at the first frame
                 {
                     walkTimer = 0;
                 }
                 walkTimer += gameTime.ElapsedGameTime.TotalSeconds;
-                if (!kbstate.IsKeyDown(Keys.A))
+                if (!kbstate.IsKeyDown(Keys.A)) //if not pressing A then loop through the walk animation
                 {
                     walkLeft = false;
                     currentSprite = sidewaysWalk;
@@ -393,7 +413,8 @@ namespace Game1
                         walkFrame++;
                     }
                 }
-                else if(kbstate.IsKeyDown(Keys.S))
+                //set correct walking sprite if moving vertically in additon
+                else if (kbstate.IsKeyDown(Keys.S))
                 {
                     currentSprite = walkDown;
                 }
@@ -407,7 +428,7 @@ namespace Game1
 
 
             }
-            else if(!kbstate.IsKeyDown(Keys.D) && !kbstate.IsKeyDown(Keys.S) && !kbstate.IsKeyDown(Keys.A) && !kbstate.IsKeyDown(Keys.W))
+            else if(!kbstate.IsKeyDown(Keys.D) && !kbstate.IsKeyDown(Keys.S) && !kbstate.IsKeyDown(Keys.A) && !kbstate.IsKeyDown(Keys.W))//if no move input then use walkdown sprite
             {
                 walkLeft = false;
                 walkRight = false;
@@ -465,23 +486,31 @@ namespace Game1
             }
         }
 
+        /// <summary>
+        /// give the player health if they use a health potion
+        /// </summary>
+        /// <param name="hpPot"></param>
         public void UseHealthPotion(HealthPotion hpPot)
         {
             
-            if (health < 15)
+            if (health < 15)//if under 15 health then give them health and remove the potion from their inventory
             {
                 health += hpPot.RestoreAmnt;
                 inventory.Remove(hpPot.Name);
                 invList.Remove(hpPot.Name);
                 healed = true;
             }
-            if(health > 15)
+            if(health > 15) //if they heal over 15 health then reset them to 15
             {
                 health = 15;
             }
         }
 
-        int alternate = 0;
+        /// <summary>
+        /// when hit flash the player sprite and give the player invulnerability for a short time
+        /// </summary>
+        /// <param name="gameTime"></param>
+        /// <returns></returns>
         public bool HitEffect(GameTime gameTime)
         {
             if (hit)
@@ -506,17 +535,11 @@ namespace Game1
                 {
                     return true;
                 }
-                
-                
-
             }
             else
             {
                 return false;
             }
-            
-
         }
-
     }
 }

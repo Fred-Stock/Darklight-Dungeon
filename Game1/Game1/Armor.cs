@@ -7,17 +7,13 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
-enum ArmorType
-{
-    test,
-}
+
 
 namespace Game1
 {
     class Armor : Item
     {
         //fields
-        ArmorType armor;
         protected int defense;
 
 
@@ -29,19 +25,20 @@ namespace Game1
         }
 
         //constructor
-        public Armor(ArmorType armor, string name, Rectangle position, Texture2D texture) : base(name, position, texture)
+        public Armor(string name, Rectangle position, Texture2D texture) : base(name, position, texture)
         {
-            this.armor = armor;
             defense = 1;
             cost = 8;
         }
 
         //methods
+        //method overriden by child classes
         public virtual void ArmorAction()
         {
 
         }
 
+        //overload for AmorAction() also overriden by child classes
         public virtual void ArmorAction(Enemies enemy)
         {
 

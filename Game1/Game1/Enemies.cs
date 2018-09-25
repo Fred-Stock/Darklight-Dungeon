@@ -18,7 +18,6 @@ namespace Game1
         private int direction;
         private double moveTimer;
         private double moveInterval;
-        private bool hit;
         protected bool affected;
         protected Rectangle prevPos2;
         private AStar astar;
@@ -32,11 +31,6 @@ namespace Game1
         protected double hitDuration;
 
         //properties
-        public bool Hit
-        {
-            get { return hit; }
-            set { hit = value; }
-        }
         public bool Affected
         {
             get { return affected; }
@@ -77,6 +71,11 @@ namespace Game1
             path = astar.FindPath();
         }
 
+        /// <summary>
+        /// calculates a path using a* and moves the enemy a long that path
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="gameTime"></param>
         public override void Move(Characters player, GameTime gameTime)
         {
             
@@ -226,10 +225,16 @@ namespace Game1
 
         }
 
+        /// <summary>
+        /// deals damage to a player
+        /// </summary>
+        /// <param name="damaged"></param>
+        /// <param name="damager"></param>
         public override void TakeDamage(Player damaged, Characters damager)
         {
-            if (damager.Position.Intersects(damaged.Position) && !damaged.Hit)
+            if (damager.Position.Intersects(damaged.Position) && !damaged.Hit) //check if the character has had damage dealt to them already from this collision
             {
+                //if the player has special armor inact its effect and then deal damage
                 if(damaged.Armor is ThornArmor)
                 {
                     damaged.Armor.ArmorAction(this);
@@ -246,6 +251,7 @@ namespace Game1
                         damaged.Health -= damage - damaged.Armor.Defense;
                     }
                 }
+                //if the player has standard damage just apply normal damage reduction
                 else if(damaged.Armor != null)
                 {
                     damaged.Health -= damage - damaged.Armor.Defense;
