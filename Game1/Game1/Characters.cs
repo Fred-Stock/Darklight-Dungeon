@@ -13,18 +13,11 @@ namespace Game1
     {
         //fields
         protected int health;
-
         protected int damage;
-
         protected KeyboardState kbstate;
-
         protected bool invulnerable;
-
-
         protected Rectangle prevPos;
-
         protected int moveSpeed;
-
         protected bool hit;
 
         public int Health
