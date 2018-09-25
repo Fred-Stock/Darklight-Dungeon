@@ -337,7 +337,7 @@ namespace Game1
 
             //initialize the shop and current level objects 
             shop = new ShopManager();
-            currentLevel = new Level(LevelIO("BossLevel"), manager);
+            currentLevel = new Level(LevelIO("level1_1"), manager);
             MouseState mouseState = new MouseState();
             MouseState prevMouseState = new MouseState();
             #endregion
@@ -924,9 +924,9 @@ namespace Game1
                 {
                     spriteBatch.Draw(play_hover, new Rectangle(240, 550, play_hover.Width, play_hover.Height), Color.White);
                 }
-                if (new Rectangle(210, 670, 380, 230).Contains(mouseState.Position))
+                if (new Rectangle(210, 668, 380, 160).Contains(mouseState.Position))
                 {
-                    spriteBatch.Draw(quit_hover, new Rectangle(245, 730, quit_hover.Width, quit_hover.Height), Color.White);
+                    spriteBatch.Draw(quit_hover, new Rectangle(245, 728, quit_hover.Width, quit_hover.Height), Color.White);
                 }
             }
             #endregion
