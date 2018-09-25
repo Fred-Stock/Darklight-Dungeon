@@ -1,9 +1,9 @@
 ﻿level1_2
 ----------------
 -  D R         -
--  R R LRRRRE  -
+-  R R LRRRR   -
 -  R    R  RRR -
--  RERRRR    R -
+-  RERRRR    RE-
 -  R         R -
 -  RRRRRR L    -
 -    P         -

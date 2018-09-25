@@ -52,12 +52,16 @@ namespace Game1
         //constructor
         public Enemies(Level level, Random rng, int health, int damage, Rectangle position, Texture2D texture) : base(health, damage, position, texture)
         {
-            
-            this.level = level;
+
+            this.level = new Level(level.LevelArray, level.MAnager);
+            if(this.level.LevelArray == level.LevelArray)
+            {
+                Console.WriteLine("true");
+            }
             currentNode = new Node((position.X / 120), (position.Y / 120) + 1);
-            levelGraph = level.NodeGraph;
+            levelGraph = this.level.NodeGraph;
             levelGraph.GenNodes();
-            astar = new AStar(currentNode, level.NodeGraph.PlayerNode, levelGraph);
+            astar = new AStar(currentNode, this.level.NodeGraph.PlayerNode, this.level.NodeGraph);
             hit = false;
             affected = false;
             this.rng = rng;
@@ -69,7 +73,7 @@ namespace Game1
             moveInterval = 2;
             moveTimer = 0;
             step = 0;
-            //path = new LinkedList<Node>();
+            
             path = astar.FindPath();
         }
 
@@ -79,7 +83,6 @@ namespace Game1
             prevPos = Position;
             Rectangle temp = Position;
 
-            //path = astar.FindPath();
 
             if (step < path.Count)
             {

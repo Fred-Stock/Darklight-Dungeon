@@ -14,6 +14,7 @@ namespace Game1
         private List<Enemies> enemyList;
         private List<Obstacle> wallList;
         private Graph nodeGraph;
+        private Manager manager;
 
         //properties
         public char[,] LevelArray
@@ -32,11 +33,17 @@ namespace Game1
         {
             get { return nodeGraph; }
         }
+        public Manager MAnager
+        {
+            get { return manager; }
+        }
+
 
 
         //constructor
         public Level(char[,] levelArray, Manager manager)
         {
+            this.manager = manager;
             wallList = new List<Obstacle>();
             enemyList = manager.EnemyList;
             this.levelArray = levelArray;
