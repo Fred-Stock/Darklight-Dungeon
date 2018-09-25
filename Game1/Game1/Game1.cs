@@ -639,26 +639,18 @@ namespace Game1
 
                 //check if enemies are hit by player
                 List<Enemies> hitEnemies = new List<Enemies>();
-                if (SingleButtonPress(Keys.J) && !player.Attacking)
+                if(SingleMouseClick() && !player.Attacking)
                 {
                     player.Attacking = true;
-                    if(kbState.IsKeyDown(Keys.A) && kbState.IsKeyDown(Keys.D))
-                    {
-                        player.LeftAttack = true;
-                    }
-                    if (kbState.IsKeyDown(Keys.A) && !player.RightAttack)
-                    {
-                        player.LeftAttack = true;
-                    }
-                    else if (kbState.IsKeyDown(Keys.D) && !player.LeftAttack)
+                    if(mouseState.X > player.Position.X)
                     {
                         player.RightAttack = true;
                     }
                     else
                     {
-                        player.RightAttack = true;
+                        player.LeftAttack = true;
                     }
-                    for(int i = 0; i < manager.EnemyList.Count; i++)
+                   for(int i = 0; i < manager.EnemyList.Count; i++)
                     {
                         if(manager.EnemyList[i] != null)
                         {
@@ -893,7 +885,7 @@ namespace Game1
             #endregion
 
             previous = kbState;
-
+            prevMouseState = mouseState;
             base.Update(gameTime);
         }
 
@@ -1181,6 +1173,18 @@ namespace Game1
                 return false;
             }
         }
+
+        public bool SingleMouseClick()
+        {
+            if(mouseState.LeftButton == ButtonState.Pressed && prevMouseState.LeftButton == ButtonState.Released)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
         
         //level input methods
         public char[,] LevelIO(string levelName)
@@ -1270,14 +1274,16 @@ namespace Game1
         /// <returns></returns>
         public bool ButtonClicked(int tlx, int tly, int brx, int bry)
         {
-            if ((mouseState.X >= tlx && mouseState.Y >= tly) && (mouseState.X < brx && mouseState.Y < bry) && mouseState.LeftButton == ButtonState.Pressed && prevMouseState.LeftButton != ButtonState.Pressed)
+            if ((mouseState.X >= tlx && mouseState.Y >= tly) && (mouseState.X < brx && mouseState.Y < bry) && SingleMouseClick())
             {
+                prevMouseState = mouseState;
                 return true;
             }
             else
             {
                 return false;
             }
+
         }
 
         /// <summary>
