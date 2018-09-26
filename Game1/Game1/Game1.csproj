@@ -88,7 +88,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="BossLevel.txt" />
+    <Content Include="bosslevel.txt" />
     <Content Include="Icon.ico" />
     <Content Include="level1_1.txt" />
     <Content Include="level1_2.txt" />
