@@ -370,7 +370,9 @@ namespace Game1
             mouseState = Mouse.GetState();
             kbState = Keyboard.GetState();
 
-            
+            // DELETE THIS WHEN DONE
+            gameState = GameState.Shop;
+            FillShop(player, shop);
 
 
             // gamestates
@@ -844,6 +846,7 @@ namespace Game1
                 //buy what ever the player is hovering over if the player has enough currency
                 for (int i = 0; i < shop.ShopInv.Count; i++)
                 {
+
                     if (ButtonClicked(555 + (i % 5) * 170, 320 + (320 * (i / 5)), 700 + (i % 5) * 170, 465 + (320 * (i / 5))))
                     {
 
@@ -1148,6 +1151,9 @@ namespace Game1
                     spriteBatch.DrawString(Arial12, shop.ShopInv[i].Name, new Vector2(560 + (i % 5) * 170, 490 + 315 * (i / 5)), Color.Black);
                     spriteBatch.DrawString(Arial12, shop.ShopInv[i].Cost.ToString(), new Vector2(570 + (i % 5) * 170, 535 + 315 * (i / 5)), Color.Black);
                     spriteBatch.DrawString(Arial12, player.Currency.ToString(), new Vector2(340, 280), Color.White);
+
+                    // adding text to exit shop
+                    spriteBatch.DrawString(Arial12, "Exit Shop", new Vector2(GraphicsDevice.Viewport.Width / 2, 280), Color.Black);
                 }
 
                 
