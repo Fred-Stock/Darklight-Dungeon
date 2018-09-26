@@ -52,7 +52,7 @@ namespace Game1
             {
                 Console.WriteLine("true");
             }
-            currentNode = new Node((position.X / 120), (position.Y / 120) + 1);
+            currentNode = new Node((position.X / 120), (position.Y / 120));
             levelGraph = this.level.NodeGraph;
             levelGraph.GenNodes();
             astar = new AStar(currentNode, this.level.NodeGraph.PlayerNode, this.level.NodeGraph);
@@ -87,50 +87,56 @@ namespace Game1
             {
                 next = path.ElementAt(step);
             }
+            if(next.X > currentNode.X || next.X < currentNode.X)
+            {
+                if (((next.X)) > currentNode.X)
+                {
+                    temp.X += moveSpeed;
+                    if (temp.X >= ((next.X) * 120))
+                    {
+                        step++;
+                        currentNode.X = Position.X / 120;
+                        //path.Clear();
+                        //path = astar.FindPath(player, this);
+                    }
+                }
+                else if (((next.X)) < currentNode.X)
+                {
+                    temp.X -= moveSpeed;
+                    if (temp.X <= ((next.X) * 120))
+                    {
+                        step++;
+                        currentNode.X = Position.X / 120;
+                        //path.Clear();
+                        //path = astar.FindPath(player, this);
+                    }
+                }
+            }
+            else
+            {
+                if (((next.Y)) > currentNode.Y)
+                {
+                    temp.Y += moveSpeed;
+                    if (temp.Y >= ((next.Y - 1) * 120))
+                    {
+                        step++;
+                        currentNode.Y = (Position.Y / 120) + 1;
+                        //path.Clear();
+                        //path = astar.FindPath(player, this);
+                    }
+                }
+                else if (((next.Y)) <= currentNode.Y)
+                {
+                    temp.Y -= moveSpeed;
+                    if (temp.Y <= ((next.Y - 1) * 120))
+                    {
+                        step++;
+                        currentNode.Y = (Position.Y / 120) + 1;
+                        //path.Clear();
+                        //path = astar.FindPath(player, this);
+                    }
+                }
 
-            if (((next.X)) > currentNode.X)
-            {
-                temp.X += moveSpeed;
-                if (temp.X >= ((next.X) * 120))
-                {
-                    step++;
-                    currentNode.X = Position.X / 120;
-                    //path.Clear();
-                    //path = astar.FindPath(player, this);
-                }
-            }
-            else if (((next.X)) < currentNode.X)
-            {
-                temp.X -= moveSpeed;
-                if (temp.X <= ((next.X) * 120))
-                {
-                    step++;
-                    currentNode.X = Position.X / 120;
-                    //path.Clear();
-                    //path = astar.FindPath(player, this);
-                }
-            }
-            if (((next.Y - 1)) > currentNode.Y)
-            {
-                temp.Y += moveSpeed;
-                if (temp.Y >= ((next.Y - 1) * 120))
-                {
-                    step++;
-                    currentNode.Y = Position.Y / 120;
-                    //path.Clear();
-                    //path = astar.FindPath(player, this);
-                }
-            }
-            else if (((next.Y - 1)) <= currentNode.Y)
-            {
-                temp.Y -= moveSpeed;
-                if (temp.Y <= ((next.Y - 1) * 120))
-                {
-                    step++;
-                    currentNode.Y = Position.Y / 120;
-                    //path.Clear();
-                    //path = astar.FindPath(player, this);
-                }
             }
 
 

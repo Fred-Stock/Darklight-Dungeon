@@ -41,7 +41,7 @@ namespace Game1
           nodeGraph.GenNodes();
           closedSet = new BinarySearchTree();
           openSet = new PriorityQueue();
-          currentNode = new Node((pathFinder.Position.X / 120), (pathFinder.Position.Y / 120) + 1);
+          currentNode =nodeGraph.NodeMatrix[(pathFinder.Position.X / 120), (pathFinder.Position.Y / 120) + 1];
           //if(player.Position.X/120 != endNode.X || player.Position.Y/120 != endNode.Y)
           //{
             //endNode = new Node((player.Position.X / 120), (player.Position.Y / 120) + 1);

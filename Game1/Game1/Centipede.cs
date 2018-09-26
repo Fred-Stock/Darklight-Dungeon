@@ -74,6 +74,9 @@ namespace Game1
         //methods
         public override void Move(Characters player, GameTime gameTime)
         {
+            //this character moves towards the player in segments
+            //It moves towards the player in either the x or y direction
+            //Every time the time
             Rectangle temp = Position;
             prevPos = Position;
 
