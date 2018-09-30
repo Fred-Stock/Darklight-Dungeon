@@ -35,30 +35,34 @@ namespace Game1
         }
 
         //methods
-      public LinkedList<Node> FindPath(Characters player, Characters pathFinder)
-      {
-          path.Clear();
-          nodeGraph.GenNodes();
-          closedSet = new BinarySearchTree();
-          openSet = new PriorityQueue();
-          currentNode =nodeGraph.NodeMatrix[(pathFinder.Position.X / 120), (pathFinder.Position.Y / 120) + 1];
-          //if(player.Position.X/120 != endNode.X || player.Position.Y/120 != endNode.Y)
-          //{
-            //endNode = new Node((player.Position.X / 120), (player.Position.Y / 120) + 1);
-          //}
-      
-          return FindPath();
-      
-          
-      }
+        public LinkedList<Node> FindPath(Characters player, Characters pathFinder)
+        {
+            path.Clear();
+            nodeGraph.GenNodes();
+            closedSet = new BinarySearchTree();
+            openSet = new PriorityQueue();
+            currentNode = nodeGraph.NodeMatrix[(pathFinder.Position.X / 120), (pathFinder.Position.Y / 120) + 1];
+            //if(player.Position.X/120 != endNode.X || player.Position.Y/120 != endNode.Y)
+            //{
+              //endNode = new Node((player.Position.X / 120), (player.Position.Y / 120) + 1);
+            //}
+        
+            return FindPath();
+        
+            
+        }
 
         public LinkedList<Node> FindPath()
         {
             if (path != null)
             {
+                nodeGraph.GenNodes();
+                closedSet = new BinarySearchTree();
+                openSet = new PriorityQueue();
                 path.Clear();
 
             }
+            currentNode.DistF = currentNode.DistTo(endNode);
             closedSet.Add(currentNode);
             do
             {
@@ -121,20 +125,16 @@ namespace Game1
                             else
                             {
                                 if (currentNode.Parent != nodeChecking)
-                                {
+                                {                                  
                                     nodeChecking.Parent = currentNode;
                                     nodeChecking.DistP = nodeChecking.DistTo(currentNode);
                                     nodeChecking.DistF = nodeChecking.DistTo(endNode);
                                     nodeChecking.DistT = nodeChecking.DistF + nodeChecking.DistP;
                                     openSet.Push(nodeChecking);
-
                                 }
                             }
-
                         }
-
                     }
-
                 }
                 if (openSet.Empty)
                 {

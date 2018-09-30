@@ -99,9 +99,8 @@ namespace Game1
             if (currentNode.Data == nodeToCheck)
             {
                 contained = true;
-
             }
-            else if (nodeToCheck.DistF < currentNode.NodeData)
+            else if (nodeToCheck.DistF <= currentNode.NodeData)
             {
                 if (currentNode.LeftBranch != null)
                 {

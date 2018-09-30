@@ -52,7 +52,6 @@ namespace Game1
         {
             this.x = x;
             this.y = y;
-
         }
 
         //methods

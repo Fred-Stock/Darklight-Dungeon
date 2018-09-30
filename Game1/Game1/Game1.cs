@@ -370,11 +370,6 @@ namespace Game1
             mouseState = Mouse.GetState();
             kbState = Keyboard.GetState();
 
-            // DELETE THIS WHEN DONE
-            gameState = GameState.Shop;
-            FillShop(player, shop);
-
-
             // gamestates
             #region Main Menu
             if (gameState == GameState.MainMenu)
@@ -1152,8 +1147,9 @@ namespace Game1
                     spriteBatch.DrawString(Arial12, shop.ShopInv[i].Cost.ToString(), new Vector2(570 + (i % 5) * 170, 535 + 315 * (i / 5)), Color.Black);
                     spriteBatch.DrawString(Arial12, player.Currency.ToString(), new Vector2(340, 280), Color.White);
 
+                    //Commented out until shop menu has been changed to accomidate the button and and button logic in implemented
                     // adding text to exit shop
-                    spriteBatch.DrawString(Arial12, "Exit Shop", new Vector2(GraphicsDevice.Viewport.Width / 2, 280), Color.Black);
+                    //spriteBatch.DrawString(Arial12, "Exit Shop", new Vector2(GraphicsDevice.Viewport.Width / 2, 280), Color.Black);
                 }
 
                 
@@ -1392,6 +1388,7 @@ namespace Game1
                 {
                     Console.WriteLine(e.Message);
                 }
+                currentLevel = new Level(levelArray, manager);
                 return levelArray;
 
             }

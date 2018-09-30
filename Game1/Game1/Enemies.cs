@@ -48,10 +48,6 @@ namespace Game1
         {
 
             this.level = new Level(level.LevelArray, level.MAnager);
-            if(this.level.LevelArray == level.LevelArray)
-            {
-                Console.WriteLine("true");
-            }
             currentNode = new Node((position.X / 120), (position.Y / 120));
             levelGraph = this.level.NodeGraph;
             levelGraph.GenNodes();
@@ -67,7 +63,6 @@ namespace Game1
             moveInterval = 2;
             moveTimer = 0;
             step = 0;
-            
             path = astar.FindPath();
         }
 
@@ -78,7 +73,7 @@ namespace Game1
         /// <param name="gameTime"></param>
         public override void Move(Characters player, GameTime gameTime)
         {
-            
+
             prevPos = Position;
             Rectangle temp = Position;
 
@@ -103,7 +98,7 @@ namespace Game1
                 else if (((next.X)) < currentNode.X)
                 {
                     temp.X -= moveSpeed;
-                    if (temp.X <= ((next.X) * 120))
+                    if (temp.X <= ((next.X) * 120) + (moveSpeed*4))
                     {
                         step++;
                         currentNode.X = Position.X / 120;
@@ -144,25 +139,25 @@ namespace Game1
             //int xDist = player.Position.X - Position.X;
             //int yDist = player.Position.Y - Position.Y;
             //Double tDist = DistanceTo(player.Position.X, player.Position.Y, Position.X, Position.Y);
-            
+
             //int xMov = 0;
             //int yMov = 0;
-            
+
             //if (tDist != 0)
             //{
             //    double xRatio = xDist / tDist;
             //    double yRatio = yDist / tDist;
-            
+
             //    xMov = (int)(moveSpeed * xRatio);
             //    yMov = (int)(moveSpeed * yRatio);
             //}
-            
+
             //if(tDist < 500)
             //{
             //    temp.X += xMov;
             //    temp.Y += yMov;
             //    Position = temp;
-            
+
             //    if (prevPos2.X == Position.X && xMov != 0)
             //    {
             //        if(yDist < 0)
@@ -173,7 +168,7 @@ namespace Game1
             //        {
             //            temp.Y += moveSpeed;
             //        }
-            
+
             //        Position = temp;
             //    }
             //    if (prevPos2.Y == Position.Y && (yMov != 0))
@@ -181,24 +176,24 @@ namespace Game1
             //        if(xDist <= 0)
             //        {
             //            temp.X -= moveSpeed;
-            
+
             //        }
             //        else
             //        {
             //            temp.X += moveSpeed;
             //        }
-            
+
             //    }
-            
+
             //}
-            
+
             //if(tDist >= 500)
             //{
-            
+
             //    moveTimer += gameTime.ElapsedGameTime.TotalSeconds;
             //    if (moveTimer < moveInterval)
             //    {
-            
+
             //        if (direction == 0)
             //        {
             //            temp.Y -= moveSpeed;
@@ -221,11 +216,10 @@ namespace Game1
             //        moveTimer -= moveInterval;
             //        direction = rng.Next(0, 4);
             //    }
-                
-            //}
-            
 
-            
+            //}
+
+
             Position = temp;
             prevPos2 = Position;
 
